@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <record id="view_stock_valuation_layer_tree_inherit"
+            model="ir.ui.view">
+
+        <field name="name">
+            stock.valuation.layer.tree.avg.cost
+        </field>
+
+        <field name="model">
+            stock.valuation.layer
+        </field>
+
+        <field name="inherit_id"
+               ref="stock_account.view_stock_valuation_layer_tree"/>
+
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='unit_cost']"
+                   position="after">
+
+                <field name="x_avg_unit_cost"/>
+
+            </xpath>
+
+        </field>
+
+    </record>
+
+</odoo>

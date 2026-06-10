@@ -1,0 +1,10 @@
+<odoo>
+    <record id="barcode_rule_qty_price" model="barcode.rule">
+        <field name="name">Qty + Price Barcode</field>
+        <field name="barcode_nomenclature_id" ref="barcodes.default_barcode_nomenclature"/>
+        <field name="type">product</field>
+        <field name="encoding">any</field>
+        <field name="pattern">21.....{NNNNN}{NNNN}</field>
+        <field name="sequence">1</field>
+    </record>
+</odoo>

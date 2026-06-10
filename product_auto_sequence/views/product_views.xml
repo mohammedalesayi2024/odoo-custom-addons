@@ -1,0 +1,43 @@
+<odoo>
+
+    <!-- Product Template View -->
+    <record id="view_product_form_inherit_brand" model="ir.ui.view">
+        <field name="name">product.template.form.brand</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='categ_id']" position="after">
+                <field name="brand_id"/>
+                <field name="product_sequence"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Product Category Shortcut -->
+    <record id="view_product_category_form_inherit_shortcut" model="ir.ui.view">
+        <field name="name">product.category.form.shortcut</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group" position="inside">
+                <field name="shortcut"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_product_brand" model="ir.actions.act_window">
+        <field name="name">Product Brands</field> <!-- 👈 تحسين الاسم -->
+        <field name="res_model">product.brand</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu تحت Configuration -->
+    <menuitem 
+        id="menu_product_brand"
+        name="Brands"
+        parent="stock.menu_stock_warehouse_mgmt"
+        action="action_product_brand"
+        sequence="30"/>
+
+</odoo>
