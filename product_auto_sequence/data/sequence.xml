@@ -1,7 +1,0 @@
-<odoo>
-    <record id="seq_product_sequence" model="ir.sequence">
-        <field name="name">Product Sequence</field>
-        <field name="code">product.sequence</field>
-        <field name="padding">4</field>
-    </record>
-</odoo>
