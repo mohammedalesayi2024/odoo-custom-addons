@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_receipt_voucher"
+            model="ir.actions.report">
+
+        <field name="name">
+            Receipt Voucher
+        </field>
+
+        <field name="model">
+            account.payment
+        </field>
+
+        <field name="report_type">
+            qweb-pdf
+        </field>
+
+        <field name="report_name">
+            smart_payment_voucher.receipt_voucher_template
+        </field>
+
+        <field name="report_file">
+            smart_payment_voucher.receipt_voucher_template
+        </field>
+
+        <field name="print_report_name">
+            'Receipt Voucher - %s' % (object.name)
+        </field>
+
+    </record>
+
+</odoo>

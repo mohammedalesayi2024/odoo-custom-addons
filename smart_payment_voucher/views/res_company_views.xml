@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_company_form_inherit_voucher" model="ir.ui.view">
+        <field name="name">res.company.form.voucher</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//notebook" position="inside">
+
+                <page string="Payment Voucher">
+
+                    <group>
+
+                        <group>
+                            <field name="voucher_show_qr"/>
+                            <field name="voucher_show_time"/>
+                        </group>
+
+                        <group>
+                            <field name="voucher_footer"/>
+                        </group>
+
+                    </group>
+
+                    <group>
+
+                        <group>
+                            <field name="voucher_stamp" widget="image"/>
+                        </group>
+
+                        <group>
+                            <field name="voucher_signature" widget="image"/>
+                        </group>
+
+                    </group>
+
+                </page>
+
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

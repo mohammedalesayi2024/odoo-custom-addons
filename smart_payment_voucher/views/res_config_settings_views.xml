@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form_voucher"
+            model="ir.ui.view">
+
+        <field name="name">account.payment.form.voucher</field>
+        <field name="model">account.payment</field>
+
+        <field name="inherit_id"
+               ref="account.res_config_settings_view_form"/>
+
+        <field name="arch" type="xml">
+
+            <xpath expr="//app[@name='account']"
+                   position="inside">
+
+                <block title="Payment Voucher">
+
+                    <setting string="Show QR Code">
+                        <field name="voucher_show_qr"/>
+                    </setting>
+
+                    <setting string="Show Time">
+                        <field name="voucher_show_time"/>
+                    </setting>
+
+                    <setting string="Voucher Footer">
+                        <field name="voucher_footer"/>
+                    </setting>
+
+                    <setting string="Company Stamp">
+                        <field name="voucher_stamp"/>
+                    </setting>
+
+                    <setting string="Authorized Signature">
+                        <field name="voucher_signature"/>
+                    </setting>
+
+                </block>
+
+            </xpath>
+
+        </field>
+
+    </record>
+
+</odoo>
