@@ -171,7 +171,7 @@
                                 </td>
 
                                 <td style="border:1px solid #ccc;padding:8px;">
-                                    <span t-field="o.payment_method_line_id"/>
+                                    <span t-field="o.journal_id"/>
                                 </td>
 
                             </tr>
