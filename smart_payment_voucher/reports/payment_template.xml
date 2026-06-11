@@ -211,6 +211,14 @@
                                 </td>
 
                             </tr>
+                            <tr>
+                                <td style="border:1px solid #ccc;padding:8px;">
+                                    المبلغ كتابة
+                                </td>
+
+                                <td style="border:1px solid #ccc;padding:8px;">
+                                    <span t-field="o.amount_in_words"/>
+                                </td>
 
                         </table>
 

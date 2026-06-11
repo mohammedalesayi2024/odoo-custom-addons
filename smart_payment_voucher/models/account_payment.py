@@ -1,8 +1,12 @@
 from odoo import models
-
+from odoo import models, fields, api
 
 class AccountPayment(models.Model):
     _inherit = "account.payment"
+    amount_in_words = fields.Char(
+        string="Amount In Words",
+        compute="_compute_amount_in_words"
+    )
 
     def action_print_receipt_voucher(self):
         self.ensure_one()
@@ -17,3 +21,9 @@ class AccountPayment(models.Model):
         return self.env.ref(
             "smart_payment_voucher.action_payment_voucher"
         ).report_action(self)
+        
+
+    @api.depends("amount")
+    def _compute_amount_in_words(self):
+        for rec in self:
+            rec.amount_in_words = str(rec.amount)
