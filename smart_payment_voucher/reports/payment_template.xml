@@ -7,8 +7,7 @@
 
             <t t-foreach="docs" t-as="o">
 
-                <t t-call="web.external_layout">
-
+                 <t t-call="web.basic_layout">
                     <div class="page"
                          style="direction:rtl;
                                 font-family: Tahoma;">
@@ -172,7 +171,7 @@
                                 </td>
 
                                 <td style="border:1px solid #ccc;padding:8px;">
-                                    <span t-field="o.journal_id"/>
+                                    <span t-field="o.payment_method_line_id"/>
                                 </td>
 
                             </tr>
@@ -227,6 +226,7 @@
                              min-height:70px;
                              padding:10px;
                              margin-bottom:30px;">
+                             <span t-field="o.memo"/>
 
                             
 
