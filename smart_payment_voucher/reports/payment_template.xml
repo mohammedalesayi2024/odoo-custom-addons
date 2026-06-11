@@ -49,21 +49,29 @@
                                     </h2>
 
                                     <div style="margin-top:8px;">
-                                        جدة - المملكة العربية السعودية
+                                        <t t-if="is_ar">جدة - المملكة العربية السعودية</t>
+                                        <t t-else="">Jeddah - Saudi Arabia</t>
                                     </div>
 
                                     <div t-if="o.company_id.vat">
-                                        الرقم الضريبي:
+                                        
+                                        <span t-if="is_ar">الرقم الضريبي</t>
+                                        <t t-else="">VAT Number</t>
                                         <span t-field="o.company_id.vat"/>
                                     </div>
 
                                     <div t-if="o.company_id.phone">
-                                        هاتف:
+                                        
+                                        <span t-if="is_ar">هاتف</t>
+                                        <t t-else="">Phone</t>
+
                                         <span t-field="o.company_id.phone"/>
                                     </div>
 
                                     <div t-if="o.company_id.email">
-                                        بريد:
+                                        
+                                        <t t-if="is_ar">بريد</t>
+                                        <t t-else="">Email</t>
                                         <span t-field="o.company_id.email"/>
                                     </div>
 
@@ -151,7 +159,8 @@
                              padding:8px;
                              margin-bottom:10px;">
 
-                            بيانات المستفيد
+                            <t t-if="is_ar">بيانات المستفيد</t>
+                            <t t-else="">Beneficiary Details</t>
 
                         </div>
 
@@ -163,7 +172,9 @@
                             <tr>
 
                                 <td style="border:1px solid #ccc;padding:8px;">
-                                    المستفيد
+                                    
+                                    <t t-if="is_ar">المستفيد</t>
+                                    <t t-else="">Beneficiary Details</t>
                                 </td>
 
                                 <td style="border:1px solid #ccc;padding:8px;">
@@ -175,7 +186,9 @@
                             <tr>
 
                                 <td style="border:1px solid #ccc;padding:8px;">
-                                    طريقة الدفع
+                                    
+                                    <t t-if="is_ar">طريقة الدفع</t>
+                                    <t t-else="">Payment Method</t>
                                 </td>
 
                                 <td style="border:1px solid #ccc;padding:8px;">
@@ -194,7 +207,9 @@
                              padding:8px;
                              margin-bottom:10px;">
 
-                            تفاصيل المبلغ
+                        
+                            <t t-if="is_ar">تفاصيل المبلغ</t>
+                            <t t-else="">Amount Details</t>
 
                         </div>
 
@@ -206,7 +221,9 @@
                             <tr>
 
                                 <td style="border:1px solid #ccc;padding:8px;">
-                                    المبلغ المصروف
+                                    
+                                    <t t-if="is_ar">المبلغ المصروف</t>
+                                    <t t-else="">Amount</t>
                                 </td>
 
                                 <td style="border:1px solid #ccc;padding:8px;">
@@ -218,7 +235,9 @@
                             <tr>
 
                                 <td style="border:1px solid #ccc;padding:8px;">
-                                    المبلغ كتابة
+                                    
+                                    <t t-if="is_ar">المبلغ كتابة</t>
+                                    <t t-else="">Amount in Words</t>        
                                 </td>
 
                                 <td style="border:1px solid #ccc;padding:8px;">
@@ -237,7 +256,9 @@
                              padding:8px;
                              margin-bottom:10px;">
 
-                            ملاحظات
+                            
+                            <t t-if="is_ar">ملاحظات</t>
+                            <t t-else="">Notes</t>
 
                         </div>
 
@@ -259,7 +280,9 @@
 
                                 <td style="text-align:center;">
 
-                                    <strong>المعتمد</strong>
+                                    
+                                    <t t-if="is_ar">المعتمد</t>
+                                    <t t-else="">Approver</t>
 
                                     <br/>
                                     <br/>
@@ -269,7 +292,8 @@
 
                                 <td style="text-align:center;">
 
-                                    <strong>المستلم</strong>
+                                    <t t-if="is_ar">المستلم</t>
+                                    <t t-else="">Recipient</t>          
 
                                     <br/>
                                     <br/>
