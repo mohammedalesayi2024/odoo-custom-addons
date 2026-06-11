@@ -10,7 +10,7 @@
                 <t t-call="web.basic_layout">
 
                     <div class="page"
-                       t-att-style="'direction:rtl;font-family:'Cairo', sans-serif;margin-top:0px;' if is_ar else 'direction:ltr;font-family:'Cairo', sans-serif;margin-top:0px;'">
+                      t-att-style="'direction:rtl;font-family:Cairo,sans-serif;margin-top:0px;' if values.get('is_ar') else 'direction:ltr;font-family:Cairo,sans-serif;margin-top:0px;'">
 
                         <!-- Company Header -->
 
