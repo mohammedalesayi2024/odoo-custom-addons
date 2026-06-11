@@ -10,8 +10,10 @@
                 <t t-call="web.basic_layout">
 
                     <div class="page"
-                         style="direction:rtl;
-                                font-family:Arial;">
+                       style="direction:rtl;
+                            font-family:Arial;
+                            margin-top:0px;
+                            padding-top:0px;">
 
                         <!-- Header -->
 
