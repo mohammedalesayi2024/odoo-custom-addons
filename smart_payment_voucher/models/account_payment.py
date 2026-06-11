@@ -23,13 +23,13 @@ class AccountPayment(models.Model):
             "smart_payment_voucher.action_payment_voucher"
         ).report_action(self)
         
-@api.depends("amount", "currency_id")
-def _compute_amount_in_words(self):
-    for rec in self:
+    @api.depends("amount", "currency_id")
+    def _compute_amount_in_words(self):
+        for rec in self:
 
-        lang = rec.env.context.get("lang", "en_US")
+         lang = rec.env.context.get("lang", "en_US")
 
-        if lang.startswith("ar"):
+         if lang.startswith("ar"):
             amount_text = num2words(rec.amount, lang="ar")
 
             if rec.currency_id.name == "SAR":
