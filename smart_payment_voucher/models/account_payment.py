@@ -1,5 +1,6 @@
 from odoo import models
 from odoo import models, fields, api
+from num2words import num2words
 
 class AccountPayment(models.Model):
     _inherit = "account.payment"
@@ -26,4 +27,4 @@ class AccountPayment(models.Model):
     @api.depends("amount")
     def _compute_amount_in_words(self):
         for rec in self:
-            rec.amount_in_words = str(rec.amount)
+            rec.amount_in_words = num2words(rec.amount, lang='ar')
