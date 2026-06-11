@@ -39,28 +39,52 @@ class AccountPayment(models.Model):
                 fraction_text = num2words(fraction_part, lang="ar")
 
                 if rec.currency_id.name == "SAR":
-                    rec.amount_in_words = (
-                        f"{amount_text} ريال سعودي "
-                        f"و {fraction_text} هللة فقط لا غير"
-                    )
+
+                    if fraction_part:
+                        rec.amount_in_words = (
+                            f"{amount_text} ريال سعودي "
+                            f"و {fraction_text} هللة فقط لا غير"
+                        )
+                    else:
+                        rec.amount_in_words = (
+                            f"{amount_text} ريال سعودي فقط لا غير"
+                        )
 
                 elif rec.currency_id.name == "USD":
-                    rec.amount_in_words = (
-                        f"{amount_text} دولار أمريكي "
-                        f"و {fraction_text} سنت فقط لا غير"
-                    )
+
+                    if fraction_part:
+                        rec.amount_in_words = (
+                            f"{amount_text} دولار أمريكي "
+                            f"و {fraction_text} سنت فقط لا غير"
+                        )
+                    else:
+                        rec.amount_in_words = (
+                            f"{amount_text} دولار أمريكي فقط لا غير"
+                        )
 
                 elif rec.currency_id.name == "EUR":
-                    rec.amount_in_words = (
-                        f"{amount_text} يورو "
-                        f"و {fraction_text} سنت فقط لا غير"
-                    )
+
+                    if fraction_part:
+                        rec.amount_in_words = (
+                            f"{amount_text} يورو "
+                            f"و {fraction_text} سنت فقط لا غير"
+                        )
+                    else:
+                        rec.amount_in_words = (
+                            f"{amount_text} يورو فقط لا غير"
+                        )
 
                 else:
-                    rec.amount_in_words = (
-                        f"{amount_text} {rec.currency_id.name} "
-                        f"و {fraction_text} فقط لا غير"
-                    )
+
+                    if fraction_part:
+                        rec.amount_in_words = (
+                            f"{amount_text} {rec.currency_id.name} "
+                            f"و {fraction_text} فقط لا غير"
+                        )
+                    else:
+                        rec.amount_in_words = (
+                            f"{amount_text} {rec.currency_id.name} فقط لا غير"
+                        )
 
             else:
 
@@ -68,25 +92,49 @@ class AccountPayment(models.Model):
                 fraction_text = num2words(fraction_part, lang="en")
 
                 if rec.currency_id.name == "SAR":
-                    rec.amount_in_words = (
-                        f"{amount_text.title()} Riyals Saudi "
-                        f"and {fraction_text.title()} Halalas Only"
-                    )
+
+                    if fraction_part:
+                        rec.amount_in_words = (
+                            f"{amount_text.title()} Riyals Saudi "
+                            f"and {fraction_text.title()} Halalas Only"
+                        )
+                    else:
+                        rec.amount_in_words = (
+                            f"{amount_text.title()} Riyals Saudi Only"
+                        )
 
                 elif rec.currency_id.name == "USD":
-                    rec.amount_in_words = (
-                        f"{amount_text.title()} US Dollars "
-                        f"and {fraction_text.title()} Cents Only"
-                    )
+
+                    if fraction_part:
+                        rec.amount_in_words = (
+                            f"{amount_text.title()} US Dollars "
+                            f"and {fraction_text.title()} Cents Only"
+                        )
+                    else:
+                        rec.amount_in_words = (
+                            f"{amount_text.title()} US Dollars Only"
+                        )
 
                 elif rec.currency_id.name == "EUR":
-                    rec.amount_in_words = (
-                        f"{amount_text.title()} Euros "
-                        f"and {fraction_text.title()} Cents Only"
-                    )
+
+                    if fraction_part:
+                        rec.amount_in_words = (
+                            f"{amount_text.title()} Euros "
+                            f"and {fraction_text.title()} Cents Only"
+                        )
+                    else:
+                        rec.amount_in_words = (
+                            f"{amount_text.title()} Euros Only"
+                        )
 
                 else:
-                    rec.amount_in_words = (
-                        f"{amount_text.title()} {rec.currency_id.name} "
-                        f"and {fraction_text.title()} Only"
-                    )
+
+                    if fraction_part:
+                        rec.amount_in_words = (
+                            f"{amount_text.title()} {rec.currency_id.name} "
+                            f"and {fraction_text.title()} Only"
+                        )
+                    else:
+                        rec.amount_in_words = (
+                            f"{amount_text.title()} {rec.currency_id.name} Only"
+                        )
