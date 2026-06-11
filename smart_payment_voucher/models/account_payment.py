@@ -23,25 +23,40 @@ class AccountPayment(models.Model):
             "smart_payment_voucher.action_payment_voucher"
         ).report_action(self)
         
+@api.depends("amount", "currency_id")
+def _compute_amount_in_words(self):
+    for rec in self:
 
-    @api.depends("amount", "currency_id")
-    def _compute_amount_in_words(self):
-       for rec in self:
+        lang = rec.env.context.get("lang", "en_US")
 
-        amount_text = num2words(rec.amount, lang="ar")
+        if lang.startswith("ar"):
+            amount_text = num2words(rec.amount, lang="ar")
 
-        if rec.currency_id.name == "SAR":
-            currency_name = "ريال سعودي"
+            if rec.currency_id.name == "SAR":
+                currency_name = "ريال سعودي"
+            elif rec.currency_id.name == "USD":
+                currency_name = "دولار أمريكي"
+            elif rec.currency_id.name == "EUR":
+                currency_name = "يورو"
+            else:
+                currency_name = rec.currency_id.name
 
-        elif rec.currency_id.name == "USD":
-            currency_name = "دولار أمريكي"
-
-        elif rec.currency_id.name == "EUR":
-            currency_name = "يورو"
+            rec.amount_in_words = (
+                f"{amount_text} {currency_name} فقط لا غير"
+            )
 
         else:
-            currency_name = rec.currency_id.name
+            amount_text = num2words(rec.amount, lang="en")
 
-        rec.amount_in_words = (
-            f"{amount_text} {currency_name} فقط لا غير"
-        )
+            if rec.currency_id.name == "SAR":
+                currency_name = "Saudi Riyals"
+            elif rec.currency_id.name == "USD":
+                currency_name = "US Dollars"
+            elif rec.currency_id.name == "EUR":
+                currency_name = "Euros"
+            else:
+                currency_name = rec.currency_id.name
+
+            rec.amount_in_words = (
+                f"{amount_text} {currency_name} Only"
+            )
