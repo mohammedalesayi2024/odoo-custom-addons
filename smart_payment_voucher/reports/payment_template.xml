@@ -9,8 +9,8 @@
              <t t-set="is_ar" t-value="o.env.user.lang and o.env.user.lang.startswith('ar')"/>  
                 <t t-call="web.basic_layout">
 
-                    <div class="page"
-                      t-att-style="'direction:rtl;font-family:Cairo,sans-serif;margin-top:0px;' if values.get('is_ar') else 'direction:ltr;font-family:Cairo,sans-serif;margin-top:0px;'">
+                   <div class="page"
+                       t-att-style="'direction:rtl;font-family:Arial;margin-top:0px;' if is_ar else 'direction:ltr;font-family:Arial;margin-top:0px;'">
 
                         <!-- Company Header -->
 
