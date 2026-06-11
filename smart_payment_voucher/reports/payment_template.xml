@@ -274,45 +274,42 @@
 
                         <!-- Signatures -->
 
-                        <table style="width:100%;">
+<table style="width:100%; margin-top:20px; border-collapse:collapse;">
 
-                            <tr>
+    <tr>
 
-                                <td style="text-align:center;">
+        <td style="
+            width:50%;
+            height:220px;
+            border:1px solid #ccc;
+            text-align:center;
+            vertical-align:top;">
 
-                                    
-                                    <t t-if="is_ar">المعتمد</t>
-                                    <t t-else="">Approver</t>
+            <div style="padding-top:10px; font-weight:bold;">
 
-                                    <br/>
-                                    <br/>
-                                    <br/>
+                <t t-if="is_ar">المعتمد</t>
+                <t t-else="">Approver</t>
 
-                                </td>
+            </div>
 
-                                <td style="text-align:center;">
+        </td>
 
-                                    <t t-if="is_ar">المستلم</t>
-                                    <t t-else="">Recipient</t>          
+        <td style="
+            width:50%;
+            height:220px;
+            border:1px solid #ccc;
+            text-align:center;
+            vertical-align:top;">
 
-                                    <br/>
-                                    <br/>
-                                    <br/>
+            <div style="padding-top:10px; font-weight:bold;">
 
-                                </td>
+                <t t-if="is_ar">الختم</t>
+                <t t-else="">Company Stamp</t>
 
-                            </tr>
+            </div>
 
-                        </table>
+        </td>
 
-                    </div>
+    </tr>
 
-                </t>
-
-            </t>
-
-        </t>
-
-    </template>
-
-</odoo>
+</table>
