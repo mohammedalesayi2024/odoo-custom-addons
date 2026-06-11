@@ -10,12 +10,42 @@
                 <t t-call="web.basic_layout">
 
                     <div class="page"
-                       style="direction:rtl;
-                            font-family:Arial;
-                            margin-top:0px;
-                            padding-top:0px;">
+                         style="direction:rtl;
+                                font-family:Arial;">
 
-                        <!-- Header -->
+                        <!-- Company Header -->
+
+                        <table style="width:100%; margin-bottom:20px;">
+                            <tr>
+
+                                <td style="width:70%; text-align:right;">
+
+                                    <h3 style="margin:0;">
+                                        <span t-field="o.company_id.name"/>
+                                    </h3>
+
+                                    <div t-if="o.company_id.phone">
+                                        📞 <span t-field="o.company_id.phone"/>
+                                    </div>
+
+                                    <div t-if="o.company_id.email">
+                                        ✉ <span t-field="o.company_id.email"/>
+                                    </div>
+
+                                </td>
+
+                                <td style="width:30%; text-align:left;">
+
+                                    <img t-if="o.company_id.logo"
+                                         t-att-src="image_data_uri(o.company_id.logo)"
+                                         style="max-height:90px;"/>
+
+                                </td>
+
+                            </tr>
+                        </table>
+
+                        <!-- Title -->
 
                         <div style="
                             background:#8b1e2d;
@@ -117,7 +147,8 @@
 
                         <table style="
                                width:100%;
-                               border-collapse:collapse;">
+                               border-collapse:collapse;
+                               margin-bottom:20px;">
 
                             <tr>
 
@@ -133,7 +164,29 @@
 
                         </table>
 
-                        <br/><br/><br/>
+                        <!-- Notes -->
+
+                        <div style="
+                             background:#8b1e2d;
+                             color:white;
+                             padding:8px;
+                             margin-bottom:10px;">
+
+                            ملاحظات
+
+                        </div>
+
+                        <div style="
+                             border:1px solid #ccc;
+                             min-height:70px;
+                             padding:10px;
+                             margin-bottom:30px;">
+
+                            <span t-field="o.ref"/>
+
+                        </div>
+
+                        <!-- Signatures -->
 
                         <table style="width:100%;">
 
@@ -141,10 +194,12 @@
 
                                 <td style="text-align:center;">
                                     <strong>المعتمد</strong>
+                                    <br/><br/><br/>
                                 </td>
 
                                 <td style="text-align:center;">
-                                    <strong>التوقيع</strong>
+                                    <strong>المستلم</strong>
+                                    <br/><br/><br/>
                                 </td>
 
                             </tr>
