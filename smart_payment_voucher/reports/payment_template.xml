@@ -55,14 +55,14 @@
 
                                     <div t-if="o.company_id.vat">
                                         
-                                        <span t-if="is_ar">الرقم الضريبي</t>
+                                        <t t-if="is_ar">الرقم الضريبي</t>   
                                         <t t-else="">VAT Number</t>
                                         <span t-field="o.company_id.vat"/>
                                     </div>
 
                                     <div t-if="o.company_id.phone">
                                         
-                                        <span t-if="is_ar">هاتف</t>
+                                        <t t-if="is_ar">هاتف</t>
                                         <t t-else="">Phone</t>
 
                                         <span t-field="o.company_id.phone"/>
