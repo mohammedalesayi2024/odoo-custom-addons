@@ -7,11 +7,11 @@
 
             <t t-foreach="docs" t-as="o">
 
-                <t t-call="web.basic_layout">
+                <t t-call="web.external_layout">
 
                     <div class="page"
                          style="direction:rtl;
-                                font-family: Tahoma;;">
+                                font-family: Tahoma;">
 
                         <!-- Company Header -->
 
@@ -73,48 +73,68 @@
 
                         <!-- Title -->
 
-                        <div style="
-                            background:#8b1e2d;
-                            color:white;
-                            padding:15px;
-                            text-align:center;
-                            border-radius:10px;
-                            margin-bottom:20px;">
-
-                            <h2 style="margin:0;">
-                                سند صرف
-                            </h2>
-
-                        </div>
+                      
 
                         <!-- Voucher Info -->
 
-                        <table style="
-                               width:100%;
-                               border-collapse:collapse;
-                               margin-bottom:20px;">
+                        <table style="width:100%; border-collapse:collapse; margin-bottom:20px;">
 
-                            <tr>
+    <tr>
 
-                                <td style="border:1px solid #ccc;padding:8px;">
-                                    <strong>رقم السند</strong>
-                                </td>
+        <td style="width:65%;">
 
-                                <td style="border:1px solid #ccc;padding:8px;">
-                                    <span t-field="o.name"/>
-                                </td>
+            <div style="
+                background:#8b1e2d;
+                color:white;
+                text-align:center;
+                font-size:24px;
+                font-weight:bold;
+                padding:20px;
+                border-radius:6px;">
 
-                                <td style="border:1px solid #ccc;padding:8px;">
-                                    <strong>التاريخ</strong>
-                                </td>
+                سند صرف
 
-                                <td style="border:1px solid #ccc;padding:8px;">
-                                    <span t-field="o.date"/>
-                                </td>
+            </div>
 
-                            </tr>
+        </td>
 
-                        </table>
+        <td style="width:35%;">
+
+            <table style="
+                   width:100%;
+                   border-collapse:collapse;">
+
+                <tr>
+
+                    <td style="border:1px solid #ccc;padding:8px;">
+                        رقم السند
+                    </td>
+
+                    <td style="border:1px solid #ccc;padding:8px;">
+                        <span t-field="o.name"/>
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <td style="border:1px solid #ccc;padding:8px;">
+                        التاريخ
+                    </td>
+
+                    <td style="border:1px solid #ccc;padding:8px;">
+                        <span t-field="o.date"/>
+                    </td>
+
+                </tr>
+
+            </table>
+
+        </td>
+
+    </tr>
+
+</table>
 
                         <!-- Beneficiary -->
 
