@@ -15,35 +15,61 @@
 
                         <!-- Company Header -->
 
-                        <table style="width:100%; margin-bottom:20px;">
-                            <tr>
+                        <table style="
+       width:100%;
+       border:1px solid #dcdcdc;
+       border-collapse:collapse;
+       margin-bottom:20px;">
 
-                                <td style="width:70%; text-align:right;">
+    <tr>
 
-                                    <h3 style="margin:0;">
-                                        <span t-field="o.company_id.name"/>
-                                    </h3>
+        <td style="
+            width:20%;
+            text-align:center;
+            padding:10px;
+            border-left:1px solid #dcdcdc;">
 
-                                    <div t-if="o.company_id.phone">
-                                        📞 <span t-field="o.company_id.phone"/>
-                                    </div>
+            <img t-if="o.company_id.logo"
+                 t-att-src="image_data_uri(o.company_id.logo)"
+                 style="max-height:80px; max-width:120px;"/>
 
-                                    <div t-if="o.company_id.email">
-                                        ✉ <span t-field="o.company_id.email"/>
-                                    </div>
+        </td>
 
-                                </td>
+        <td style="
+            width:80%;
+            text-align:right;
+            padding:10px;">
 
-                                <td style="width:30%; text-align:left;">
+            <h2 style="
+                margin:0;
+                color:#1f2d3d;">
+                <span t-field="o.company_id.name"/>
+            </h2>
 
-                                    <img t-if="o.company_id.logo"
-                                         t-att-src="image_data_uri(o.company_id.logo)"
-                                         style="max-height:90px;"/>
+            <div style="margin-top:8px;">
+                جدة - المملكة العربية السعودية
+            </div>
 
-                                </td>
+            <div t-if="o.company_id.vat">
+                الرقم الضريبي:
+                <span t-field="o.company_id.vat"/>
+            </div>
 
-                            </tr>
-                        </table>
+            <div t-if="o.company_id.phone">
+                هاتف:
+                <span t-field="o.company_id.phone"/>
+            </div>
+
+            <div t-if="o.company_id.email">
+                بريد:
+                <span t-field="o.company_id.email"/>
+            </div>
+
+        </td>
+
+    </tr>
+
+</table>
 
                         <!-- Title -->
 
@@ -126,7 +152,7 @@
                                 </td>
 
                                 <td style="border:1px solid #ccc;padding:8px;">
-                                    <span t-field="o.payment_method_line_id"/>
+                                    <span t-field="o.journal_id"/>
                                 </td>
 
                             </tr>
