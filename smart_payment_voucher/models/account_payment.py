@@ -24,7 +24,24 @@ class AccountPayment(models.Model):
         ).report_action(self)
         
 
-    @api.depends("amount")
+    @api.depends("amount", "currency_id")
     def _compute_amount_in_words(self):
-        for rec in self:
-            rec.amount_in_words = num2words(rec.amount, lang='ar')
+       for rec in self:
+
+        amount_text = num2words(rec.amount, lang="ar")
+
+        if rec.currency_id.name == "SAR":
+            currency_name = "ريال سعودي"
+
+        elif rec.currency_id.name == "USD":
+            currency_name = "دولار أمريكي"
+
+        elif rec.currency_id.name == "EUR":
+            currency_name = "يورو"
+
+        else:
+            currency_name = rec.currency_id.name
+
+        rec.amount_in_words = (
+            f"{amount_text} {currency_name} فقط لا غير"
+        )
