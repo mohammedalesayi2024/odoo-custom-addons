@@ -282,7 +282,7 @@
 
         <td style="
             width:50%;
-            height:220px;
+            height:120px;
             border:1px solid #ccc;
             text-align:center;
             vertical-align:top;">
@@ -291,14 +291,18 @@
 
                 <t t-if="is_ar">المعتمد</t>
                 <t t-else="">Approver</t>
+                  <br/>
 
+<img t-if="o.company_id.voucher_signature"
+     t-att-src="image_data_uri(o.company_id.voucher_signature)"
+     style="max-height:80px; max-width:200px;"/>
             </div>
 
         </td>
 
         <td style="
             width:50%;
-            height:220px;
+            height:120px;
             border:1px solid #ccc;
             text-align:center;
             vertical-align:top;">
@@ -307,7 +311,11 @@
 
                 <t t-if="is_ar">الختم</t>
                 <t t-else="">Company Stamp</t>
+                  <br/>
 
+                 <img t-if="o.company_id.voucher_stamp"
+                   t-att-src="image_data_uri(o.company_id.voucher_stamp)"
+                   style="max-height:90px; max-width:150px;"/>
             </div>
 
         </td>
