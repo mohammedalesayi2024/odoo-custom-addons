@@ -54,7 +54,7 @@ class AccountPayment(models.Model):
 
                     if fraction_part:
                         rec.amount_in_words = (
-                            f"{amount_text} دولار أمريكي "
+                            f"{amount_text} دولار  أمريكي "
                             f"و {fraction_text} سنت فقط لا غير"
                         )
                     else:
