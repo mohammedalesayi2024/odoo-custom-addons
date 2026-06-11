@@ -6,140 +6,137 @@
         <t t-call="web.html_container">
 
             <t t-foreach="docs" t-as="o">
+             <t t-set="is_ar" t-value="o.env.user.lang and o.env.user.lang.startswith('ar')"/>  
+                <t t-call="web.basic_layout">
 
-                 <t t-call="web.basic_layout">
                     <div class="page"
-                      style="
-                              direction:rtl;
-                              font-family:Tahoma;
-                              margin-top:0px;">
+                       t-att-style="'direction:rtl;font-family:Tahoma;margin-top:0px;' if is_ar else 'direction:ltr;font-family:Tahoma;margin-top:0px;'">
 
                         <!-- Company Header -->
 
                         <table style="
-       width:100%;
-       border:1px solid #dcdcdc;
-       border-collapse:collapse;
-       margin-bottom:20px;">
+                               width:100%;
+                               border:1px solid #dcdcdc;
+                               border-collapse:collapse;
+                               margin-bottom:20px;">
 
-    <tr>
+                            <tr>
 
-        <td style="
-            width:20%;
-            text-align:center;
-            vertical-align:top;
-            padding:3px;
-            border-left:1px solid #dcdcdc;">
+                                <td style="
+                                    width:20%;
+                                    text-align:center;
+                                    vertical-align:top;
+                                    padding:3px;
+                                    border-left:1px solid #dcdcdc;">
 
-           <img t-if="o.company_id.logo"
-                   t-att-src="image_data_uri(o.company_id.logo)"
-                   style="max-height:70px; max-width:90px; margin-top:-5px;"/>
+                                    <img t-if="o.company_id.logo"
+                                         t-att-src="image_data_uri(o.company_id.logo)"
+                                         style="max-height:70px; max-width:90px; margin-top:-5px;"/>
 
-        </td>
+                                </td>
 
-        <td style="
-            width:85%;
-            text-align:right;
-            padding:5px;">
+                                <td style="
+                                    width:85%;
+                                    text-align:right;
+                                    padding:5px;">
 
-            <h2 style="
-                margin:0;
-                color:#1f2d3d;">
-                <span t-field="o.company_id.name"/>
-            </h2>
+                                    <h2 style="
+                                        margin:0;
+                                        color:#1f2d3d;">
 
-            <div style="margin-top:8px;">
-                جدة - المملكة العربية السعودية
-            </div>
+                                        <span t-field="o.company_id.name"/>
 
-            <div t-if="o.company_id.vat">
-                الرقم الضريبي:
-                <span t-field="o.company_id.vat"/>
-            </div>
+                                    </h2>
 
-            <div t-if="o.company_id.phone">
-                هاتف:
-                <span t-field="o.company_id.phone"/>
-            </div>
+                                    <div style="margin-top:8px;">
+                                        جدة - المملكة العربية السعودية
+                                    </div>
 
-            <div t-if="o.company_id.email">
-                بريد:
-                <span t-field="o.company_id.email"/>
-            </div>
+                                    <div t-if="o.company_id.vat">
+                                        الرقم الضريبي:
+                                        <span t-field="o.company_id.vat"/>
+                                    </div>
 
-        </td>
+                                    <div t-if="o.company_id.phone">
+                                        هاتف:
+                                        <span t-field="o.company_id.phone"/>
+                                    </div>
 
-    </tr>
+                                    <div t-if="o.company_id.email">
+                                        بريد:
+                                        <span t-field="o.company_id.email"/>
+                                    </div>
 
-</table>
+                                </td>
 
-                        <!-- Title -->
+                            </tr>
 
-                      
+                        </table>
 
                         <!-- Voucher Info -->
 
-  <table style="width:100%; border-collapse:collapse; margin-bottom:20px;">
+                        <table style="width:100%; border-collapse:collapse; margin-bottom:20px;">
 
-       <tr>
+                            <tr>
 
-           <td style="width:60%;">
+                                <td style="width:60%;">
 
-             <div style="
-                background:#8b1e2d;
-                color:white;
-                text-align:center;
-                font-size:24px;
-                font-weight:bold;
-                padding:20px;
-                border-radius:6px;">
+                                    <div style="
+                                        background:#8b1e2d;
+                                        color:white;
+                                        text-align:center;
+                                        font-size:24px;
+                                        font-weight:bold;
+                                        padding:20px;
+                                        border-radius:6px;">
 
-                سند صرف
-  
-               </div>
+                                        <t t-if="is_ar">سند صرف</t>
+                                        <t t-else="">Payment Voucher</t>
 
-        </td>
+                                    </div>
 
-        <td style="width:40%;">
+                                </td>
 
-          <table style="
-                   width:100%;
-                   border-collapse:collapse;">
+                                <td style="width:40%;">
 
-                <tr>
+                                    <table style="
+                                           width:100%;
+                                           border-collapse:collapse;">
 
-                    <td style="border:1px solid #ccc;padding:8px;">
-                        رقم السند
-                    </td>
+                                        <tr>
 
-                    <td style="border:1px solid #ccc;padding:8px;">
-                        <span t-field="o.name"/>
-                    </td>
+                                            <td style="border:1px solid #ccc;padding:8px;">
+                                                رقم السند
+                                            </td>
 
-                </tr>
+                                            <td style="border:1px solid #ccc;padding:8px;">
+                                                <span t-field="o.name"/>
+                                            </td>
 
-                <tr>
+                                        </tr>
 
-                    <td style="border:1px solid #ccc;padding:8px;">
-                        التاريخ
-                    </td>
+                                        <tr>
 
-                    <td style="border:1px solid #ccc;padding:8px;">
-                        <span t-field="o.date"/>
-                    </td>
+                                            <td style="border:1px solid #ccc;padding:8px;">
+                                                التاريخ
+                                            </td>
 
-                </tr>
+                                            <td style="border:1px solid #ccc;padding:8px;">
+                                                <span t-field="o.date"/>
+                                            </td>
 
-            </table>
-            
-            
+                                        </tr>
 
-        </td>
+                                    </table>
 
-    </tr>
+                                </td>
 
-</table>
-<hr style="border:1px solid #e5e5e5; margin:10px 0 20px 0;"/>
+                            </tr>
+
+                        </table>
+
+                        <hr style="border:1px solid #e5e5e5; margin:10px 0 20px 0;"/>
+
                         <!-- Beneficiary -->
 
                         <div style="
@@ -211,7 +208,9 @@
                                 </td>
 
                             </tr>
+
                             <tr>
+
                                 <td style="border:1px solid #ccc;padding:8px;">
                                     المبلغ كتابة
                                 </td>
@@ -219,7 +218,9 @@
                                 <td style="border:1px solid #ccc;padding:8px;">
                                     <span t-field="o.amount_in_words"/>
                                 </td>
+
                             </tr>
+
                         </table>
 
                         <!-- Notes -->
@@ -239,9 +240,8 @@
                              min-height:70px;
                              padding:10px;
                              margin-bottom:30px;">
-                             <span t-field="o.memo"/>
 
-                            
+                            <span t-field="o.memo"/>
 
                         </div>
 
@@ -252,13 +252,23 @@
                             <tr>
 
                                 <td style="text-align:center;">
+
                                     <strong>المعتمد</strong>
-                                    <br/><br/><br/>
+
+                                    <br/>
+                                    <br/>
+                                    <br/>
+
                                 </td>
 
                                 <td style="text-align:center;">
+
                                     <strong>المستلم</strong>
-                                    <br/><br/><br/>
+
+                                    <br/>
+                                    <br/>
+                                    <br/>
+
                                 </td>
 
                             </tr>

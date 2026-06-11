@@ -69,7 +69,7 @@ class AccountPayment(models.Model):
 
                 if rec.currency_id.name == "SAR":
                     rec.amount_in_words = (
-                        f"{amount_text.title()} Riyals "
+                        f"{amount_text.title()} Riyals Saudi "
                         f"and {fraction_text.title()} Halalas Only"
                     )
 
