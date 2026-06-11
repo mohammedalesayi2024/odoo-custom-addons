@@ -106,7 +106,10 @@
                                         <tr>
 
                                             <td style="border:1px solid #ccc;padding:8px;">
-                                                رقم السند
+                                                
+                                                
+                                               <t t-if="is_ar">رقم السند</t>
+                                               <t t-else="">Voucher Number</t>
                                             </td>
 
                                             <td style="border:1px solid #ccc;padding:8px;">
@@ -118,7 +121,10 @@
                                         <tr>
 
                                             <td style="border:1px solid #ccc;padding:8px;">
-                                                التاريخ
+                                                
+                                                
+                                              <t t-if="is_ar">التاريخ</t>
+                                              <t t-else="">Date</t>
                                             </td>
 
                                             <td style="border:1px solid #ccc;padding:8px;">
