@@ -23,41 +23,70 @@ class AccountPayment(models.Model):
         return self.env.ref(
             "smart_payment_voucher.action_payment_voucher"
         ).report_action(self)
+@api.depends("amount", "currency_id")
+def _compute_amount_in_words(self):
+    for rec in self:
 
-    @api.depends("amount", "currency_id")
-    def _compute_amount_in_words(self):
-        for rec in self:
+        lang = rec.env.user.lang or "en_US"
 
-            lang = rec.env.user.lang or "en_US"
+        whole_part = int(rec.amount)
+        fraction_part = round((rec.amount - whole_part) * 100)
 
-            if lang.startswith("ar"):
-                amount_text = num2words(rec.amount, lang="ar")
+        if lang.startswith("ar"):
 
-                if rec.currency_id.name == "SAR":
-                    currency_name = "ريال سعودي"
-                elif rec.currency_id.name == "USD":
-                    currency_name = "دولار أمريكي"
-                elif rec.currency_id.name == "EUR":
-                    currency_name = "يورو"
-                else:
-                    currency_name = rec.currency_id.name
+            amount_text = num2words(whole_part, lang="ar")
+            fraction_text = num2words(fraction_part, lang="ar")
 
+            if rec.currency_id.name == "SAR":
                 rec.amount_in_words = (
-                    f"{amount_text} {currency_name} فقط لا غير"
+                    f"{amount_text} ريال سعودي "
+                    f"و {fraction_text} هللة فقط لا غير"
+                )
+
+            elif rec.currency_id.name == "USD":
+                rec.amount_in_words = (
+                    f"{amount_text} دولار أمريكي "
+                    f"و {fraction_text} سنت فقط لا غير"
+                )
+
+            elif rec.currency_id.name == "EUR":
+                rec.amount_in_words = (
+                    f"{amount_text} يورو "
+                    f"و {fraction_text} سنت فقط لا غير"
                 )
 
             else:
-                amount_text = num2words(rec.amount, lang="en")
-
-                if rec.currency_id.name == "SAR":
-                    currency_name = "Saudi Riyals"
-                elif rec.currency_id.name == "USD":
-                    currency_name = "US Dollars"
-                elif rec.currency_id.name == "EUR":
-                    currency_name = "Euros"
-                else:
-                    currency_name = rec.currency_id.name
-
                 rec.amount_in_words = (
-                    f"{amount_text} {currency_name} Only"
+                    f"{amount_text} {rec.currency_id.name} "
+                    f"و {fraction_text} فقط لا غير"
                 )
+
+        else:
+
+            amount_text = num2words(whole_part, lang="en")
+            fraction_text = num2words(fraction_part, lang="en")
+
+            if rec.currency_id.name == "SAR":
+                rec.amount_in_words = (
+                    f"{amount_text.title()} Riyals "
+                    f"and {fraction_text.title()} Halalas Only"
+                )
+
+            elif rec.currency_id.name == "USD":
+                rec.amount_in_words = (
+                    f"{amount_text.title()} US Dollars "
+                    f"and {fraction_text.title()} Cents Only"
+                )
+
+            elif rec.currency_id.name == "EUR":
+                rec.amount_in_words = (
+                    f"{amount_text.title()} Euros "
+                    f"and {fraction_text.title()} Cents Only"
+                )
+
+            else:
+                rec.amount_in_words = (
+                    f"{amount_text.title()} {rec.currency_id.name} "
+                    f"and {fraction_text.title()} Only"
+                )
+            
