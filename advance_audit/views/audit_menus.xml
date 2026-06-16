@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem
+        id="menu_advance_audit_root"
+        name="Advance Audit"
+        sequence="100"/>
+
+    <menuitem
+        id="menu_advance_audit_events"
+        name="Audit Events"
+        parent="menu_advance_audit_root"
+        action="action_advance_audit_event"
+        sequence="10"/>
+
+</odoo>
