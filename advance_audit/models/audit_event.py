@@ -34,9 +34,12 @@ class AdvanceAuditEvent(models.Model):
     )
 
     model_name = fields.Char(
-        string='Model'
+        string='Technical Model'
     )
-
+    model_id = fields.Many2one(
+    'ir.model',
+    string='Model'
+    )
     record_id = fields.Integer(
         string='Record ID'
     )
