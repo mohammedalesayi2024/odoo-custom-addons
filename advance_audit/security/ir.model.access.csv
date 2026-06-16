@@ -1,3 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_advance_audit_event,advance.audit.event,model_advance_audit_event,,1,1,1,1
 access_advance_audit_change,advance.audit.change,model_advance_audit_change,,1,1,1,1
+access_advance_audit_policy,advance.audit.policy,model_advance_audit_policy,,1,1,1,1

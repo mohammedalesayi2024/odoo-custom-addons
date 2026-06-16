@@ -10,8 +10,15 @@
         'security/ir.model.access.csv',
 
         'views/audit_event_views.xml',
+        'views/audit_policy_views.xml',
+
+        'views/audit_policy_actions.xml',
         'views/audit_actions.xml',
+        
         'views/audit_menus.xml',
+        
+        
+        
     ],
     'installable': True,
     'application': True,

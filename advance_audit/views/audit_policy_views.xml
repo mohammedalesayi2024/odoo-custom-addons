@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- List View -->
+    <record id="view_advance_audit_policy_list" model="ir.ui.view">
+        <field name="name">advance.audit.policy.list</field>
+        <field name="model">advance.audit.policy</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="model_id"/>
+                <field name="active"/>
+                <field name="track_create"/>
+                <field name="track_write"/>
+                <field name="track_delete"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_advance_audit_policy_form" model="ir.ui.view">
+        <field name="name">advance.audit.policy.form</field>
+        <field name="model">advance.audit.policy</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+
+                    <group>
+                        <field name="name"/>
+                        <field name="model_id"/>
+                        <field name="active"/>
+                    </group>
+
+                    <group string="Tracking Options">
+                        <field name="track_create"/>
+                        <field name="track_write"/>
+                        <field name="track_delete"/>
+                        <field name="track_view"/>
+                        <field name="track_search"/>
+                    </group>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

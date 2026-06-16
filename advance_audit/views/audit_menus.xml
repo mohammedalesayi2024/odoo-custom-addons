@@ -12,5 +12,11 @@
         parent="menu_advance_audit_root"
         action="action_advance_audit_event"
         sequence="10"/>
+    <menuitem
+        id="menu_advance_audit_policies"
+        name="Audit Policies"
+        parent="menu_advance_audit_root"
+        action="action_advance_audit_policy"
+        sequence="20"/>
 
 </odoo>
