@@ -15,10 +15,11 @@ class AdvanceAuditPolicy(models.Model):
     )
 
     model_id = fields.Many2one(
-        'ir.model',
-        string='Model',
-        required=True
-    )
+    'ir.model',
+    string='Model',
+    required=True,
+    ondelete='cascade'
+   )
 
     track_create = fields.Boolean(
         string='Track Create',
