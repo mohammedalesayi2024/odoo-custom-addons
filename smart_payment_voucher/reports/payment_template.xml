@@ -237,7 +237,8 @@
                                 <td style="border:1px solid #ccc;padding:8px;">
                                     
                                     <t t-if="is_ar">المبلغ كتابة</t>
-                                    <t t-else="">Amount in Words</t>        
+                                    <t t-else="">Amount in- Words</t>  
+                                          
                                 </td>
 
                                 <td style="border:1px solid #ccc;padding:8px;">
