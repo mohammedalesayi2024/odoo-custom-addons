@@ -49,30 +49,32 @@
                                     </h2>
                                     <div style="margin-top:8px;">
 
-                                       <t t-if="is_ar">العنوان: </t>
-                                       <t t-else="">Address: </t>
+    <t t-if="is_ar">العنوان:</t>
+    <t t-else="">Address:</t>
 
-                                       <span t-field="o.company_id.partner_id.street"/>
+    <span t-field="o.company_id.partner_id.street"/>
 
-                                       <t t-if="o.company_id.partner_id.street2">
+    <br/>
+
+    <t t-if="o.company_id.partner_id.street2">
+        <span t-field="o.company_id.partner_id.street2"/>
+    </t>
+
+    <t t-if="o.company_id.partner_id.city">
         -
-                                       <span t-field="o.company_id.partner_id.street2"/>
-                                       </t>
- 
-                                   </div>
+        <span t-field="o.company_id.partner_id.city"/>
+    </t>
 
-                                   <div>
-                                         <span t-field="o.company_id.partner_id.country_id"/>
-    -
-                                        <span t-field="o.company_id.partner_id.city"/>
-                                   </div>
+    <t t-if="o.company_id.partner_id.zip">
+        -
+        <span t-field="o.company_id.partner_id.zip"/>
+    </t>
 
-                                   <div t-if="o.company_id.partner_id.zip">
-                                            <t t-if="is_ar">الرقم البريدي:</t>
-                                            <t t-else="">Zip Code:</t>
+    <br/>
 
-                                   <span t-field="o.company_id.partner_id.zip"/>
-                                   </div>
+    <span t-field="o.company_id.partner_id.country_id"/>
+
+</div>
                                     
    
 
