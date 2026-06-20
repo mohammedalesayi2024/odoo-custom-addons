@@ -48,9 +48,14 @@
 
                                     </h2>
 
-                                    <div style="margin-top:8px;">
-                                        <t t-if="is_ar" > العنوان :جدة - المملكة العربية السعودية</t>
-                                        <t t-else="" >Address: Jeddah - Saudi Arabia</t>
+                                    <div style="margin-top:8px;"
+                                         t-if="o.company_id.partner_id.contact_address">
+
+                                        <t t-if="is_ar">العنوان:</t>
+                                        <t t-else="">Address:</t>
+
+                                        <span t-field="o.company_id.partner_id.contact_address"/>
+
                                     </div>
 
                                     <div t-if="o.company_id.vat">
