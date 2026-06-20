@@ -290,9 +290,9 @@
 
                         <div style="
                              border:1px solid #ccc;
-                             min-height:70px;
+                             min-height:40px;
                              padding:10px;
-                             margin-bottom:30px;">
+                             margin-bottom:10px;">
 
                             <span t-field="o.memo"/>
 
@@ -302,9 +302,14 @@
 
                         <!-- Signatures -->
 
-<table style="width:100%; margin-top:20px; border-collapse:collapse;">
+<table style="
+    width:100%;
+    margin-top:5px;
+    border-collapse:collapse;
+    page-break-inside:avoid;
+">
 
-    <tr>
+    <tr style="page-break-inside:avoid;">
 
         <td style="
             width:50%;
@@ -317,11 +322,13 @@
 
                 <t t-if="is_ar">المعتمد</t>
                 <t t-else="">Approver</t>
-                  <br/>
 
-<img t-if="o.company_id.voucher_signature"
-     t-att-src="image_data_uri(o.company_id.voucher_signature)"
-     style="max-height:80px; max-width:120px;"/>
+                <br/>
+
+                <img t-if="o.company_id.voucher_signature"
+                     t-att-src="image_data_uri(o.company_id.voucher_signature)"
+                     style="max-height:80px; max-width:120px;"/>
+
             </div>
 
         </td>
@@ -337,11 +344,13 @@
 
                 <t t-if="is_ar">الختم</t>
                 <t t-else="">Company Stamp</t>
-                  <br/>
 
-                 <img t-if="o.company_id.voucher_stamp"
-                   t-att-src="image_data_uri(o.company_id.voucher_stamp)"
-                   style="max-height:90px; max-width:150px;"/>
+                <br/>
+
+                <img t-if="o.company_id.voucher_stamp"
+                     t-att-src="image_data_uri(o.company_id.voucher_stamp)"
+                     style="max-height:90px; max-width:150px;"/>
+
             </div>
 
         </td>
@@ -349,15 +358,3 @@
     </tr>
 
 </table>
-
-                    </div>
-
-                </t>
-
-            </t>
-
-        </t>
-
-    </template>
-
-</odoo>
