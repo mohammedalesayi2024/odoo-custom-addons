@@ -1,4 +1,7 @@
 from odoo import models
+import logging
+
+_logger = logging.getLogger(__name__)
 
 
 class AccountPayment(models.Model):
@@ -8,6 +11,7 @@ class AccountPayment(models.Model):
         res = super().action_post()
 
         for payment in self:
+            _logger.info("AUTO RECONCILE START %s", payment.name)
             payment._auto_reconcile_oldest_invoices()
 
         return res
@@ -15,31 +19,14 @@ class AccountPayment(models.Model):
     def _auto_reconcile_oldest_invoices(self):
         self.ensure_one()
 
-        if self.partner_type != 'customer':
-            return
+        _logger.info("Partner: %s", self.partner_id.name)
+        _logger.info("Move: %s", self.move_id.name)
 
-        invoices = self.env['account.move'].search([
-            ('partner_id', '=', self.partner_id.id),
-            ('move_type', '=', 'out_invoice'),
-            ('state', '=', 'posted'),
-            ('payment_state', 'in', ['not_paid', 'partial']),
-        ], order='invoice_date_due asc, id asc')
-
-        payment_lines = self.move_id.line_ids.filtered(
-            lambda l: l.account_id.account_type == 'asset_receivable'
-            and not l.reconciled
-        )
-
-        for invoice in invoices:
-            invoice_lines = invoice.line_ids.filtered(
-                lambda l: l.account_id.account_type == 'asset_receivable'
-                and not l.reconciled
+        for line in self.move_id.line_ids:
+            _logger.info(
+                "Account=%s Type=%s Debit=%s Credit=%s",
+                line.account_id.code,
+                line.account_id.account_type,
+                line.debit,
+                line.credit,
             )
-
-            lines = payment_lines | invoice_lines
-
-            if len(lines) >= 2:
-                try:
-                    lines.reconcile()
-                except Exception:
-                    pass
