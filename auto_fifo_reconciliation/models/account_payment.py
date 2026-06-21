@@ -8,7 +8,7 @@ class AccountPayment(models.Model):
     _inherit = "account.payment"
 
     def action_post(self):
-        raise UserError("FIFO TEST")
+        
         res = super().action_post()
         
 
