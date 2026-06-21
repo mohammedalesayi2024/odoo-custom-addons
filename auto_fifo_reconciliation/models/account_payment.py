@@ -1,7 +1,4 @@
 from odoo import models
-import logging
-
-_logger = logging.getLogger(__name__)
 
 
 class AccountPayment(models.Model):
@@ -11,7 +8,6 @@ class AccountPayment(models.Model):
         res = super().action_post()
 
         for payment in self:
-            _logger.info("AUTO RECONCILE START %s", payment.name)
             payment._auto_reconcile_oldest_invoices()
 
         return res
@@ -19,14 +15,48 @@ class AccountPayment(models.Model):
     def _auto_reconcile_oldest_invoices(self):
         self.ensure_one()
 
-        _logger.info("Partner: %s", self.partner_id.name)
-        _logger.info("Move: %s", self.move_id.name)
+        # للعملاء فقط
+        if self.partner_type != 'customer':
+            return
 
-        for line in self.move_id.line_ids:
-            _logger.info(
-                "Account=%s Type=%s Debit=%s Credit=%s",
-                line.account_id.code,
-                line.account_id.account_type,
-                line.debit,
-                line.credit,
+        # سطر الذمم المدينة الخاص بالدفعة
+        payment_line = self.move_id.line_ids.filtered(
+            lambda l: (
+                l.account_id.account_type == 'asset_receivable'
+                and not l.reconciled
             )
+        )
+
+        if not payment_line:
+            return
+
+        payment_line = payment_line[0]
+
+        # الفواتير المفتوحة مرتبة حسب تاريخ الاستحقاق
+        invoices = self.env['account.move'].search([
+            ('partner_id', '=', self.partner_id.id),
+            ('move_type', '=', 'out_invoice'),
+            ('state', '=', 'posted'),
+            ('payment_state', 'in', ['not_paid', 'partial']),
+        ], order='invoice_date_due asc, id asc')
+
+        for invoice in invoices:
+
+            invoice_line = invoice.line_ids.filtered(
+                lambda l: (
+                    l.account_id.account_type == 'asset_receivable'
+                    and not l.reconciled
+                )
+            )
+
+            if not invoice_line:
+                continue
+
+            try:
+                (payment_line + invoice_line[0]).reconcile()
+            except Exception:
+                continue
+
+            # إذا انتهى مبلغ الدفعة نتوقف
+            if payment_line.reconciled:
+                break
