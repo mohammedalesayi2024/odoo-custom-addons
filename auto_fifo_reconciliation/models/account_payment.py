@@ -20,7 +20,8 @@ class AccountPayment(models.Model):
         return res
 
     def _auto_reconcile_oldest_invoices(self):
-        self.ensure_one()
+        if not self.partner_id:
+    return
 
         _logger.info("=== AUTO FIFO START %s ===", self.name)
 
@@ -78,8 +79,9 @@ class AccountPayment(models.Model):
                 _logger.info("Trying reconcile")
                 (payment_line + line).reconcile()
                 _logger.info("Reconcile success")
-            except Exception as e:
-                _logger.exception("Reconcile error: %s", e)
+            except Exception:
+                _logger.exception("Reconcile error")
+                raise
 
             if payment_line.reconciled:
                 _logger.info("Payment fully reconciled")
