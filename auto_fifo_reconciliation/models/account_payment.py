@@ -12,7 +12,10 @@ class AccountPayment(models.Model):
         res = super().action_post()
 
         for payment in self:
-            payment._auto_reconcile_oldest_invoices()
+            partner = payment.partner_id
+
+            if partner.auto_fifo_reconcile:
+                payment._auto_reconcile_oldest_invoices()
 
         return res
 
