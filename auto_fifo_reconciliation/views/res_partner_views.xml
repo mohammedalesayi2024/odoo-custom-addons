@@ -12,6 +12,9 @@
 
                 <field name="auto_fifo_reconcile"/>
 
+                <field name="payment_allocation_method"
+                       invisible="not auto_fifo_reconcile"/>
+
             </xpath>
 
         </field>
