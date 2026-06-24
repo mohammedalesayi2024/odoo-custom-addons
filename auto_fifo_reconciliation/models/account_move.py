@@ -12,22 +12,16 @@ class AccountMove(models.Model):
 
         for move in self:
 
-            receivable_credit_lines = move.line_ids.filtered(
-                lambda l: (
-                    l.account_id.account_type == "asset_receivable"
-                    and l.partner_id
-                    and l.credit > 0
-                )
-            )
+            _logger.info("===== MOVE %s =====", move.name)
 
-            for line in receivable_credit_lines:
-
-                partner = line.partner_id
+            for line in move.line_ids:
 
                 _logger.info(
-                    "FIFO JOURNAL | MOVE=%s | PARTNER=%s | CREDIT=%s",
-                    move.name,
-                    partner.name,
+                    "ACCOUNT=%s | TYPE=%s | PARTNER=%s | DEBIT=%s | CREDIT=%s",
+                    line.account_id.code,
+                    line.account_id.account_type,
+                    line.partner_id.name if line.partner_id else "NONE",
+                    line.debit,
                     line.credit,
                 )
 
