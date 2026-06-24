@@ -10,6 +10,25 @@ class AccountMove(models.Model):
     def action_post(self):
         res = super().action_post()
 
-        _logger.info("=== FIFO JOURNAL ENTRY CHECK ===")
+        for move in self:
+
+            receivable_credit_lines = move.line_ids.filtered(
+                lambda l: (
+                    l.account_id.account_type == "asset_receivable"
+                    and l.partner_id
+                    and l.credit > 0
+                )
+            )
+
+            for line in receivable_credit_lines:
+
+                partner = line.partner_id
+
+                _logger.info(
+                    "FIFO JOURNAL | MOVE=%s | PARTNER=%s | CREDIT=%s",
+                    move.name,
+                    partner.name,
+                    line.credit,
+                )
 
         return res
