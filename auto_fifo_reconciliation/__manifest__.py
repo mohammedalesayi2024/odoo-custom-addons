@@ -6,6 +6,7 @@
     "license": "LGPL-3",
     "depends": ["account"],
     "data": [
+        "security/security.xml",
         "views/res_partner_views.xml",
     ],
     "installable": True,

@@ -10,10 +10,11 @@
 
             <xpath expr="//field[@name='category_id']" position="after">
 
-                <field name="auto_fifo_reconcile"/>
+                <field name="auto_fifo_reconcile"
+                       groups="auto_fifo_reconciliation.group_auto_fifo_manager"/>
 
                 <field name="payment_allocation_method"
-                       readonly="not auto_fifo_reconcile"
+                       groups="auto_fifo_reconciliation.group_auto_fifo_manager"
                        invisible="not auto_fifo_reconcile"/>
 
             </xpath>

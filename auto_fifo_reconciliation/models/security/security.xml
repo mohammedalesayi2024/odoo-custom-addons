@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="group_auto_fifo_manager" model="res.groups">
+        <field name="name">Auto FIFO Manager</field>
+        <field name="category_id" ref="base.module_category_accounting"/>
+    </record>
+
+</odoo>
