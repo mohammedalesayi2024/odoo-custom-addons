@@ -84,6 +84,7 @@
 
                                         <t t-if="is_ar"> الرقم الضريبي:</t>
                                         <t t-else="">VAT Number:</t>
+                                       
                                         <span t-field="o.company_id.vat" />
                                     </div>
 
@@ -91,6 +92,8 @@
 
                                         <t t-if="is_ar"> هاتف:</t>
                                         <t t-else="">Phone:</t>
+                                       
+
 
                                         <span t-field="o.company_id.phone" />
                                     </div>
@@ -99,6 +102,8 @@
 
                                         <t t-if="is_ar"> بريد:</t>
                                         <t t-else="">Email</t>
+                                       
+
                                         <span t-field="o.company_id.email" />
                                     </div>
 
@@ -118,7 +123,7 @@
 
                                     <div
                                         style="
-                                    background:#714B67
+                                    background:#714B67;
                                     color:white;
                                     text-align:center;
                                     font-size:24px;
@@ -128,6 +133,7 @@
                                     border-radius:3px;">
                                         <t t-if="is_ar">سند صرف</t>
                                         <t t-else="">Payment Voucher</t>
+                                      
 
                                     </div>
 
@@ -147,6 +153,7 @@
 
                                                 <t t-if="is_ar">رقم السند</t>
                                                 <t t-else="">Voucher Number</t>
+                                        
                                             </td>
 
                                             <td style="border:1px solid #ccc;padding:8px;">
@@ -162,6 +169,7 @@
 
                                                 <t t-if="is_ar">التاريخ</t>
                                                 <t t-else="">Date</t>
+                                              
                                             </td>
 
                                             <td style="border:1px solid #ccc;padding:8px;">
@@ -191,6 +199,7 @@
 
                             <t t-if="is_ar">بيانات المستفيد</t>
                             <t t-else="">Beneficiary Details</t>
+                         
 
                         </div>
 
@@ -206,6 +215,7 @@
 
                                     <t t-if="is_ar">المستفيد</t>
                                     <t t-else="">Beneficiary Details</t>
+                                   
                                 </td>
 
                                 <td style="border:1px solid #ccc;padding:8px;">
@@ -242,6 +252,9 @@
 
                             <t t-if="is_ar">تفاصيل المبلغ</t>
                             <t t-else="">Amount Details</t>
+                            
+
+
 
                         </div>
 
@@ -257,6 +270,7 @@
 
                                     <t t-if="is_ar">المبلغ المصروف</t>
                                     <t t-else="">Amount</t>
+                                    <t></t>
                                 </td>
 
                                 <td style="border:1px solid #ccc;padding:8px;">
@@ -270,7 +284,7 @@
                                 <td style="border:1px solid #ccc;padding:8px;">
 
                                     <t t-if="is_ar">المبلغ كتابة</t>
-                                    <t t-else="">Amount in- Words</t>
+                                    <t t-else="">Amount in Words</t>
 
                                 </td>
 

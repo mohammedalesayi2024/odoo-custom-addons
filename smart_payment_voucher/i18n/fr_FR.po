@@ -1,0 +1,289 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* smart_payment_voucher
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-26 21:55+0000\n"
+"PO-Revision-Date: 2026-06-27 01:07+0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.9\n"
+
+#. module: smart_payment_voucher
+#: model:ir.actions.report,print_report_name:smart_payment_voucher.action_payment_voucher
+msgid "'Payment Voucher - %s' % (object.name)"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model:ir.actions.report,print_report_name:smart_payment_voucher.action_receipt_voucher
+msgid "'Receipt Voucher - %s' % (object.name)"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.receipt_voucher_template
+msgid "<strong>Amount:</strong>"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.receipt_voucher_template
+msgid "<strong>Date:</strong>"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.receipt_voucher_template
+msgid "<strong>Partner:</strong>"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.receipt_voucher_template
+msgid "<strong>Signature</strong>"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.receipt_voucher_template
+msgid "<strong>Voucher No:</strong>"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "Address:"
+msgstr "Adresse"
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "Amount"
+msgstr "Montant"
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "Amount Details"
+msgstr "Détails du montant"
+
+#. module: smart_payment_voucher
+#: model:ir.model.fields,field_description:smart_payment_voucher.field_account_payment__amount_in_words
+msgid "Amount In Words"
+msgstr "Montant en toutes lettres"
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "Amount in- Words"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "Approver"
+msgstr "Approver"
+
+#. module: smart_payment_voucher
+#: model:ir.model.fields,field_description:smart_payment_voucher.field_res_company__voucher_signature
+#: model:ir.model.fields,field_description:smart_payment_voucher.field_res_config_settings__voucher_signature
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.res_config_settings_view_form_voucher
+msgid "Authorized Signature"
+msgstr "Signature autorisée"
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "Beneficiary Details"
+msgstr "Coordonnées du bénéficiaire"
+
+#. module: smart_payment_voucher
+#: model:ir.model,name:smart_payment_voucher.model_res_company
+msgid "Companies"
+msgstr "Sociétés"
+
+#. module: smart_payment_voucher
+#: model:ir.model.fields,field_description:smart_payment_voucher.field_res_company__voucher_stamp
+#: model:ir.model.fields,field_description:smart_payment_voucher.field_res_config_settings__voucher_stamp
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.res_config_settings_view_form_voucher
+msgid "Company Stamp"
+msgstr "Cachet de l'entreprise"
+
+#. module: smart_payment_voucher
+#: model:ir.model,name:smart_payment_voucher.model_res_config_settings
+msgid "Config Settings"
+msgstr "Paramètres de Configuration"
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "Date"
+msgstr "Date"
+
+#. module: smart_payment_voucher
+#: model:ir.model.fields,field_description:smart_payment_voucher.field_account_payment__display_name
+#: model:ir.model.fields,field_description:smart_payment_voucher.field_res_company__display_name
+#: model:ir.model.fields,field_description:smart_payment_voucher.field_res_config_settings__display_name
+msgid "Display Name"
+msgstr "Nom d'affichage"
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "Email"
+msgstr "E-mail"
+
+#. module: smart_payment_voucher
+#: model:ir.model.fields,field_description:smart_payment_voucher.field_account_payment__id
+#: model:ir.model.fields,field_description:smart_payment_voucher.field_res_company__id
+#: model:ir.model.fields,field_description:smart_payment_voucher.field_res_config_settings__id
+msgid "ID"
+msgstr "Identifiant"
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "Notes"
+msgstr "Notes"
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "Payment Method"
+msgstr "Mode de paiement"
+
+#. module: smart_payment_voucher
+#: model:ir.actions.report,name:smart_payment_voucher.action_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.res_config_settings_view_form_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.view_account_payment_form_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.view_company_form_inherit_voucher
+msgid "Payment Voucher"
+msgstr "Bon de paiement"
+
+#. module: smart_payment_voucher
+#: model:ir.model,name:smart_payment_voucher.model_account_payment
+msgid "Payments"
+msgstr "Paiements"
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "Phone:"
+msgstr "Téléphone"
+
+#. module: smart_payment_voucher
+#: model:ir.actions.report,name:smart_payment_voucher.action_receipt_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.receipt_voucher_template
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.view_account_payment_form_voucher
+msgid "Receipt Voucher"
+msgstr "Bon de réception"
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.receipt_voucher_template
+msgid "Received from:"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model:ir.model.fields,field_description:smart_payment_voucher.field_res_company__voucher_show_qr
+#: model:ir.model.fields,field_description:smart_payment_voucher.field_res_config_settings__voucher_show_qr
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.res_config_settings_view_form_voucher
+msgid "Show QR Code"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model:ir.model.fields,field_description:smart_payment_voucher.field_res_company__voucher_show_time
+#: model:ir.model.fields,field_description:smart_payment_voucher.field_res_config_settings__voucher_show_time
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.res_config_settings_view_form_voucher
+msgid "Show Time"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "VAT Number:"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model:ir.model.fields,field_description:smart_payment_voucher.field_res_company__voucher_footer
+#: model:ir.model.fields,field_description:smart_payment_voucher.field_res_config_settings__voucher_footer
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.res_config_settings_view_form_voucher
+msgid "Voucher Footer"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "Voucher Number"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "التاريخ"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "الختم"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "الرقم الضريبي:"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "العنوان:"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "المبلغ المصروف"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "المبلغ كتابة"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "المستفيد"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "المعتمد"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "بريد:"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "بيانات المستفيد"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "تفاصيل المبلغ"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "رقم السند"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "سند صرف"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "طريقة الدفع"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "ملاحظات"
+msgstr ""
+
+#. module: smart_payment_voucher
+#: model_terms:ir.ui.view,arch_db:smart_payment_voucher.payment_voucher_template
+msgid "هاتف:"
+msgstr ""
