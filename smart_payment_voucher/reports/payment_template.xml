@@ -6,12 +6,13 @@
         <t t-call="web.html_container">
 
             <t t-foreach="docs" t-as="o">
-             <t t-set="is_ar" t-value="o.env.user.lang and o.env.user.lang.startswith('ar')"/>  
-                <t t-call="web.basic_layout">
 
-                   <div class="page"
-                     t-att-style="'direction:rtl;font-family:Courier New;margin-top:-35px;' if is_ar else 'direction:ltr;font-family:Courier New;margin-top:-35px;'">
+               <t t-set="is_ar"
+                 t-value="o.env.user.lang and o.env.user.lang.startswith('ar')"/>  
+                
 
+               <div class="page"
+                     t-att-style="'direction:rtl;font-family:Arial,sans-serif;padding:20px;' if is_ar else 'direction:ltr;font-family:Arial,sans-serif;padding:20px;'">
                         <!-- Company Header -->
 
                         <!-- ================= HEADER ================= -->
@@ -22,113 +23,110 @@
     padding:0 0 12px 0;
     border-bottom:2px solid #d9e4f2;">
 
-    <table style="
-        width:100%;
-        border:none;
-        border-collapse:collapse;">
+    
 
-        <tr>
+<table style="width:100%;border-collapse:collapse;margin-bottom:18px;border:none;">
 
-            <!-- Company Information -->
+    <tr>
 
-            <td style="
-                width:82%;
-                border:none;
-                vertical-align:top;
-                text-align:right;
-                padding:0;">
+        <!-- Company Information -->
 
-                <h1 style="
-                    margin:0;
-                    font-size:28px;
-                    color:#163A63;
-                    font-weight:700;">
+        <td style="width:78%;vertical-align:top;border:none;padding:0;">
 
-                    <span t-field="o.company_id.name"/>
+            <div style="
+                font-size:28px;
+                font-weight:bold;
+                color:#17406D;
+                margin-bottom:8px;">
 
-                </h1>
+                <span t-field="o.company_id.name"/>
 
-                <div style="
-                    margin-top:8px;
-                    line-height:1.8;
-                    font-size:13px;
-                    color:#444;">
+            </div>
 
-                    <t t-if="is_ar">العنوان:</t>
-                    <t t-else="">Address:</t>
+            <div style="
+                font-size:12px;
+                color:#555;
+                line-height:20px;">
 
-                    <span t-field="o.company_id.partner_id.street"/>
+                <t t-if="is_ar">العنوان :</t>
+                <t t-else="">Address :</t>
 
-                    <t t-if="o.company_id.partner_id.street2">
+                <span t-field="o.company_id.partner_id.street"/>
 
-                        <br/>
-                        <span t-field="o.company_id.partner_id.street2"/>
+                <t t-if="o.company_id.partner_id.street2">
+                    ,
+                    <span t-field="o.company_id.partner_id.street2"/>
+                </t>
 
-                    </t>
+                <t t-if="o.company_id.partner_id.city">
+                    ,
+                    <span t-field="o.company_id.partner_id.city"/>
+                </t>
 
-                    <t t-if="o.company_id.partner_id.city">
+                <t t-if="o.company_id.partner_id.country_id">
+                    ,
+                    <span t-field="o.company_id.partner_id.country_id"/>
+                </t>
 
-                        -
-                        <span t-field="o.company_id.partner_id.city"/>
+                <br/>
 
-                    </t>
+                <t t-if="o.company_id.vat">
 
-                    <t t-if="o.company_id.partner_id.zip">
+                    <t t-if="is_ar">الرقم الضريبي :</t>
+                    <t t-else="">VAT :</t>
 
-                        -
-                        <span t-field="o.company_id.partner_id.zip"/>
-
-                    </t>
+                    <span t-field="o.company_id.vat"/>
 
                     <br/>
 
-                    <span t-field="o.company_id.partner_id.country_id"/>
+                </t>
 
-                    <t t-if="o.company_id.vat">
+                <t t-if="o.company_id.phone">
 
-                        <br/>
+                    <t t-if="is_ar">الهاتف :</t>
+                    <t t-else="">Phone :</t>
 
-                        <t t-if="is_ar">الرقم الضريبي:</t>
-                        <t t-else="">VAT:</t>
+                    <span t-field="o.company_id.phone"/>
 
-                        <span t-field="o.company_id.vat"/>
+                    <br/>
 
-                    </t>
+                </t>
 
-                    <t t-if="o.company_id.phone">
+                <t t-if="o.company_id.email">
 
-                        <br/>
+                    <t t-if="is_ar">البريد :</t>
+                    <t t-else="">Email :</t>
 
-                        <t t-if="is_ar">هاتف:</t>
-                        <t t-else="">Phone:</t>
+                    <span t-field="o.company_id.email"/>
 
-                        <span t-field="o.company_id.phone"/>
+                </t>
 
-                    </t>
+            </div>
 
-                </div>
+        </td>
 
-            </td>
+        <!-- Logo -->
 
-            <!-- Logo -->
+        <td style="
+            width:22%;
+            text-align:center;
+            vertical-align:top;
+            border:none;">
 
-            <td style="
-                width:18%;
-                border:none;
-                text-align:center;
-                vertical-align:top;">
+            <img
+                t-if="o.company_id.logo"
+                t-att-src="image_data_uri(o.company_id.logo)"
+                style="
+                    max-width:120px;
+                    max-height:90px;"/>
 
-                <img t-if="o.company_id.logo"
-                     t-att-src="image_data_uri(o.company_id.logo)"
-                     style="
-                        max-width:110px;
-                        max-height:90px;"/>
+        </td>
 
-            </td>
+    </tr>
 
-        </tr>
+</table>
 
-    </table>
+<hr style="border:0;border-top:2px solid #d8e5f2;margin:0 0 20px 0;"/>
 
 </div>
 
@@ -378,7 +376,7 @@
 
                     </div>
 
-                </t>
+                
 
             </t>
 
