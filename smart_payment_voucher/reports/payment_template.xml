@@ -1,389 +1,363 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <odoo>
 
-    <template id="payment_voucher_template">
+<template id="payment_voucher_template">
 
-        <t t-call="web.html_container">
-          
-          <t t-call="web.report_assets_common"/>
+    <t t-call="web.html_container">
 
-            <t t-foreach="docs" t-as="o">
-
-               <t t-set="is_ar"
-                 t-value="o.env.user.lang and o.env.user.lang.startswith('ar')"/>  
-                
+        <t t-foreach="docs" t-as="o">
+         <t t-set="is_ar" t-value="o.env.user.lang and o.env.user.lang.startswith('ar')"/>  
+            <t t-call="web.basic_layout">
 
                <div class="page"
-                     t-att-style="'direction:rtl;font-family:Arial,sans-serif;padding:20px;' if is_ar else 'direction:ltr;font-family:Arial,sans-serif;padding:20px;'">
-                        <!-- Company Header -->
+                 t-att-style="'direction:rtl;font-family:Courier New;margin-top:0px;' if is_ar else 'direction:ltr;font-family:Courier New;margin-top:0px;'">
 
-                        <!-- ================= HEADER ================= -->
+                    <!-- Company Header -->
 
-<div style="
-    width:100%;
-    margin:0;
-    padding:0 0 12px 0;
-    border-bottom:2px solid #d9e4f2;">
+                    <table style="
+                           width:100%;
+                           border:None;
+                           border-collapse:collapse;
+                           margin-bottom:20px;">
 
-    
+                        <tr>
 
-<table style="width:100%;border-collapse:collapse;margin-bottom:18px;border:none;">
+                            <td style="
+                                width:20%;
+                                text-align:center;
+                                vertical-align:top;
+                                padding:3px;
+                                border-left:None;">
 
-    <tr>
+                                <img t-if="o.company_id.logo"
+                                     t-att-src="image_data_uri(o.company_id.logo)"
+                                     style="max-height:70px; max-width:90px; margin-top:-5px;"/>
 
-        <!-- Company Information -->
+                            </td>
 
-        <td style="width:78%;vertical-align:top;border:none;padding:0;">
+                            <td style="
+                                width:85%;
+                                text-align:right;
+                                padding:5px;">
 
-            <div style="
-                font-size:28px;
-                font-weight:bold;
-                color:#17406D;
-                margin-bottom:8px;">
+                                <h2 style="
+                                    margin:0;
+                                    color:#1f2d3d;">
 
-                <span t-field="o.company_id.name"/>
+                                    <span t-field="o.company_id.name"/>
 
-            </div>
+                                </h2>
+                                <div style="margin-top:8px;">
 
-            <div style="
-                font-size:12px;
-                color:#555;
-                line-height:20px;">
+<t t-if="is_ar">العنوان:</t>
+<t t-else="">Address:</t>
 
-                <t t-if="is_ar">العنوان :</t>
-                <t t-else="">Address :</t>
+<span t-field="o.company_id.partner_id.street"/>
 
-                <span t-field="o.company_id.partner_id.street"/>
+<br/>
 
-                <t t-if="o.company_id.partner_id.street2">
-                    ,
-                    <span t-field="o.company_id.partner_id.street2"/>
-                </t>
+<t t-if="o.company_id.partner_id.street2">
+    <span t-field="o.company_id.partner_id.street2"/>
+</t>
 
-                <t t-if="o.company_id.partner_id.city">
-                    ,
-                    <span t-field="o.company_id.partner_id.city"/>
-                </t>
+<t t-if="o.company_id.partner_id.city">
+    -
+    <span t-field="o.company_id.partner_id.city"/>
+</t>
 
-                <t t-if="o.company_id.partner_id.country_id">
-                    ,
-                    <span t-field="o.company_id.partner_id.country_id"/>
-                </t>
+<t t-if="o.company_id.partner_id.zip">
+    -
+    <span t-field="o.company_id.partner_id.zip"/>
+</t>
 
-                <br/>
+<br/>
 
-                <t t-if="o.company_id.vat">
-
-                    <t t-if="is_ar">الرقم الضريبي :</t>
-                    <t t-else="">VAT :</t>
-
-                    <span t-field="o.company_id.vat"/>
-
-                    <br/>
-
-                </t>
-
-                <t t-if="o.company_id.phone">
-
-                    <t t-if="is_ar">الهاتف :</t>
-                    <t t-else="">Phone :</t>
-
-                    <span t-field="o.company_id.phone"/>
-
-                    <br/>
-
-                </t>
-
-                <t t-if="o.company_id.email">
-
-                    <t t-if="is_ar">البريد :</t>
-                    <t t-else="">Email :</t>
-
-                    <span t-field="o.company_id.email"/>
-
-                </t>
-
-            </div>
-
-        </td>
-
-        <!-- Logo -->
-
-        <td style="
-            width:22%;
-            text-align:center;
-            vertical-align:top;
-            border:none;">
-
-            <img
-                t-if="o.company_id.logo"
-                t-att-src="image_data_uri(o.company_id.logo)"
-                style="
-                    max-width:120px;
-                    max-height:90px;"/>
-
-        </td>
-
-    </tr>
-
-</table>
-
-<hr style="border:0;border-top:2px solid #d8e5f2;margin:0 0 20px 0;"/>
+<span t-field="o.company_id.partner_id.country_id"/>
 
 </div>
 
-                        <!-- Voucher Info -->
 
-                        <table style="width:100%; border-collapse:collapse; margin-bottom:20px;">
 
-                            <tr>
-
-                                <td style="width:60%;">
-
-                                    <div style="
-                                        background:#8b1e2d;
-                                        color:white;
-                                        text-align:center;
-                                        font-size:24px;
-                                        font-weight:bold;
-                                        padding:20px;
-                                        height:100px;
-                                        border-radius:3px;">
-                                        <t t-if="is_ar">سند صرف</t>
-                                        <t t-else="">Payment Voucher</t>
-
-                                    </div>
-
-                                </td>
-
-                                <td style="width:40%;">
-
-                                    <table style="
-                                           width:100%;
-                                           border-collapse:collapse;">
-
-                                        <tr>
-
-                                            <td style="border:1px solid #ccc;padding:8px;">
-                                                
-                                                
-                                               <t t-if="is_ar">رقم السند</t>
-                                               <t t-else="">Voucher Number</t>
-                                            </td>
-
-                                            <td style="border:1px solid #ccc;padding:8px;">
-                                                <span t-field="o.name"/>
-                                            </td>
-
-                                        </tr>
-
-                                        <tr>
-
-                                            <td style="border:1px solid #ccc;padding:8px;">
-                                                
-                                                
-                                              <t t-if="is_ar">التاريخ</t>
-                                              <t t-else="">Date</t>
-                                            </td>
-
-                                            <td style="border:1px solid #ccc;padding:8px;">
-                                                <span t-field="o.date"/>
-                                            </td>
-
-                                        </tr>
-
-                                    </table>
-
-                                </td>
-
-                            </tr>
-
-                        </table>
-
-                        <hr style="border:1px solid #e5e5e5; margin:10px 0 20px 0;"/>
-
-                        <!-- Beneficiary -->
-
-                        <div style="
-                             background:#8b1e2d;
-                             color:white;
-                             padding:8px;
-                             margin-bottom:10px;">
-
-                            <t t-if="is_ar">بيانات المستفيد</t>
-                            <t t-else="">Beneficiary Details</t>
-
-                        </div>
-
-                        <table style="
-                               width:100%;
-                               border-collapse:collapse;
-                               margin-bottom:20px;">
-
-                            <tr>
-
-                                <td style="border:1px solid #ccc;padding:8px;">
+                                <div t-if="o.company_id.vat">
                                     
-                                    <t t-if="is_ar">المستفيد</t>
-                                    <t t-else="">Beneficiary Details</t>
-                                </td>
+                                    <t t-if="is_ar" > :الرقم الضريبي</t>   
+                                    <t t-else="">VAT Number:</t>
+                                    <span t-field="o.company_id.vat"/>
+                                </div>
 
-                                <td style="border:1px solid #ccc;padding:8px;">
-                                    <span t-field="o.partner_id"/>
-                                </td>
-
-                            </tr>
-
-                            <tr>
-
-                                <td style="border:1px solid #ccc;padding:8px;">
+                                <div t-if="o.company_id.phone">
                                     
-                                    <t t-if="is_ar">طريقة الدفع</t>
-                                    <t t-else="">Payment Method</t>
-                                </td>
+                                    <t t-if="is_ar" > :هاتف</t>
+                                    <t t-else="">Phone:</t>
 
-                                <td style="border:1px solid #ccc;padding:8px;">
-                                    <span t-field="o.journal_id"/>
-                                </td>
+                                    <span t-field="o.company_id.phone"/>
+                                </div>
 
-                            </tr>
-
-                        </table>
-
-                        <!-- Amount -->
-
-                        <div style="
-                             background:#8b1e2d;
-                             color:white;
-                             padding:8px;
-                             margin-bottom:10px;">
-
-                        
-                            <t t-if="is_ar">تفاصيل المبلغ</t>
-                            <t t-else="">Amount Details</t>
-
-                        </div>
-
-                        <table style="
-                               width:100%;
-                               border-collapse:collapse;
-                               margin-bottom:20px;">
-
-                            <tr>
-
-                                <td style="border:1px solid #ccc;padding:8px;">
+                                <div t-if="o.company_id.email">
                                     
-                                    <t t-if="is_ar">المبلغ المصروف</t>
-                                    <t t-else="">Amount</t>
-                                </td>
+                                    <t t-if="is_ar" > :بريد</t>
+                                    <t t-else="">Email</t>
+                                    <span t-field="o.company_id.email"/>
+                                </div>
 
-                                <td style="border:1px solid #ccc;padding:8px;">
-                                    <span t-field="o.amount"/>
-                                </td>
+                            </td>
 
-                            </tr>
+                        </tr>
 
-                            <tr>
+                    </table>
 
-                                <td style="border:1px solid #ccc;padding:8px;">
-                                    
-                                    <t t-if="is_ar">المبلغ كتابة</t>
-                                    <t t-else="">Amount in- Words</t>  
-                                          
-                                </td>
+                    <!-- Voucher Info -->
 
-                                <td style="border:1px solid #ccc;padding:8px;">
-                                    <span t-field="o.amount_in_words"/>
-                                </td>
+                    <table style="width:100%; border-collapse:collapse; margin-bottom:20px;">
 
-                            </tr>
+                        <tr>
 
-                        </table>
+                            <td style="width:60%;">
 
-                        <!-- Notes -->
+                                <div style="
+                                    background:#8b1e2d;
+                                    color:white;
+                                    text-align:center;
+                                    font-size:24px;
+                                    font-weight:bold;
+                                    padding:20px;
+                                    height:100px;
+                                    border-radius:3px;">
+                                    <t t-if="is_ar">سند صرف</t>
+                                    <t t-else="">Payment Voucher</t>
 
-                        <div style="
-                             background:#8b1e2d;
-                             color:white;
-                             padding:8px;
-                             margin-bottom:10px;">
+                                </div>
 
-                            
-                            <t t-if="is_ar">ملاحظات</t>
-                            <t t-else="">Notes</t>
+                            </td>
 
-                        </div>
+                            <td style="width:40%;">
 
-                        <div style="
-                             border:1px solid #ccc;
-                             min-height:40px;
-                             padding:10px;
-                             margin-bottom:10px;">
+                                <table style="
+                                       width:100%;
+                                       border-collapse:collapse;">
 
-                            <span t-field="o.memo"/>
+                                    <tr>
 
-                        </div>
+                                        <td style="border:1px solid #ccc;padding:8px;">
+                                            
+                                            
+                                           <t t-if="is_ar">رقم السند</t>
+                                           <t t-else="">Voucher Number</t>
+                                        </td>
 
-                        <!-- Signatures -->
+                                        <td style="border:1px solid #ccc;padding:8px;">
+                                            <span t-field="o.name"/>
+                                        </td>
 
-                        <!-- Signatures -->
+                                    </tr>
 
-<table style="width:100%; margin-top:5px; border-collapse:collapse;">
+                                    <tr>
 
-    <tr>
+                                        <td style="border:1px solid #ccc;padding:8px;">
+                                            
+                                            
+                                          <t t-if="is_ar">التاريخ</t>
+                                          <t t-else="">Date</t>
+                                        </td>
 
-        <td style="
-            width:50%;
-            height:100px;
-            border:1px solid #ccc;
-            text-align:center;
-            vertical-align:top;">
+                                        <td style="border:1px solid #ccc;padding:8px;">
+                                            <span t-field="o.date"/>
+                                        </td>
 
-            <div style="padding-top:10px; font-weight:bold;">
+                                    </tr>
 
-                <t t-if="is_ar">المعتمد</t>
-                <t t-else="">Approver</t>
-                  <br/>
+                                </table>
 
-<img t-if="o.company_id.voucher_signature"
-     t-att-src="image_data_uri(o.company_id.voucher_signature)"
-     style="max-height:80px; max-width:120px;"/>
-            </div>
+                            </td>
 
-        </td>
+                        </tr>
 
-        <td style="
-            width:50%;
-            height:100px;
-            border:1px solid #ccc;
-            text-align:center;
-            vertical-align:top;">
+                    </table>
 
-            <div style="padding-top:10px; font-weight:bold;">
+                    <hr style="border:1px solid #e5e5e5; margin:10px 0 20px 0;"/>
 
-                <t t-if="is_ar">الختم</t>
-                <t t-else="">Company Stamp</t>
-                  <br/>
+                    <!-- Beneficiary -->
 
-                 <img t-if="o.company_id.voucher_stamp"
-                   t-att-src="image_data_uri(o.company_id.voucher_stamp)"
-                   style="max-height:90px; max-width:150px;"/>
-            </div>
+                    <div style="
+                         background:#8b1e2d;
+                         color:white;
+                         padding:8px;
+                         margin-bottom:10px;">
 
-        </td>
-
-    </tr>
-
-</table>
+                        <t t-if="is_ar">بيانات المستفيد</t>
+                        <t t-else="">Beneficiary Details</t>
 
                     </div>
 
-                
+                    <table style="
+                           width:100%;
+                           border-collapse:collapse;
+                           margin-bottom:20px;">
+
+                        <tr>
+
+                            <td style="border:1px solid #ccc;padding:8px;">
+                                
+                                <t t-if="is_ar">المستفيد</t>
+                                <t t-else="">Beneficiary Details</t>
+                            </td>
+
+                            <td style="border:1px solid #ccc;padding:8px;">
+                                <span t-field="o.partner_id"/>
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td style="border:1px solid #ccc;padding:8px;">
+                                
+                                <t t-if="is_ar">طريقة الدفع</t>
+                                <t t-else="">Payment Method</t>
+                            </td>
+
+                            <td style="border:1px solid #ccc;padding:8px;">
+                                <span t-field="o.journal_id"/>
+                            </td>
+
+                        </tr>
+
+                    </table>
+
+                    <!-- Amount -->
+
+                    <div style="
+                         background:#8b1e2d;
+                         color:white;
+                         padding:8px;
+                         margin-bottom:10px;">
+
+                    
+                        <t t-if="is_ar">تفاصيل المبلغ</t>
+                        <t t-else="">Amount Details</t>
+
+                    </div>
+
+                    <table style="
+                           width:100%;
+                           border-collapse:collapse;
+                           margin-bottom:20px;">
+
+                        <tr>
+
+                            <td style="border:1px solid #ccc;padding:8px;">
+                                
+                                <t t-if="is_ar">المبلغ المصروف</t>
+                                <t t-else="">Amount</t>
+                            </td>
+
+                            <td style="border:1px solid #ccc;padding:8px;">
+                                <span t-field="o.amount"/>
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td style="border:1px solid #ccc;padding:8px;">
+                                
+                                <t t-if="is_ar">المبلغ كتابة</t>
+                                <t t-else="">Amount in- Words</t>  
+                                      
+                            </td>
+
+                            <td style="border:1px solid #ccc;padding:8px;">
+                                <span t-field="o.amount_in_words"/>
+                            </td>
+
+                        </tr>
+
+                    </table>
+
+                    <!-- Notes -->
+
+                    <div style="
+                         background:#8b1e2d;
+                         color:white;
+                         padding:8px;
+                         margin-bottom:10px;">
+
+                        
+                        <t t-if="is_ar">ملاحظات</t>
+                        <t t-else="">Notes</t>
+
+                    </div>
+
+                    <div style="
+                         border:1px solid #ccc;
+                         min-height:40px;
+                         padding:10px;
+                         margin-bottom:10px;">
+
+                        <span t-field="o.memo"/>
+
+                    </div>
+
+                    <!-- Signatures -->
+
+                    <!-- Signatures -->
+
+<table style="width:100%; margin-top:5px; border-collapse:collapse;">
+
+<tr>
+
+    <td style="
+        width:50%;
+        height:100px;
+        border:1px solid #ccc;
+        text-align:center;
+        vertical-align:top;">
+
+        <div style="padding-top:10px; font-weight:bold;">
+
+            <t t-if="is_ar">المعتمد</t>
+            <t t-else="">Approver</t>
+              <br/>
+
+<img t-if="o.company_id.voucher_signature"
+  t-att-src="image_data_uri(o.company_id.voucher_signature)"
+  style="max-height:80px; max-width:120px;"/></div>
+
+    </td>
+
+    <td style="
+        width:50%;
+        height:100px;
+        border:1px solid #ccc;
+        text-align:center;
+        vertical-align:top;">
+
+        <div style="padding-top:10px; font-weight:bold;">
+
+            <t t-if="is_ar">الختم</t>
+            <t t-else="">Company Stamp</t>
+              <br/>
+
+             <img t-if="o.company_id.voucher_stamp"
+               t-att-src="image_data_uri(o.company_id.voucher_stamp)"
+               style="max-height:90px; max-width:150px;"/>
+        </div>
+
+    </td>
+
+</tr>
+
+</table>
+
+                </div>
 
             </t>
 
         </t>
 
-    </template>
+    </t>
+
+</template>
 
 </odoo>
