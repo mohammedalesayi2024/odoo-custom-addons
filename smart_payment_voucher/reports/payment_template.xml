@@ -14,106 +14,123 @@
 
                         <!-- Company Header -->
 
-                        <table style="
-                               width:100%;
-                               border-collapse:collapse;
-                                margin:0 0 10px 0;">
+                        <!-- ================= HEADER ================= -->
 
-                            <tr>
+<div style="
+    width:100%;
+    margin:0;
+    padding:0 0 12px 0;
+    border-bottom:2px solid #d9e4f2;">
 
-                                <td style="
-                                    width:18%;
-                                    text-align:center;
-                                    vertical-align:top;
-                                    padding:3px;">
-                                   
+    <table style="
+        width:100%;
+        border:none;
+        border-collapse:collapse;">
 
-                                    <img t-if="o.company_id.logo"
-                                         t-att-src="image_data_uri(o.company_id.logo)"
-                                         style="
-                                            max-height:85px;
-                                            max-width:110px;
-                                            display:block;
-                                            margin:0 auto;"/>
+        <tr>
 
-                                </td>
+            <!-- Company Information -->
 
-                                <td style="
-                                    width:85%;
-                                    text-align:right;
-                                    vertical-align:top;
-                                    padding:0 8px;">
+            <td style="
+                width:82%;
+                border:none;
+                vertical-align:top;
+                text-align:right;
+                padding:0;">
 
-                                    <h2 style="
-                                        margin:0 0 6px 0;
-                                         color:#163A63;
-                                         font-size:22pt;
-                                         font-weight:bold;">
+                <h1 style="
+                    margin:0;
+                    font-size:28px;
+                    color:#163A63;
+                    font-weight:700;">
 
-                                        <span t-field="o.company_id.name"/>
+                    <span t-field="o.company_id.name"/>
 
-                                    </h2>
-                                    <div style="
-                                         margin-top:2px;
-                                         font-size:12pt;
-                                         line-height:1.45;">
+                </h1>
 
-    <t t-if="is_ar">العنوان:</t>
-    <t t-else="">Address:</t>
+                <div style="
+                    margin-top:8px;
+                    line-height:1.8;
+                    font-size:13px;
+                    color:#444;">
 
-    <span t-field="o.company_id.partner_id.street"/>
+                    <t t-if="is_ar">العنوان:</t>
+                    <t t-else="">Address:</t>
 
-    <br/>
+                    <span t-field="o.company_id.partner_id.street"/>
 
-    <t t-if="o.company_id.partner_id.street2">
-        <span t-field="o.company_id.partner_id.street2"/>
-    </t>
+                    <t t-if="o.company_id.partner_id.street2">
 
-    <t t-if="o.company_id.partner_id.city">
-        -
-        <span t-field="o.company_id.partner_id.city"/>
-    </t>
+                        <br/>
+                        <span t-field="o.company_id.partner_id.street2"/>
 
-    <t t-if="o.company_id.partner_id.zip">
-        -
-        <span t-field="o.company_id.partner_id.zip"/>
-    </t>
+                    </t>
 
-    <br/>
+                    <t t-if="o.company_id.partner_id.city">
 
-    <span t-field="o.company_id.partner_id.country_id"/>
+                        -
+                        <span t-field="o.company_id.partner_id.city"/>
+
+                    </t>
+
+                    <t t-if="o.company_id.partner_id.zip">
+
+                        -
+                        <span t-field="o.company_id.partner_id.zip"/>
+
+                    </t>
+
+                    <br/>
+
+                    <span t-field="o.company_id.partner_id.country_id"/>
+
+                    <t t-if="o.company_id.vat">
+
+                        <br/>
+
+                        <t t-if="is_ar">الرقم الضريبي:</t>
+                        <t t-else="">VAT:</t>
+
+                        <span t-field="o.company_id.vat"/>
+
+                    </t>
+
+                    <t t-if="o.company_id.phone">
+
+                        <br/>
+
+                        <t t-if="is_ar">هاتف:</t>
+                        <t t-else="">Phone:</t>
+
+                        <span t-field="o.company_id.phone"/>
+
+                    </t>
+
+                </div>
+
+            </td>
+
+            <!-- Logo -->
+
+            <td style="
+                width:18%;
+                border:none;
+                text-align:center;
+                vertical-align:top;">
+
+                <img t-if="o.company_id.logo"
+                     t-att-src="image_data_uri(o.company_id.logo)"
+                     style="
+                        max-width:110px;
+                        max-height:90px;"/>
+
+            </td>
+
+        </tr>
+
+    </table>
 
 </div>
-                                    
-   
-
-                                    <div t-if="o.company_id.vat">
-                                        
-                                        <t t-if="is_ar" > :الرقم الضريبي</t>   
-                                        <t t-else="">VAT Number:</t>
-                                        <span t-field="o.company_id.vat"/>
-                                    </div>
-
-                                    <div t-if="o.company_id.phone">
-                                        
-                                        <t t-if="is_ar" > :هاتف</t>
-                                        <t t-else="">Phone:</t>
-
-                                        <span t-field="o.company_id.phone"/>
-                                    </div>
-
-                                    <div t-if="o.company_id.email">
-                                        
-                                        <t t-if="is_ar" > :بريد</t>
-                                        <t t-else="">Email</t>
-                                        <span t-field="o.company_id.email"/>
-                                    </div>
-
-                                </td>
-
-                            </tr>
-
-                        </table>
 
                         <!-- Voucher Info -->
 
