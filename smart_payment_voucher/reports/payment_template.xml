@@ -34,7 +34,7 @@
 
                                     <img t-if="o.company_id.logo"
                                         t-att-src="image_data_uri(o.company_id.logo)"
-                                        style="max-height:70px; max-width:90px; margin-top:-5px;" />
+                                        style="max-height:200px; max-width:180px; margin-top:-5px;" />
 
                                 </td>
 
