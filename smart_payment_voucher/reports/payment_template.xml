@@ -8,7 +8,7 @@
 
         <t t-foreach="docs" t-as="o">
          <t t-set="is_ar" t-value="o.env.user.lang and o.env.user.lang.startswith('ar')"/>  
-            <t t-call="web.basic_layout">
+            <t t-call="web.external_layout_standard">
 
                <div class="page"
                  t-att-style="'direction:rtl;font-family:Courier New;margin-top:0px;' if is_ar else 'direction:ltr;font-family:Courier New;margin-top:0px;'">
