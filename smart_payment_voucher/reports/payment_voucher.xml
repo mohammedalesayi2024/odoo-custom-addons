@@ -14,7 +14,7 @@
         <field name="report_file">smart_payment_voucher.payment_voucher_template</field>
 
         <field name="print_report_name">'Payment Voucher - %s' % (object.name)</field>
-
+        <field name="paperformat_id" ref="smart_payment_voucher.paperformat_payment_voucher"/>
     </record>
 
 </odoo>
