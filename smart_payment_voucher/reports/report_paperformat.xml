@@ -3,7 +3,7 @@
 
     <record id="paperformat_payment_voucher" model="report.paperformat">
         <field name="name">Payment Voucher</field>
-        <field name="default" eval="False"/>
+        <field name="default" eval="False" />
         <field name="format">A4</field>
         <field name="orientation">Portrait</field>
 
@@ -12,7 +12,7 @@
         <field name="margin_left">8</field>
         <field name="margin_right">8</field>
 
-        <field name="header_line" eval="False"/>
+        <field name="header_line" eval="False" />
         <field name="header_spacing">0</field>
         <field name="dpi">96</field>
     </record>
