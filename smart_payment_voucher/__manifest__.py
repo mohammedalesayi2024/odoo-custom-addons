@@ -25,10 +25,7 @@ Features:
 
         "views/res_company_views.xml",
         "views/account_payment_views.xml",
-        "views/res_config_settings_views.xml",
-
-        "reports/report_paperformat.xml",
-        
+        "views/res_config_settings_views.xml",    
         "reports/receipt_voucher.xml",
         "reports/payment_voucher.xml",
         "reports/receipt_template.xml",
