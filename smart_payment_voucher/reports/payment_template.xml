@@ -21,11 +21,11 @@
 
                             <tr>
 
-                                <td> style="
+                                <td style="
                                     width:18%;
                                     text-align:center;
                                     vertical-align:top;
-                                    padding:3px;
+                                    padding:3px;">
                                    
 
                                     <img t-if="o.company_id.logo"
