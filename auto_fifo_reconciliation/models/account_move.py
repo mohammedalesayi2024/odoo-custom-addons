@@ -71,7 +71,9 @@ class AccountMove(models.Model):
 
                 if method == "date":
 
-                    receivable_lines = self.env["account.move.line"].search(
+                    partner_lines_to_reconcile = self.env[
+                        "account.move.line"
+                    ].search(
                         domain,
                         order="date asc, id asc",
                     )
@@ -100,12 +102,26 @@ class AccountMove(models.Model):
                         )
                     )
 
-                    receivable_lines = non_invoice_lines + invoice_lines
+                    partner_lines_to_reconcile = (
+                        non_invoice_lines + invoice_lines
+                    )
 
-                for line in receivable_lines:
+                _logger.info(
+                    "Partner lines found: %s",
+                    len(partner_lines_to_reconcile),
+                )
+
+                for line in partner_lines_to_reconcile:
 
                     if line.id == payment_line.id:
                         continue
+
+                    _logger.info(
+                        "Processing line %s | Move=%s | Residual=%s",
+                        line.id,
+                        line.move_id.name,
+                        line.amount_residual,
+                    )
 
                     try:
                         (payment_line + line).reconcile()
@@ -117,6 +133,9 @@ class AccountMove(models.Model):
                         raise
 
                     if payment_line.reconciled:
+                        _logger.info(
+                            "Partner line fully reconciled"
+                        )
                         break
 
         return res
