@@ -32,7 +32,8 @@ Main Features
     ],
     "assets": {
         "point_of_sale._assets_pos": [
-            "pos_printer_tags/static/src/js/*.js",
+            
+            "pos_printer_tags/static/src/js/pos_store_patch.js",
         ],
     },
     "installable": True,
