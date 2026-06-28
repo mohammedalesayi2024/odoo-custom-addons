@@ -12,20 +12,41 @@ class AccountMove(models.Model):
 
         for move in self:
 
-            receivable_credit_lines = move.line_ids.filtered(
+            partner_lines = move.line_ids.filtered(
                 lambda l: (
-                    l.account_id.account_type == "asset_receivable"
-                    and l.partner_id
-                    and l.credit > 0
+                    l.partner_id
                     and not l.reconciled
+                    and (
+                        (
+                            l.account_id.account_type == "asset_receivable"
+                            and l.credit > 0
+                        )
+                        or (
+                            l.account_id.account_type == "liability_payable"
+                            and l.debit > 0
+                        )
+                    )
                 )
             )
 
-            for payment_line in receivable_credit_lines:
+            for payment_line in partner_lines:
 
                 partner = payment_line.partner_id
 
                 if not partner.auto_fifo_reconcile:
+                    continue
+
+                if payment_line.account_id.account_type == "asset_receivable":
+                    account_type = "asset_receivable"
+                    balance_operator = ">"
+                    invoice_type = "out_invoice"
+
+                elif payment_line.account_id.account_type == "liability_payable":
+                    account_type = "liability_payable"
+                    balance_operator = "<"
+                    invoice_type = "in_invoice"
+
+                else:
                     continue
 
                 _logger.info(
@@ -38,11 +59,15 @@ class AccountMove(models.Model):
 
                 domain = [
                     ("partner_id", "=", partner.id),
-                    ("account_id.account_type", "=", "asset_receivable"),
+                    ("account_id.account_type", "=", account_type),
                     ("parent_state", "=", "posted"),
                     ("reconciled", "=", False),
-                    ("balance", ">", 0),
                 ]
+
+                if balance_operator == ">":
+                    domain.append(("balance", ">", 0))
+                else:
+                    domain.append(("balance", "<", 0))
 
                 if method == "date":
 
@@ -56,7 +81,7 @@ class AccountMove(models.Model):
                     all_lines = self.env["account.move.line"].search(domain)
 
                     non_invoice_lines = all_lines.filtered(
-                        lambda l: l.move_id.move_type != "out_invoice"
+                        lambda l: l.move_id.move_type != invoice_type
                     ).sorted(
                         key=lambda l: (
                             l.date or l.move_id.date,
@@ -65,7 +90,7 @@ class AccountMove(models.Model):
                     )
 
                     invoice_lines = all_lines.filtered(
-                        lambda l: l.move_id.move_type == "out_invoice"
+                        lambda l: l.move_id.move_type == invoice_type
                     ).sorted(
                         key=lambda l: (
                             l.move_id.invoice_date_due
