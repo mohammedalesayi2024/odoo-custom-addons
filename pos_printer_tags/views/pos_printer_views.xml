@@ -8,16 +8,29 @@
 
         <field name="arch" type="xml">
 
+            <!-- إضافة طريقة التوجيه بعد عنوان الـ Proxy -->
             <xpath expr="//field[@name='proxy_ip']" position="after">
 
                 <field name="routing_method"/>
 
+            </xpath>
+
+            <!-- إخفاء فئات المنتجات عند اختيار Product Tag -->
+            <xpath expr="//field[@name='product_categories_ids']" position="attributes">
+                <attribute name="invisible">routing_method == 'tag'</attribute>
+            </xpath>
+
+            <!-- إضافة علامات المنتجات بعد الفئات -->
+            <xpath expr="//field[@name='product_categories_ids']" position="after">
+
                 <field name="printed_product_tag_ids"
-                       widget="many2many_tags"/>
+                       widget="many2many_tags"
+                       invisible="routing_method == 'category'"/>
 
             </xpath>
 
         </field>
+
     </record>
 
 </odoo>
