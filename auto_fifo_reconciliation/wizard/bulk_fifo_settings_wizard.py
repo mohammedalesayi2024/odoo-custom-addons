@@ -17,4 +17,8 @@ class BulkFIFOSettingsWizard(models.TransientModel):
         ],
         string="آلية توزيع الدفعة",
         default="date",
+        required=True,
     )
+
+    def action_apply(self):
+        return {"type": "ir.actions.act_window_close"}
