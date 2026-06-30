@@ -10,30 +10,54 @@
 
                 <group>
 
-                    <field name="auto_fifo_reconcile"/>
+                    <field name="auto_fifo_reconcile" />
 
-                    <field name="payment_allocation_method"/>
+                    <field name="payment_allocation_method" />
 
                 </group>
 
                 <footer>
                     <button string="تطبيق"
-                            type="object"
-                            name="action_apply"
-                            class="btn-primary"/>
+                        type="object"
+                        name="action_apply"
+                        class="btn-primary" />
 
                     <button string="إلغاء"
-                            special="cancel"/>
+                        special="cancel" />
                 </footer>
 
             </form>
         </field>
     </record>
-  <!-- Wizard Action -->
+    <!-- Wizard Action -->
     <record id="action_bulk_fifo_settings_wizard" model="ir.actions.act_window">
-    <field name="name">تحديث إعدادات التسوية</field>
-    <field name="res_model">bulk.fifo.settings.wizard</field>
-    <field name="view_mode">form</field>
-    <field name="target">new</field>
+        <field name="name">تحديث إعدادات التسوية</field>
+        <field name="res_model">bulk.fifo.settings.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <!-- Server Action -->
+    <record id="server_action_bulk_fifo_settings" model="ir.actions.server">
+        <field name="name">تحديث إعدادات التسوية</field>
+
+        <field name="model_id" ref="base.model_res_partner" />
+        <field name="binding_model_id" ref="base.model_res_partner" />
+        <field name="binding_type">action</field>
+        <field name="binding_view_types">list</field>
+
+        <field name="state">code</field>
+
+        <field name="code"><![CDATA[
+        action = {
+            "type": "ir.actions.act_window",
+            "res_model": "bulk.fifo.settings.wizard",
+            "view_mode": "form",
+            "target": "new",
+            "context": {
+            "active_ids": records.ids,
+            },
+         }
+        ]]></field>
+
     </record>
 </odoo>
