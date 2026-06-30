@@ -26,8 +26,9 @@ Compatible with Odoo 19.
     "depends": ["account"],
     "data": [
         "security/security.xml",
-        "views/res_partner_views.xml",
+        'security/ir.model.access.csv',
         'wizard/bulk_fifo_settings_wizard_views.xml',
+        "views/res_partner_views.xml",
     ],
     "installable": True,
     "application": False,
