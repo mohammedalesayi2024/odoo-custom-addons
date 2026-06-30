@@ -29,5 +29,11 @@
             </form>
         </field>
     </record>
-
+  <!-- Wizard Action -->
+    <record id="action_bulk_fifo_settings_wizard" model="ir.actions.act_window">
+    <field name="name">تحديث إعدادات التسوية</field>
+    <field name="res_model">bulk.fifo.settings.wizard</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+    </record>
 </odoo>
