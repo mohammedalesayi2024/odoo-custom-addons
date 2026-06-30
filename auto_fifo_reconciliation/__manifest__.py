@@ -27,6 +27,7 @@ Compatible with Odoo 19.
     "data": [
         "security/security.xml",
         "views/res_partner_views.xml",
+        'wizard/bulk_fifo_settings_wizard_views.xml',
     ],
     "installable": True,
     "application": False,
