@@ -3,6 +3,8 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
+_logger.warning("######### STOCK PICKING FILE LOADED #########")
+
 
 class StockPicking(models.Model):
     _inherit = "stock.picking"
