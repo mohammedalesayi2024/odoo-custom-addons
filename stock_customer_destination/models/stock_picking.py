@@ -1,11 +1,31 @@
-from odoo import models
+from odoo import api, models
 
 
 class StockPicking(models.Model):
     _inherit = "stock.picking"
 
-    def _set_customer_destination(self):
+    @api.onchange("partner_id")
+    def _onchange_partner_id_set_destination_location(self):
+        """
+        عند اختيار العميل في التحويل الداخلي يتم تحديث
+        موقع الوجهة مباشرة إلى موقع العميل.
+        """
         for picking in self:
+            if (
+                picking.picking_type_id
+                and picking.picking_type_id.code == "internal"
+                and picking.partner_id
+                and picking.partner_id.property_stock_customer
+            ):
+                picking.location_dest_id = (
+                    picking.partner_id.property_stock_customer
+                )
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super().create(vals_list)
+
+        for picking in records:
             if (
                 picking.picking_type_id.code == "internal"
                 and picking.partner_id
@@ -15,16 +35,20 @@ class StockPicking(models.Model):
                     picking.partner_id.property_stock_customer
                 )
 
-    def action_confirm(self):
-        res = super().action_confirm()
-        self._set_customer_destination()
-        return res
+        return records
 
-    def action_assign(self):
-        res = super().action_assign()
-        self._set_customer_destination()
-        return res
+    def write(self, vals):
+        res = super().write(vals)
 
-    def button_validate(self):
-        self._set_customer_destination()
-        return super().button_validate()
+        if "partner_id" in vals:
+            for picking in self:
+                if (
+                    picking.picking_type_id.code == "internal"
+                    and picking.partner_id
+                    and picking.partner_id.property_stock_customer
+                ):
+                    picking.location_dest_id = (
+                        picking.partner_id.property_stock_customer
+                    )
+
+        return res
