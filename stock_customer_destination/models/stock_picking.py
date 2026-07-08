@@ -24,3 +24,15 @@ class StockPicking(models.Model):
                 picking.location_dest_id = (
                     picking.partner_id.property_stock_customer
                 )
+
+    @api.onchange("partner_id", "picking_type_id")
+    def _onchange_picking_type(self):
+        super()._onchange_picking_type()
+
+        if (
+            self.picking_type_id
+            and self.picking_type_id.code == "internal"
+            and self.partner_id
+            and self.partner_id.property_stock_customer
+        ):
+            self.location_dest_id = self.partner_id.property_stock_customer
