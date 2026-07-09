@@ -6,10 +6,7 @@ class StockPicking(models.Model):
 
     @api.depends("picking_type_id", "partner_id")
     def _compute_location_id(self):
-        """
-        اجعل موقع الوجهة في التحويل الداخلي هو موقع العميل
-        مباشرة عند اختيار العميل.
-        """
+      
         super()._compute_location_id()
 
         for picking in self:
