@@ -8,7 +8,18 @@ class AdvanceAuditEvent(models.Model):
 
     name = fields.Char(
         string='Reference',
-        readonly=True
+        readonly=True,
+        copy=False,
+        index=True,
+    )
+
+    company_id = fields.Many2one(
+        'res.company',
+        string='Company',
+        default=lambda self: self.env.company,
+        readonly=True,
+        required=True,
+        index=True,
     )
 
     user_id = fields.Many2one(
@@ -16,7 +27,8 @@ class AdvanceAuditEvent(models.Model):
         string='User',
         required=True,
         default=lambda self: self.env.user,
-        readonly=True
+        readonly=True,
+        index=True,
     )
 
     event_type = fields.Selection([
@@ -30,19 +42,25 @@ class AdvanceAuditEvent(models.Model):
         ('search', 'Search'),
     ],
         string='Operation',
-        required=True
+        required=True,
+        index=True,
     )
 
     model_name = fields.Char(
         string='Technical Model'
     )
+
     model_id = fields.Many2one(
-    'ir.model',
-    string='Model',
-    ondelete='cascade'
+        'ir.model',
+        string='Model',
+        required=True,
+        ondelete='cascade',
+        index=True,
     )
+
     record_id = fields.Integer(
-        string='Record ID'
+        string='Record ID',
+        index=True,
     )
 
     record_name = fields.Char(
@@ -56,11 +74,13 @@ class AdvanceAuditEvent(models.Model):
     event_datetime = fields.Datetime(
         string='Date Time',
         default=fields.Datetime.now,
-        required=True
+        required=True,
+        readonly=True,
+        index=True,
     )
 
     change_ids = fields.One2many(
         'advance.audit.change',
         'event_id',
-        string='Changes'
+        string='Changes',
     )
