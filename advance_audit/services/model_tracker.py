@@ -18,7 +18,7 @@ class Base(models.AbstractModel):
             audit.log_event(
                 record=record,
                 event_type="create",
-                description="Record created",
+                 description="Record created",
             )
 
         return records
