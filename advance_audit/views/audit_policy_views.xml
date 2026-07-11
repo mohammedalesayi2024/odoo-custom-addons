@@ -7,12 +7,14 @@
         <field name="model">advance.audit.policy</field>
         <field name="arch" type="xml">
             <list>
+                <field name="sequence" widget="handle"/>
                 <field name="name"/>
                 <field name="model_id"/>
                 <field name="active"/>
                 <field name="track_create"/>
                 <field name="track_write"/>
                 <field name="track_delete"/>
+                
             </list>
         </field>
     </record>

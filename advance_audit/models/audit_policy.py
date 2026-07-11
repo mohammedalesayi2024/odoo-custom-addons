@@ -4,7 +4,7 @@ from odoo import models, fields
 class AdvanceAuditPolicy(models.Model):
     _name = 'advance.audit.policy'
     _description = 'Advance Audit Policy'
-
+    _order = "sequence, id"
     name = fields.Char(
         string='Name',
         required=True
@@ -12,14 +12,24 @@ class AdvanceAuditPolicy(models.Model):
 
     active = fields.Boolean(
         default=True
+        
     )
-
+    sequence = fields.Integer(
+    string="Priority",
+    default=10,
+    )
     model_id = fields.Many2one(
     'ir.model',
     string='Model',
     required=True,
     ondelete='cascade'
-   )
+    )
+    user_ids = fields.Many2many(
+    'res.users',
+    string='Users',
+    help='If empty, the policy applies to all users.'
+    )
+     
 
     track_create = fields.Boolean(
         string='Track Create',
