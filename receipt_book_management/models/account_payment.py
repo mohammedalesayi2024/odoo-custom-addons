@@ -30,7 +30,7 @@ class AccountPayment(models.Model):
             if payment.partner_type != "customer":
                 continue
 
-            # إذا كان السند لديه رقم مسبقاً فلا تعطه رقماً جديداً
+            # إذا كانلسند لديه رقم مسبقاً فلا تعطه رقماً جديداً
             if payment.receipt_number:
                 continue
 
