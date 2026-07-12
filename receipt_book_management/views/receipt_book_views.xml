@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Tree View -->
+    <record id="view_receipt_book_tree" model="ir.ui.view">
+        <field name="name">receipt.book.tree</field>
+        <field name="model">receipt.book</field>
+        <field name="arch" type="xml">
+            <list string="Receipt Books">
+                <field name="name"/>
+                <field name="company_id"/>
+                <field name="user_id"/>
+                <field name="from_number"/>
+                <field name="to_number"/>
+                <field name="next_number"/>
+                <field name="remaining"/>
+                <field name="state"
+                       decoration-success="state == 'active'"
+                       decoration-warning="state == 'near_end'"
+                       decoration-danger="state == 'finished'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_receipt_book_form" model="ir.ui.view">
+        <field name="name">receipt.book.form</field>
+        <field name="model">receipt.book</field>
+        <field name="arch" type="xml">
+            <form string="Receipt Book">
+
+                <sheet>
+
+                    <group>
+
+                        <group>
+                            <field name="name"/>
+                            <field name="company_id"/>
+                            <field name="user_id"/>
+                        </group>
+
+                        <group>
+                            <field name="from_number"/>
+                            <field name="to_number"/>
+                            <field name="next_number"/>
+                            <field name="warning_limit"/>
+                        </group>
+
+                    </group>
+
+                    <group>
+
+                        <group>
+                            <field name="remaining" readonly="1"/>
+                        </group>
+
+                        <group>
+                            <field name="state" readonly="1"/>
+                            <field name="active"/>
+                        </group>
+
+                    </group>
+
+                </sheet>
+
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_receipt_book_search" model="ir.ui.view">
+        <field name="name">receipt.book.search</field>
+        <field name="model">receipt.book</field>
+        <field name="arch" type="xml">
+
+            <search>
+
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="company_id"/>
+
+                <filter name="active_books"
+                        string="Active"
+                        domain="[('state','=','active')]"/>
+
+                <filter name="near_end"
+                        string="Near End"
+                        domain="[('state','=','near_end')]"/>
+
+                <filter name="finished"
+                        string="Finished"
+                        domain="[('state','=','finished')]"/>
+
+            </search>
+
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_receipt_book" model="ir.actions.act_window">
+        <field name="name">Receipt Books</field>
+        <field name="res_model">receipt.book</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Menus -->
+    <menuitem id="menu_receipt_book_root"
+              name="Receipt Books"
+              sequence="100"/>
+
+    <menuitem id="menu_receipt_books"
+              name="Receipt Books"
+              parent="menu_receipt_book_root"
+              action="action_receipt_book"/>
+
+</odoo>
