@@ -24,6 +24,7 @@ Features:
         "views/receipt_book_views.xml",
         "views/res_users_views.xml",
         "views/account_payment_views.xml",
+        'views/receipt_salesperson_views.xml',
     ],
     "installable": True,
     "application": True,
