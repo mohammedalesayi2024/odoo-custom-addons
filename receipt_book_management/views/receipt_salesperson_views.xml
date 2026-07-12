@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <!-- Tree View -->
     <record id="view_receipt_salesperson_tree" model="ir.ui.view">
         <field name="name">receipt.salesperson.tree</field>
         <field name="model">receipt.salesperson</field>
@@ -14,11 +15,12 @@
         </field>
     </record>
 
+    <!-- Form View -->
     <record id="view_receipt_salesperson_form" model="ir.ui.view">
         <field name="name">receipt.salesperson.form</field>
         <field name="model">receipt.salesperson</field>
         <field name="arch" type="xml">
-            <form>
+            <form string="Salesperson">
                 <sheet>
                     <group>
                         <field name="name"/>
@@ -31,10 +33,19 @@
         </field>
     </record>
 
+    <!-- Action -->
     <record id="action_receipt_salesperson" model="ir.actions.act_window">
         <field name="name">Salespersons</field>
         <field name="res_model">receipt.salesperson</field>
         <field name="view_mode">list,form</field>
     </record>
+
+    <!-- Menu -->
+    <menuitem
+        id="menu_receipt_salesperson"
+        name="Salespersons"
+        parent="account.menu_finance_configuration"
+        action="action_receipt_salesperson"
+        sequence="90"/>
 
 </odoo>
