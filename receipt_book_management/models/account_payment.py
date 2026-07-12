@@ -30,13 +30,21 @@ class AccountPayment(models.Model):
             if payment.partner_type != "customer":
                 continue
 
-            book = payment.env.user.receipt_book_id
+            # إذا كان السند لديه رقم مسبقاً فلا تعطه رقماً جديداً
+            if payment.receipt_number:
+                continue
+
+            book = self.env.user.receipt_book_id
 
             if not book:
-                raise ValidationError("Please assign a Receipt Book to your user.")
+                raise ValidationError(
+                    "Please assign a Receipt Book to your user."
+                )
 
             if book.next_number > book.to_number:
-                raise ValidationError("Receipt Book has no remaining numbers.")
+                raise ValidationError(
+                    "Receipt Book has no remaining numbers."
+                )
 
             payment.receipt_book_id = book
             payment.receipt_number = book.next_number
