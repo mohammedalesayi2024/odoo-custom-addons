@@ -10,9 +10,12 @@
 
             <xpath expr="//sheet/group" position="inside">
 
-                <group string="Receipt Book">
+                <group string="Receipt Information">
+
+                    <field name="salesperson_id"/>
 
                     <field name="receipt_book_id" readonly="1"/>
+
                     <field name="receipt_number" readonly="1"/>
 
                 </group>

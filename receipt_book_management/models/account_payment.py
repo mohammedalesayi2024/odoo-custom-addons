@@ -1,9 +1,14 @@
-from odoo import fields, models
+from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 
 class AccountPayment(models.Model):
     _inherit = "account.payment"
+
+    salesperson_id = fields.Many2one(
+        "receipt.salesperson",
+        string="Salesperson",
+    )
 
     receipt_book_id = fields.Many2one(
         "receipt.book",
@@ -18,6 +23,14 @@ class AccountPayment(models.Model):
         copy=False,
     )
 
+    @api.onchange("salesperson_id")
+    def _onchange_salesperson_id(self):
+        for rec in self:
+            if rec.salesperson_id:
+                rec.receipt_book_id = rec.salesperson_id.receipt_book_id
+            else:
+                rec.receipt_book_id = False
+
     def action_post(self):
         res = super().action_post()
 
@@ -30,15 +43,20 @@ class AccountPayment(models.Model):
             if payment.partner_type != "customer":
                 continue
 
-            # إذا كانلسند لديه رقم مسبقاً فلا تعطه رقماً جديداً
+            # إذا كان السند لديه رقم بالفعل فلا ينشئ رقماً جديداً
             if payment.receipt_number:
                 continue
 
-            book = self.env.user.receipt_book_id
+            if not payment.salesperson_id:
+                raise ValidationError(
+                    "Please select a Salesperson."
+                )
+
+            book = payment.receipt_book_id
 
             if not book:
                 raise ValidationError(
-                    "Please assign a Receipt Book to your user."
+                    "The selected salesperson has no Receipt Book."
                 )
 
             if book.next_number > book.to_number:
