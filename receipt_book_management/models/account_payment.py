@@ -52,7 +52,8 @@ class AccountPayment(models.Model):
                     "Please select a Salesperson."
                 )
 
-            book = payment.receipt_book_id
+            # الحصول على دفتر السندات من المندوب مباشرة
+            book = payment.salesperson_id.receipt_book_id
 
             if not book:
                 raise ValidationError(
@@ -64,9 +65,11 @@ class AccountPayment(models.Model):
                     "Receipt Book has no remaining numbers."
                 )
 
+            # حفظ الدفتر ورقم السند
             payment.receipt_book_id = book
             payment.receipt_number = book.next_number
 
+            # زيادة الرقم التالي
             book.next_number += 1
 
         return res
