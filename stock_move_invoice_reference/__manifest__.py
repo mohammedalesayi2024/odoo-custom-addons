@@ -1,4 +1,3 @@
-# Manifest will be added in the next step.
 {
     "name": "Stock Move Invoice Reference",
     "version": "19.0.1.0.0",
