@@ -3,7 +3,7 @@ from odoo import fields, models
 
 
 class StockMove(models.Model):
-    _inherit = "stock.move"
+    _inherit = "stock.move.line"
 
     invoice_reference_id = fields.Many2one(
         comodel_name="account.move",
