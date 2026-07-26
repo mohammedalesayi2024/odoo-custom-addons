@@ -1,3 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <!-- Views will be added here -->
+
+    <record id="view_move_tree_invoice_reference" model="ir.ui.view">
+        <field name="name">stock.move.tree.invoice.reference</field>
+        <field name="model">stock.move</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='reference']" position="after">
+                <field name="invoice_reference_id" optional="show"/>
+            </xpath>
+
+        </field>
+    </record>
+
 </odoo>
