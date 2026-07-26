@@ -1,4 +1,7 @@
 from odoo import api, fields, models
+import logging
+
+_logger = logging.getLogger(__name__)
 
 
 class StockMoveLine(models.Model):
@@ -9,8 +12,6 @@ class StockMoveLine(models.Model):
         string="Invoice Reference",
         compute="_compute_invoice_reference",
         store=True,
-        readonly=True,
-        index=True,
     )
 
     @api.depends("move_id.sale_line_id")
@@ -20,11 +21,21 @@ class StockMoveLine(models.Model):
 
             sale_line = line.move_id.sale_line_id
             if not sale_line:
+                _logger.warning("NO SALE LINE")
                 continue
 
             order = sale_line.order_id
-            if not order:
-                continue
+            _logger.warning("ORDER: %s", order.name)
+
+            _logger.warning("INVOICE IDS: %s", order.invoice_ids.ids)
+
+            for inv in order.invoice_ids:
+                _logger.warning(
+                    "Invoice: %s  state=%s  type=%s",
+                    inv.name,
+                    inv.state,
+                    inv.move_type,
+                )
 
             invoices = order.invoice_ids.filtered(
                 lambda m: m.state == "posted"
