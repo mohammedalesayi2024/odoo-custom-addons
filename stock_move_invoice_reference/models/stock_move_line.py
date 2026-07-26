@@ -17,25 +17,29 @@ class StockMoveLine(models.Model):
         for line in self:
             line.invoice_reference_id = False
 
-            # Customer Invoice / Credit Note
-            if line.move_id.sale_line_id:
-                order = line.move_id.sale_line_id.order_id
-                invoice = order.invoice_ids.filtered(
-                    lambda m: m.state == "posted"
-                    and m.move_type in ("out_invoice", "out_refund")
+            # -------------------------
+            # Sales
+            # -------------------------
+            sale_line = line.move_id.sale_line_id
+            if sale_line:
+                invoice_line = sale_line.invoice_lines.filtered(
+                    lambda l: l.move_id.state == "posted"
+                    and l.move_id.move_type == "out_invoice"
                 )[:1]
 
-                if invoice:
-                    line.invoice_reference_id = invoice
-                continue
+                if invoice_line:
+                    line.invoice_reference_id = invoice_line.move_id
+                    continue
 
-            # Vendor Bill / Vendor Credit Note
-            if line.move_id.purchase_line_id:
-                order = line.move_id.purchase_line_id.order_id
-                invoice = order.invoice_ids.filtered(
-                    lambda m: m.state == "posted"
-                    and m.move_type in ("in_invoice", "in_refund")
+            # -------------------------
+            # Purchase
+            # -------------------------
+            purchase_line = line.move_id.purchase_line_id
+            if purchase_line:
+                invoice_line = purchase_line.invoice_lines.filtered(
+                    lambda l: l.move_id.state == "posted"
+                    and l.move_id.move_type == "in_invoice"
                 )[:1]
 
-                if invoice:
-                    line.invoice_reference_id = invoice
+                if invoice_line:
+                    line.invoice_reference_id = invoice_line.move_id
