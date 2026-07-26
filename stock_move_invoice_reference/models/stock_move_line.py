@@ -1,16 +1,14 @@
 from odoo import api, fields, models
-import logging
-
-_logger = logging.getLogger(__name__)
 
 
 class StockMoveLine(models.Model):
     _inherit = "stock.move.line"
 
     invoice_reference_id = fields.Many2one(
-        "account.move",
+        comodel_name="account.move",
         string="Invoice Reference",
         compute="_compute_invoice_reference",
+        readonly=True,
         store=False,
     )
 
@@ -21,21 +19,11 @@ class StockMoveLine(models.Model):
 
             sale_line = line.move_id.sale_line_id
             if not sale_line:
-                _logger.warning("NO SALE LINE")
                 continue
 
             order = sale_line.order_id
-            _logger.warning("ORDER: %s", order.name)
-
-            _logger.warning("INVOICE IDS: %s", order.invoice_ids.ids)
-
-            for inv in order.invoice_ids:
-                _logger.warning(
-                    "Invoice: %s  state=%s  type=%s",
-                    inv.name,
-                    inv.state,
-                    inv.move_type,
-                )
+            if not order:
+                continue
 
             invoices = order.invoice_ids.filtered(
                 lambda m: m.state == "posted"
