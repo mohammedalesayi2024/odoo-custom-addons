@@ -11,7 +11,7 @@ class StockMoveLine(models.Model):
         "account.move",
         string="Invoice Reference",
         compute="_compute_invoice_reference",
-        store=True,
+        store=False,
     )
 
     @api.depends("move_id.sale_line_id")
