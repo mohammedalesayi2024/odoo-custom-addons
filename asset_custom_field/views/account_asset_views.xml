@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-    <record id="view_account_asset_form_inherit_custom" model="ir.ui.view">
-        <field name="name">account.asset.form.inherit.custom</field>
-        <field name="model">account.asset</field>
-        <field name="inherit_id" ref="account_asset.view_account_asset_form"/>
+   <record id="view_account_asset_form_inherit_custom" model="ir.ui.view">
+    <field name="name">account.asset.form.inherit.custom</field>
+    <field name="model">account.asset</field>
+    <field name="inherit_id" ref="account_asset.view_account_asset_form"/>
+    <field name="arch" type="xml">
 
-        <field name="arch" type="xml">
-            <xpath expr="//sheet/group" position="inside">
-                <field name="asset_note"/>
-            </xpath>
-        </field>
-    </record>
+        <xpath expr="//field[@name='asset_group_id']" position="after">
+            <field name="asset_note"/>
+        </xpath>
+
+    </field>
+</record>
 
 </odoo>
