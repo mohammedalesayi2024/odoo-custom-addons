@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="mail_template_coupon_sent" model="mail.template">
+        <field name="name">إرسال كوبون تحويل نقاط الولاء</field>
+        <field name="model_id" ref="loyalty.model_loyalty_card"/>
+        <field name="subject">🎁 كوبون الولاء الخاص بك</field>
+        <field name="email_to">{{ object.partner_id.email }}</field>
+        <field name="lang">{{ object.partner_id.lang }}</field>
+        <field name="auto_delete" eval="True"/>
+        <field name="body_html" type="html">
+            <div style="font-family: Tahoma, Arial, sans-serif; direction: rtl; text-align: right; padding: 16px;">
+                <p>مرحبًا <strong t-out="object.partner_id.name"/>،</p>
+                <p>🎁 لقد حصلت على كوبون ولاء بقيمة
+                    <strong t-out="'%.2f' % object.points"/>
+                    <t t-out="object.currency_id.symbol or ''"/>
+                </p>
+                <p style="font-size: 18px;">
+                    كود الكوبون:
+                    <span style="background:#f2f2f2; padding:4px 10px; border-radius:4px; font-weight:bold;">
+                        <t t-out="object.code"/>
+                    </span>
+                </p>
+                <p>استخدمه عند الشراء من فروعنا أو متجرنا الإلكتروني.</p>
+                <p>شكرًا لثقتك بنا 🌟</p>
+            </div>
+        </field>
+    </record>
+
+</odoo>
