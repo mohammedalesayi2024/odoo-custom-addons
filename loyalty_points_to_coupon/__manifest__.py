@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "تحويل نقاط الولاء إلى كوبون - Loyalty Points to Coupon",
-    "version": "19.0.0.3",
+    "version": "19.0.0.4",
     "category": "Sales/Point of Sale",
     "summary": "سياسة نقاط ولاء كاملة: اكتساب تلقائي + تحويل يدوي/تلقائي إلى كوبون",
     "description": """
@@ -35,9 +35,11 @@
         "security/ir.model.access.csv",
         "data/loyalty_program_data.xml",
         "data/mail_template_data.xml",
+        "data/loyalty_policy_settings_data.xml",
         "data/ir_cron_data.xml",
         "wizard/loyalty_point_to_coupon_wizard_views.xml",
         "views/res_partner_views.xml",
+        "views/loyalty_policy_settings_views.xml",
     ],
     "installable": True,
     "application": False,

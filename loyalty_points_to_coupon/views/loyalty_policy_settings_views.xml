@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_loyalty_policy_settings_form" model="ir.ui.view">
+        <field name="name">loyalty.policy.settings.form</field>
+        <field name="model">loyalty.policy.settings</field>
+        <field name="arch" type="xml">
+            <form string="إعدادات سياسة نقاط الولاء">
+                <sheet>
+                    <group string="احتساب اكتساب النقاط">
+                        <field name="points_currency_unit"/>
+                        <field name="use_tax_included_amount"/>
+                    </group>
+                    <group string="إصدار الكوبون التلقائي">
+                        <field name="coupon_trigger_points"/>
+                        <field name="coupon_value_currency"/>
+                    </group>
+                    <group string="فئات المنتجات">
+                        <field name="earn_excluded_category_ids" widget="many2many_tags"/>
+                        <field name="redeem_excluded_category_ids" widget="many2many_tags"/>
+                    </group>
+                    <group string="قواعد الدمج">
+                        <field name="block_coupon_with_other_discount_sales"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_loyalty_policy_settings_list" model="ir.ui.view">
+        <field name="name">loyalty.policy.settings.list</field>
+        <field name="model">loyalty.policy.settings</field>
+        <field name="arch" type="xml">
+            <list string="إعدادات سياسة نقاط الولاء">
+                <field name="name"/>
+                <field name="points_currency_unit"/>
+                <field name="coupon_trigger_points"/>
+                <field name="coupon_value_currency"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_loyalty_policy_settings" model="ir.actions.act_window">
+        <field name="name">إعدادات سياسة نقاط الولاء</field>
+        <field name="res_model">loyalty.policy.settings</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_loyalty_policy_settings_root"
+              name="سياسة نقاط الولاء"
+              sequence="99"/>
+
+    <menuitem id="menu_loyalty_policy_settings"
+              name="الإعدادات"
+              parent="menu_loyalty_policy_settings_root"
+              action="action_loyalty_policy_settings"
+              sequence="10"/>
+
+</odoo>
