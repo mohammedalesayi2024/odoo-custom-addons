@@ -7,16 +7,16 @@
         <field name="arch" type="xml">
             <form string="إعدادات سياسة نقاط الولاء">
                 <sheet>
-                    <group string="احتساب اكتساب النقاط">
-                        <field name="points_currency_unit"/>
-                        <field name="use_tax_included_amount"/>
-                    </group>
+                    <div class="alert alert-info" role="alert">
+                        احتساب اكتساب النقاط (كم ريال = كم نقطة) يُضبط الآن
+                        مباشرة من قاعدة (Rule) داخل برنامج "نقاط الولاء
+                        (اكتساب)" في شاشة الخصم والولاء، وليس من هنا.
+                    </div>
                     <group string="إصدار الكوبون التلقائي">
                         <field name="coupon_trigger_points"/>
                         <field name="coupon_value_currency"/>
                     </group>
-                    <group string="فئات المنتجات">
-                        <field name="earn_excluded_category_ids" widget="many2many_tags"/>
+                    <group string="فئات مستثناة من استخدام الكوبون">
                         <field name="redeem_excluded_category_ids" widget="many2many_tags"/>
                     </group>
                     <group string="قواعد الدمج">
