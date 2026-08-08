@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "تحويل نقاط الولاء إلى كوبون - Loyalty Points to Coupon",
-    "version": "19.0.0.2",
+    "version": "19.0.0.3",
     "category": "Sales/Point of Sale",
     "summary": "سياسة نقاط ولاء كاملة: اكتساب تلقائي + تحويل يدوي/تلقائي إلى كوبون",
     "description": """
