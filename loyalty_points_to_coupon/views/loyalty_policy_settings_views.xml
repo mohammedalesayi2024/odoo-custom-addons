@@ -33,7 +33,6 @@
         <field name="arch" type="xml">
             <list string="إعدادات سياسة نقاط الولاء">
                 <field name="name"/>
-                <field name="points_currency_unit"/>
                 <field name="coupon_trigger_points"/>
                 <field name="coupon_value_currency"/>
             </list>
