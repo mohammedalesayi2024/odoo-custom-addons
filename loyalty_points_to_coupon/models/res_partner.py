@@ -5,7 +5,6 @@ from .loyalty_policy_constants import (
     COUPON_TRIGGER_POINTS,
     COUPON_POINTS_PER_CURRENCY,
     MIN_ELIGIBLE_AMOUNT,
-    POINTS_PER_ELIGIBLE_ORDER,
 )
 
 
@@ -75,6 +74,10 @@ class ResPartner(models.Model):
         لكل طلب/فاتورة مؤكَّدة، ويتحقق تلقائيًا من عتبة الـ100 نقطة
         ويُصدر الكوبون فورًا عند بلوغها (سواء كان الرصيد وصل بفضل هذا
         الطلب، أو كان أصلًا مرتفعًا من رصيد سابق).
+
+        احتساب النقاط تناسبي: كل 20 ريال (MIN_ELIGIBLE_AMOUNT) من المبلغ
+        المؤهل = نقطة واحدة، مع تجاهل الكسر. مثال: 103 ريال ÷ 20 = 5 نقاط
+        (يُهمَل الباقي 3 ريال، ولا يُرحَّل للطلب التالي).
         """
         self.ensure_one()
 
@@ -84,20 +87,25 @@ class ResPartner(models.Model):
         if eligible_amount < MIN_ELIGIBLE_AMOUNT:
             return
 
+        points_earned = int(eligible_amount // MIN_ELIGIBLE_AMOUNT)
+        if points_earned <= 0:
+            return
+
         card = self._get_or_create_earning_loyalty_card()
         if not card:
             return
 
-        card.points += POINTS_PER_ELIGIBLE_ORDER
+        card.points += points_earned
         self.message_post(
             body=_(
                 "(%(source)s) تم منح %(points)s نقطة ولاء "
-                "(المبلغ المؤهل: %(amount).2f)."
+                "(المبلغ المؤهل: %(amount).2f، بواقع نقطة لكل %(unit)s ريال)."
             )
             % {
                 "source": source_label or _("طلب"),
-                "points": POINTS_PER_ELIGIBLE_ORDER,
+                "points": points_earned,
                 "amount": eligible_amount,
+                "unit": MIN_ELIGIBLE_AMOUNT,
             }
         )
 
