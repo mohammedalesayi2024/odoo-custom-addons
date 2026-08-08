@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!--
+        شبكة أمان: تفحص يوميًا كل بطاقات برنامج الاكتساب التي رصيدها ≥ 100
+        نقطة (مثلًا عملاء لديهم أرصدة سابقة من قبل تركيب الموديول، أو حالات
+        نادرة لم يمر عليها طلب جديد بعد بلوغ العتبة) وتُصدر لهم الكوبون.
+        يمكن أيضًا تشغيلها يدويًا فورًا من Settings > Technical > Automation
+        > Scheduled Actions (بعد تفعيل Developer Mode) بالضغط على "Run Manually".
+    -->
+    <record id="ir_cron_check_pending_loyalty_coupons" model="ir.cron">
+        <field name="name">تحقق وإصدار كوبونات نقاط الولاء المستحقة (100+)</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="state">code</field>
+        <field name="code">model.action_check_and_issue_pending_coupons()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active" eval="True"/>
+    </record>
+
+</odoo>
