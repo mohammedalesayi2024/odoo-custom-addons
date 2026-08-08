@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_loyalty_point_to_coupon_wizard_user,loyalty.point.to.coupon.wizard.user,model_loyalty_point_to_coupon_wizard,base.group_user,1,1,1,1
+access_loyalty_policy_settings_user,loyalty.policy.settings.user,model_loyalty_policy_settings,base.group_user,1,1,1,0

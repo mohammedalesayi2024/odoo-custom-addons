@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models, _
 
-from .loyalty_policy_constants import (
-    COUPON_TRIGGER_POINTS,
-    COUPON_POINTS_PER_CURRENCY,
-    MIN_ELIGIBLE_AMOUNT,
-)
-
 
 class ResPartner(models.Model):
     _inherit = "res.partner"
@@ -71,23 +65,25 @@ class ResPartner(models.Model):
 
     def _grant_loyalty_points_for_order(self, eligible_amount, source_label=None):
         """منطق منح النقاط المشترك بين Sales وPOS. يُستدعى مرة واحدة فقط
-        لكل طلب/فاتورة مؤكَّدة، ويتحقق تلقائيًا من عتبة الـ100 نقطة
-        ويُصدر الكوبون فورًا عند بلوغها (سواء كان الرصيد وصل بفضل هذا
-        الطلب، أو كان أصلًا مرتفعًا من رصيد سابق).
+        لكل طلب/فاتورة مؤكَّدة، ويتحقق تلقائيًا من عتبة إصدار الكوبون
+        (من الإعدادات) ويُصدره فورًا عند بلوغها.
 
-        احتساب النقاط تناسبي: كل 20 ريال (MIN_ELIGIBLE_AMOUNT) من المبلغ
-        المؤهل = نقطة واحدة، مع تجاهل الكسر. مثال: 103 ريال ÷ 20 = 5 نقاط
-        (يُهمَل الباقي 3 ريال، ولا يُرحَّل للطلب التالي).
+        كل القيم (وحدة الاحتساب، العتبة، قيمة الكوبون) تُقرأ من
+        loyalty.policy.settings بدل أن تكون ثابتة بالكود، حتى يقدر
+        المستخدم تعديلها من الواجهة مباشرة.
         """
         self.ensure_one()
 
         if self.id == self.env.ref("base.public_partner").id:
             return
 
-        if eligible_amount < MIN_ELIGIBLE_AMOUNT:
+        settings = self.env["loyalty.policy.settings"].get_settings()
+        unit = settings.points_currency_unit or 20.0
+
+        if eligible_amount < unit:
             return
 
-        points_earned = int(eligible_amount // MIN_ELIGIBLE_AMOUNT)
+        points_earned = int(eligible_amount // unit)
         if points_earned <= 0:
             return
 
@@ -99,30 +95,32 @@ class ResPartner(models.Model):
         self.message_post(
             body=_(
                 "(%(source)s) تم منح %(points)s نقطة ولاء "
-                "(المبلغ المؤهل: %(amount).2f، بواقع نقطة لكل %(unit)s ريال)."
+                "(المبلغ المؤهل: %(amount).2f، بواقع نقطة لكل %(unit)s)."
             )
             % {
                 "source": source_label or _("طلب"),
                 "points": points_earned,
                 "amount": eligible_amount,
-                "unit": MIN_ELIGIBLE_AMOUNT,
+                "unit": unit,
             }
         )
 
-        if card.points >= COUPON_TRIGGER_POINTS:
+        trigger = settings.coupon_trigger_points or 100.0
+        value = settings.coupon_value_currency or 10.0
+        points_per_currency = trigger / value if value else 10.0
+
+        if card.points >= trigger:
             card._issue_conversion_coupon(
-                points_to_convert=COUPON_TRIGGER_POINTS,
-                points_per_currency=COUPON_POINTS_PER_CURRENCY,
+                points_to_convert=trigger,
+                points_per_currency=points_per_currency,
                 send_notification=True,
-                source_label=_("إصدار تلقائي عند بلوغ 100 نقطة"),
+                source_label=_("إصدار تلقائي عند بلوغ %s نقطة") % trigger,
             )
 
     def action_check_and_issue_pending_coupons(self):
-        """أداة "تحقق الآن" يدوية: تفحص كل بطاقات برنامج الاكتساب التي
-        رصيدها الحالي ≥ 100 (مثلًا عملاء لديهم أرصدة سابقة من قبل تركيب
-        الموديول أو لم يمر عليهم طلب جديد بعد بلوغ العتبة) وتُصدر لهم
-        كوبونًا فوريًا دون انتظار عملية بيع جديدة.
-        """
+        """أداة "تحقق الآن" (يدوية أو عبر Cron): تفحص كل بطاقات برنامج
+        الاكتساب التي رصيدها ≥ عتبة الإصدار الحالية في الإعدادات وتُصدر
+        لهم كوبونًا فوريًا دون انتظار عملية بيع جديدة."""
         program = self.env.ref(
             "loyalty_points_to_coupon.loyalty_program_points_earning",
             raise_if_not_found=False,
@@ -130,16 +128,21 @@ class ResPartner(models.Model):
         if not program:
             return
 
+        settings = self.env["loyalty.policy.settings"].get_settings()
+        trigger = settings.coupon_trigger_points or 100.0
+        value = settings.coupon_value_currency or 10.0
+        points_per_currency = trigger / value if value else 10.0
+
         pending_cards = self.env["loyalty.card"].search(
-            [("program_id", "=", program.id), ("points", ">=", COUPON_TRIGGER_POINTS)]
+            [("program_id", "=", program.id), ("points", ">=", trigger)]
         )
         issued = 0
         for card in pending_cards:
             card._issue_conversion_coupon(
-                points_to_convert=COUPON_TRIGGER_POINTS,
-                points_per_currency=COUPON_POINTS_PER_CURRENCY,
+                points_to_convert=trigger,
+                points_per_currency=points_per_currency,
                 send_notification=True,
-                source_label=_("تصحيح/مسح دوري لأرصدة سابقة ≥ 100 نقطة"),
+                source_label=_("تصحيح/مسح دوري لأرصدة سابقة ≥ %s نقطة") % trigger,
             )
             issued += 1
 
@@ -148,7 +151,7 @@ class ResPartner(models.Model):
             "tag": "display_notification",
             "params": {
                 "title": _("تم الفحص"),
-                "message": _("تم إصدار %s كوبون لعملاء وصلوا لـ100 نقطة.") % issued,
+                "message": _("تم إصدار %s كوبون لعملاء وصلوا للعتبة.") % issued,
                 "sticky": False,
                 "type": "success" if issued else "info",
             },
