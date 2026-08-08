@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!--
+        برنامج اكتساب نقاط الولاء الأساسي.
+        النقاط لا تُمنح عبر آلية loyalty.rule القياسية، بل يديرها الموديول
+        برمجيًا عند تأكيد أمر البيع (انظر models/sale_order.py) حتى يمكن
+        استثناء السطور المخفّضة/سطور العروض من الاحتساب بدقة، وإصدار كوبون
+        10 ريال تلقائيًا وفوريًا بمجرد بلوغ 100 نقطة.
+    -->
+    <record id="loyalty_program_points_earning" model="loyalty.program">
+        <field name="name">برنامج نقاط الولاء (اكتساب)</field>
+        <field name="program_type">loyalty</field>
+        <field name="trigger">auto</field>
+        <field name="applies_on">both</field>
+        <field name="portal_visible" eval="True"/>
+        <field name="portal_point_name">نقطة ولاء</field>
+    </record>
+
+    <!--
+        برنامج كوبونات يُستخدم فقط كـ "وعاء" لاستقبال الكوبونات الناتجة
+        عن تحويل نقاط الولاء. لا يحتوي على قاعدة اكتساب نقاط (rule)
+        لأن النقاط تُضاف يدويًا عبر المعالج (Wizard) فقط.
+        كل نقطة على بطاقة هذا البرنامج = وحدة نقدية واحدة من الخصم.
+    -->
+    <record id="coupon_program_loyalty_conversion" model="loyalty.program">
+        <field name="name">كوبون تحويل نقاط الولاء</field>
+        <field name="program_type">coupons</field>
+        <field name="trigger">with_code</field>
+        <field name="applies_on">both</field>
+        <field name="portal_visible" eval="False"/>
+        <field name="portal_point_name">ريال خصم</field>
+    </record>
+
+    <!--
+        ⚠️ استثناء فئتَي "البن" و"الإكسسوارات" من الكوبون، ومنع دمجه مع أي
+        عرض آخر: هذان الإعدادان يُضبطان من واجهة Odoo بعد التثبيت لأنهما
+        يعتمدان على فئات المنتجات الفعلية في قاعدة بياناتكم (انظر خطوات
+        التهيئة اليدوية في README.md). الإعداد الافتراضي هنا هو "الخصم على
+        كامل الطلب" مبدئيًا، ويجب تعديله يدويًا إلى "منتجات محددة" واختيار
+        كل الفئات المسموح بها ما عدا البن والإكسسوارات.
+    -->
+    <record id="coupon_reward_loyalty_conversion" model="loyalty.reward">
+        <field name="program_id" ref="coupon_program_loyalty_conversion"/>
+        <field name="reward_type">discount</field>
+        <field name="discount_mode">per_point</field>
+        <field name="discount">1.0</field>
+        <field name="discount_applicability">order</field>
+        <field name="required_points">1</field>
+    </record>
+
+</odoo>
