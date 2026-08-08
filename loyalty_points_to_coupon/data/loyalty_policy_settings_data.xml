@@ -11,8 +11,6 @@
     -->
     <record id="default_loyalty_policy_settings" model="loyalty.policy.settings">
         <field name="name">الإعدادات الافتراضية</field>
-        <field name="points_currency_unit">20.0</field>
-        <field name="use_tax_included_amount" eval="False"/>
         <field name="coupon_trigger_points">100.0</field>
         <field name="coupon_value_currency">10.0</field>
         <field name="block_coupon_with_other_discount_sales" eval="True"/>

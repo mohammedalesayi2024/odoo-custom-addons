@@ -9,6 +9,50 @@ from odoo.exceptions import UserError
 class LoyaltyCard(models.Model):
     _inherit = "loyalty.card"
 
+    def write(self, vals):
+        old_points_by_id = {}
+        if "points" in vals:
+            old_points_by_id = {card.id: card.points for card in self}
+
+        res = super().write(vals)
+
+        if "points" in vals:
+            for card in self:
+                card._maybe_auto_issue_coupon(old_points_by_id.get(card.id, 0.0))
+
+        return res
+
+    def _maybe_auto_issue_coupon(self, old_points):
+        """يُصدر كوبونًا تلقائيًا فور عبور رصيد بطاقة برنامج "نقاط الولاء
+        (اكتساب)" لعتبة الإصدار المحدَّدة في الإعدادات - بغض النظر عن
+        مصدر إضافة النقاط (قاعدة Odoo الأصلية المرئية، تعديل يدوي، أو أي
+        آلية أخرى). يعمل فقط عند "عبور" العتبة لأول مرة (من تحتها إلى
+        فوقها) لتفادي التكرار.
+        """
+        self.ensure_one()
+
+        program = self.env.ref(
+            "loyalty_points_to_coupon.loyalty_program_points_earning",
+            raise_if_not_found=False,
+        )
+        if not program or self.program_id.id != program.id:
+            return
+
+        settings = self.env["loyalty.policy.settings"].get_settings()
+        trigger = settings.coupon_trigger_points or 100.0
+        value = settings.coupon_value_currency or 10.0
+
+        if old_points >= trigger or self.points < trigger:
+            return
+
+        points_per_currency = trigger / value if value else 10.0
+        self._issue_conversion_coupon(
+            points_to_convert=trigger,
+            points_per_currency=points_per_currency,
+            send_notification=True,
+            source_label=_("إصدار تلقائي فوري عند بلوغ %s نقطة") % trigger,
+        )
+
     def _generate_unique_coupon_code(self):
         while True:
             suffix = "".join(

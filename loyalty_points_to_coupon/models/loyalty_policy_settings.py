@@ -8,22 +8,16 @@ class LoyaltyPolicySettings(models.Model):
 
     name = fields.Char(default="الإعدادات الافتراضية", required=True)
 
-    points_currency_unit = fields.Float(
-        string="كل كم ريال = نقطة ولاء واحدة",
-        default=20.0,
-        help="مثال: 20 يعني كل 20 ريال من المبلغ المؤهل = نقطة واحدة "
-        "(يُهمَل الكسر، فاتورة 103 ريال ÷ 20 = 5 نقاط).",
-    )
-    use_tax_included_amount = fields.Boolean(
-        string="احتساب النقاط على المبلغ شامل الضريبة",
-        default=False,
-        help="إذا كان مفعّلاً: يُحتسب على السعر شامل الضريبة (مثال: فاتورة "
-        "103 ريال شاملة الضريبة ÷ 20 = 5 نقاط). إذا كان معطّلاً (الافتراضي): "
-        "يُحتسب على السعر قبل الضريبة (103 ÷ 1.15 = 89.57 ÷ 20 = 4 نقاط).",
-    )
+    # ملاحظة: احتساب اكتساب النقاط نفسه (كم ريال = كم نقطة) أصبح يُضبط
+    # مباشرة من قاعدة (Rule) مرئية وقابلة للتعديل في واجهة أودو، داخل
+    # برنامج "نقاط الولاء (اكتساب)" → تبويب "القواعد والمكافآت". هذه
+    # الشاشة تبقى فقط للإعدادات التي لا يوفرها أودو أصلًا.
+
     coupon_trigger_points = fields.Float(
         string="عتبة إصدار الكوبون التلقائي (نقطة)",
         default=100.0,
+        help="بمجرد وصول/تجاوز رصيد العميل لهذا الرقم، يُصدر كوبون فورًا "
+        "تلقائيًا، بغض النظر عن مصدر النقاط (قاعدة أودو أو تعديل يدوي).",
     )
     coupon_value_currency = fields.Float(
         string="قيمة الكوبون الصادر عند بلوغ العتبة (ريال)",
@@ -33,16 +27,8 @@ class LoyaltyPolicySettings(models.Model):
         string="منع استخدام الكوبون مع أي عرض/خصم آخر (Sales)",
         default=True,
         help="عند التفعيل: لن يقبل النظام تأكيد أي طلب مبيعات يحتوي على "
-        "كوبون نقاط الولاء بالإضافة إلى منتج آخر عليه خصم أو عرض.",
-    )
-    earn_excluded_category_ids = fields.Many2many(
-        "product.category",
-        "loyalty_policy_earn_excluded_categ_rel",
-        "settings_id",
-        "category_id",
-        string="فئات مستثناة من اكتساب النقاط",
-        help="أي منتج ضمن هذه الفئات لا يمنح العميل نقاط ولاء أبدًا، حتى "
-        "بدون خصم على السطر.",
+        "كوبون نقاط الولاء بالإضافة إلى منتج آخر عليه خصم أو عرض. في "
+        "نقطة البيع (POS) يُسجَّل تحذير بعد إتمام الطلب بدل المنع الفوري.",
     )
     redeem_excluded_category_ids = fields.Many2many(
         "product.category",
@@ -96,8 +82,6 @@ class LoyaltyPolicySettings(models.Model):
                 ]
                 reward.write(vals)
             except Exception:
-                # قد يختلف اسم الحقل بين نسخ أودو - نطبّق ما أمكن على الأقل
-                # ونترك تنبيهًا في سجل الأنشطة للمراجعة اليدوية إن لزم.
                 reward.write({"discount_applicability": "specific"})
                 self.env["ir.logging"].sudo().create(
                     {
