@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import random
+import secrets
 import string
 
 from odoo import api, fields, models, _
@@ -54,13 +54,31 @@ class LoyaltyCard(models.Model):
         )
 
     def _generate_unique_coupon_code(self):
-        while True:
-            suffix = "".join(
-                random.choices(string.ascii_uppercase + string.digits, k=6)
-            )
-            code = "LOY-%s" % suffix
+        """يولّد رمز كوبون عشوائي وآمن (غير قابل للتخمين أو التسلسل) عبر
+        مكتبة secrets - المخصصة في بايثون لتوليد قيم حساسة أمنيًا
+        (بعكس random العادية، القابلة للتنبؤ لو عرف أحد حالتها الداخلية).
+        البادئة وطول الجزء العشوائي يُضبطان من واجهة أودو مباشرة داخل
+        شاشة برنامج "نقاط الولاء (اكتساب)" ← تبويب "إعدادات الكوبون
+        التلقائي" ← "شكل رمز الكوبون"، دون أي شكل ثابت مفروض من الكود.
+        """
+        settings = self.env["loyalty.policy.settings"].get_settings()
+        prefix = settings.coupon_code_prefix or ""
+        length = max(settings.coupon_code_length or 6, 4)
+        alphabet = string.ascii_uppercase + string.digits
+
+        for _attempt in range(50):
+            random_part = "".join(secrets.choice(alphabet) for _ in range(length))
+            code = "%s%s" % (prefix, random_part)
             if not self.search([("code", "=", code)], limit=1):
                 return code
+
+        raise UserError(
+            _(
+                "تعذّر توليد رمز كوبون فريد بعد عدة محاولات. يرجى زيادة "
+                "طول الجزء العشوائي من الرمز من إعدادات برنامج نقاط "
+                "الولاء."
+            )
+        )
 
     def _issue_conversion_coupon(
         self, points_to_convert, points_per_currency=10.0, send_notification=True,
