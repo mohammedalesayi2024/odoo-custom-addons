@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_loyalty_program_form_coupon_policy_inherit" model="ir.ui.view">
+        <field name="name">loyalty.program.form.coupon.policy.inherit</field>
+        <field name="model">loyalty.program</field>
+        <field name="inherit_id" ref="loyalty.loyalty_program_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="إعدادات الكوبون التلقائي"
+                      name="coupon_policy_settings"
+                      invisible="not is_points_earning_program">
+                    <div class="alert alert-info" role="alert">
+                        هذه الإعدادات خاصة بالإصدار التلقائي لكوبون الخصم عند
+                        بلوغ العميل عتبة نقاط معيّنة، وباستخدام الكوبون
+                        الناتج. احتساب اكتساب النقاط نفسه (كم ريال = كم
+                        نقطة) يبقى يُضبط من تبويب "القواعد والمكافآت".
+                    </div>
+                    <group>
+                        <group string="إصدار الكوبون التلقائي">
+                            <field name="coupon_trigger_points"/>
+                            <field name="coupon_value_currency"/>
+                        </group>
+                        <group string="قواعد الدمج">
+                            <field name="block_coupon_with_other_discount_sales"/>
+                        </group>
+                    </group>
+                    <group string="فئات مستثناة من استخدام الكوبون">
+                        <field name="redeem_excluded_category_ids"
+                               widget="many2many_tags" nolabel="1" colspan="2"/>
+                    </group>
+                    <field name="is_points_earning_program" invisible="1"/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
