@@ -45,6 +45,20 @@ class LoyaltyProgram(models.Model):
         "كوبون نقاط الولاء بالإضافة إلى منتج آخر عليه خصم أو عرض. في "
         "نقطة البيع (POS) يُسجَّل تحذير بعد إتمام الطلب بدل المنع الفوري.",
     )
+    coupon_code_prefix = fields.Char(
+        string="بادئة رمز الكوبون",
+        compute="_compute_policy_settings_fields",
+        inverse="_inverse_coupon_code_prefix",
+        help="تُضاف في بداية كل رمز كوبون. اتركها فارغة لعدم استخدام "
+        "بادئة.",
+    )
+    coupon_code_length = fields.Integer(
+        string="طول الجزء العشوائي من الرمز",
+        compute="_compute_policy_settings_fields",
+        inverse="_inverse_coupon_code_length",
+        help="عدد الخانات العشوائية (حروف وأرقام) بعد البادئة. كل ما "
+        "زاد الرقم كل ما قلّ احتمال التخمين أو التكرار. الحد الأدنى: 4.",
+    )
 
     def _compute_is_points_earning_program(self):
         program = self.env.ref(
@@ -63,6 +77,8 @@ class LoyaltyProgram(models.Model):
             rec.block_coupon_with_other_discount_sales = (
                 settings.block_coupon_with_other_discount_sales
             )
+            rec.coupon_code_prefix = settings.coupon_code_prefix
+            rec.coupon_code_length = settings.coupon_code_length
 
     def _inverse_coupon_trigger_points(self):
         settings = self.env["loyalty.policy.settings"].get_settings()
@@ -91,3 +107,15 @@ class LoyaltyProgram(models.Model):
                 settings.block_coupon_with_other_discount_sales = (
                     rec.block_coupon_with_other_discount_sales
                 )
+
+    def _inverse_coupon_code_prefix(self):
+        settings = self.env["loyalty.policy.settings"].get_settings()
+        for rec in self:
+            if rec.is_points_earning_program:
+                settings.coupon_code_prefix = rec.coupon_code_prefix
+
+    def _inverse_coupon_code_length(self):
+        settings = self.env["loyalty.policy.settings"].get_settings()
+        for rec in self:
+            if rec.is_points_earning_program:
+                settings.coupon_code_length = rec.coupon_code_length

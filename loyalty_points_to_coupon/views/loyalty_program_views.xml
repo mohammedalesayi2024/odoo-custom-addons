@@ -21,6 +21,12 @@
                             <field name="coupon_trigger_points"/>
                             <field name="coupon_value_currency"/>
                         </group>
+                        <group string="شكل رمز الكوبون">
+                            <field name="coupon_code_prefix"/>
+                            <field name="coupon_code_length"/>
+                        </group>
+                    </group>
+                    <group>
                         <group string="قواعد الدمج">
                             <field name="block_coupon_with_other_discount_sales"/>
                         </group>

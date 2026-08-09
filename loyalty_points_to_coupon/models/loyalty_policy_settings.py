@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models, _
+from odoo.exceptions import ValidationError
 
 
 class LoyaltyPolicySettings(models.Model):
@@ -39,6 +40,31 @@ class LoyaltyPolicySettings(models.Model):
         help="مثال: البن والإكسسوارات. لن يعمل الكوبون على أي منتج ضمن "
         "هذه الفئات. يُطبَّق تلقائيًا على برنامج الكوبون عند الحفظ.",
     )
+    coupon_code_prefix = fields.Char(
+        string="بادئة رمز الكوبون",
+        default="LOY-",
+        help="تُضاف في بداية كل رمز كوبون. اتركها فارغة لعدم استخدام "
+        "بادئة.",
+    )
+    coupon_code_length = fields.Integer(
+        string="طول الجزء العشوائي من الرمز",
+        default=6,
+        help="عدد الخانات العشوائية (حروف وأرقام) بعد البادئة. كل ما "
+        "زاد الرقم كل ما قلّ احتمال التخمين أو التكرار. الحد الأدنى "
+        "الموصى به: 6.",
+    )
+
+    @api.constrains("coupon_code_length")
+    def _check_coupon_code_length(self):
+        for rec in self:
+            if rec.coupon_code_length < 4:
+                raise ValidationError(
+                    _(
+                        "طول الجزء العشوائي من رمز الكوبون يجب ألا يقل "
+                        "عن 4 خانات، حفاظًا على أمان الرمز وصعوبة "
+                        "تخمينه."
+                    )
+                )
 
     @api.model
     def get_settings(self):
