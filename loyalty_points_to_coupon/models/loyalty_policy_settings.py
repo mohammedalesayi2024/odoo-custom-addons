@@ -90,7 +90,13 @@ class LoyaltyPolicySettings(models.Model):
     def _sync_redeem_categories_to_coupon_reward(self):
         """يحدّث تلقائيًا مكافأة برنامج الكوبون بحيث تشمل كل الفئات ما
         عدا الفئات المستثناة المختارة هنا، دون الحاجة لفتح شاشة المكافأة
-        يدويًا في كل مرة."""
+        يدويًا في كل مرة.
+
+        ملاحظة هامة: لا نترك المكافأة أبدًا بحالة discount_applicability
+        = 'specific' بدون أن يكون حقل الفئات فعليًا مضبوطًا بالقيم
+        الصحيحة، لأن ذلك يعني عمليًا (بحسب سلوك أودو) أن الخصم يُطبَّق
+        على كل شيء بلا أي استثناء - وهو أخطر من عدم التقييد أصلاً لأنه
+        يبدو مقيّدًا في الواجهة بينما هو غير ذلك فعليًا."""
         reward = self.env.ref(
             "loyalty_points_to_coupon.coupon_reward_loyalty_conversion",
             raise_if_not_found=False,
@@ -98,17 +104,80 @@ class LoyaltyPolicySettings(models.Model):
         if not reward:
             return
 
+        category_field = reward._fields.get("discount_product_category_id")
+
         for settings in self:
             all_categories = self.env["product.category"].search([])
-            included_categories = all_categories - settings.redeem_excluded_category_ids
-            vals = {"discount_applicability": "specific"}
-            try:
-                vals["discount_product_category_id"] = [
-                    (6, 0, included_categories.ids)
-                ]
-                reward.write(vals)
-            except Exception:
-                reward.write({"discount_applicability": "specific"})
+            included_categories = (
+                all_categories - settings.redeem_excluded_category_ids
+            )
+            error_message = None
+
+            if not settings.redeem_excluded_category_ids:
+                # لا يوجد استثناء مطلوب أصلاً - الخصم على كامل الطلب،
+                # وهذه الحالة الوحيدة الآمنة لاستخدام discount_applicability
+                # = 'order' بدون قيود فئات.
+                reward.write({"discount_applicability": "order"})
+                continue
+
+            if category_field is None:
+                error_message = (
+                    "الحقل discount_product_category_id غير موجود في "
+                    "موديل loyalty.reward بهذا الإصدار من أودو - لا يمكن "
+                    "تطبيق استثناء الفئات تلقائيًا."
+                )
+            elif category_field.type == "many2many":
+                try:
+                    reward.write(
+                        {
+                            "discount_applicability": "specific",
+                            "discount_product_category_id": [
+                                (6, 0, included_categories.ids)
+                            ],
+                        }
+                    )
+                except Exception as exc:  # noqa: BLE001
+                    error_message = f"فشل الكتابة على الحقل (many2many): {exc}"
+            elif category_field.type == "many2one":
+                # حقل بأودو يقبل فئة واحدة فقط، لا يمكن معه تنفيذ منطق
+                # "كل الفئات ما عدا المستثناة" حين يكون عدد الفئات
+                # المتبقية أكثر من واحدة.
+                if len(included_categories) == 1:
+                    try:
+                        reward.write(
+                            {
+                                "discount_applicability": "specific",
+                                "discount_product_category_id": included_categories.id,
+                            }
+                        )
+                    except Exception as exc:  # noqa: BLE001
+                        error_message = f"فشل الكتابة على الحقل (many2one): {exc}"
+                else:
+                    error_message = (
+                        "discount_product_category_id هو حقل Many2one في "
+                        "هذا الإصدار (فئة واحدة فقط)، ولا يدعم استثناء "
+                        "فئة واحدة أو أكثر مع بقاء أكثر من فئة مسموحة. "
+                        "يلزم حل بديل (فحص يدوي في الكود بدل الاعتماد "
+                        "على هذا الحقل الأصلي)."
+                    )
+            else:
+                error_message = (
+                    f"نوع حقل غير متوقع: {category_field.type}"
+                )
+
+            if error_message:
+                # حالة آمنة: لا نُبقي المكافأة 'specific' بلا قيود فعلية.
+                # الأفضل تعطيل الخصم مؤقتًا عن الفئات كلها (بدل فتحه
+                # للجميع) وتنبيه المدير ليتدخل يدويًا.
+                reward.write(
+                    {
+                        "discount_applicability": "specific",
+                        "discount_product_category_id": [(6, 0, [])]
+                        if category_field is not None
+                        and category_field.type == "many2many"
+                        else False,
+                    }
+                )
                 self.env["ir.logging"].sudo().create(
                     {
                         "name": "loyalty_points_to_coupon",
@@ -116,8 +185,10 @@ class LoyaltyPolicySettings(models.Model):
                         "level": "WARNING",
                         "message": (
                             "تعذّر تحديث حقل الفئات المشمولة على مكافأة "
-                            "الكوبون تلقائيًا - يرجى ضبطها يدويًا من واجهة "
-                            "المكافأة."
+                            "الكوبون تلقائيًا، وتم تعطيل الكوبون مؤقتًا "
+                            "(لن يُطبَّق على أي منتج) لحين الضبط اليدوي، "
+                            "بدل تركه يعمل بلا استثناء. السبب: "
+                            + error_message
                         ),
                         "path": "loyalty_policy_settings",
                         "func": "_sync_redeem_categories_to_coupon_reward",
