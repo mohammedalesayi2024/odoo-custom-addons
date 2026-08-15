@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_qaqc_root" name="QA/QC Documents" sequence="25"
+              web_icon="qaqc_documents,static/description/icon.png"/>
+
+    <menuitem id="menu_qaqc_prq" name="PRQ" parent="menu_qaqc_root"
+              action="action_qaqc_prq" sequence="10"/>
+
+    <!-- MAR, MES, MIR, RSN, WIR, NCR menu items will be added
+         alongside each model in the next iterations. -->
+
+</odoo>

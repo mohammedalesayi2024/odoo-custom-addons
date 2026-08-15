@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="seq_qaqc_prq" model="ir.sequence">
+            <field name="name">QA/QC - PRQ</field>
+            <field name="code">qaqc.prq</field>
+            <field name="prefix"></field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- MAR, MES, MIR, RSN, WIR, NCR sequences follow the same
+             pattern and will be added alongside each model. -->
+
+    </data>
+</odoo>

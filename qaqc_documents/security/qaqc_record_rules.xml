@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Example: Procurement only sees/edits PRQs while in draft/submitted -->
+        <record id="rule_qaqc_prq_procurement_own" model="ir.rule">
+            <field name="name">PRQ: Procurement - own project scope</field>
+            <field name="model_id" ref="model_qaqc_prq"/>
+            <field name="groups" eval="[(4, ref('group_qaqc_procurement'))]"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <!-- NOTE: placeholder domain. To be refined once we define
+                 project-level assignment (e.g. project_id in user's
+                 allowed_project_ids) in the next iteration. -->
+        </record>
+
+    </data>
+</odoo>
