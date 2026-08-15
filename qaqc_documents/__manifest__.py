@@ -39,6 +39,7 @@ templates (Jeddah Rose Project).
         # views
         'views/project_project_views.xml',
         'views/qaqc_prq_views.xml',
+        'views/qaqc_mar_views.xml',
         'views/qaqc_menus.xml',
     ],
     'installable': True,
