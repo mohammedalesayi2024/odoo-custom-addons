@@ -1,3 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_qaqc_prq_user,qaqc.prq.user,model_qaqc_prq,base.group_user,1,1,1,0
 access_qaqc_prq_manager,qaqc.prq.manager,model_qaqc_prq,group_qaqc_manager,1,1,1,1
+access_qaqc_mar_user,qaqc.mar.user,model_qaqc_mar,base.group_user,1,1,1,0
+access_qaqc_mar_manager,qaqc.mar.manager,model_qaqc_mar,group_qaqc_manager,1,1,1,1
+access_qaqc_mar_compliance_line_user,qaqc.mar.compliance.line.user,model_qaqc_mar_compliance_line,base.group_user,1,1,1,1

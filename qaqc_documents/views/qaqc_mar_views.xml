@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_qaqc_mar_form" model="ir.ui.view">
+        <field name="name">qaqc.mar.form</field>
+        <field name="model">qaqc.mar</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit" string="Submit" type="object"
+                            invisible="state != 'draft'" class="oe_highlight"/>
+                    <button name="action_start_review" string="Start Review" type="object"
+                            invisible="state != 'submitted'"/>
+                    <button name="action_approve" string="A - Approve" type="object"
+                            invisible="state not in ('submitted','under_review')" class="oe_highlight"/>
+                    <button name="action_approve_as_noted" string="B - Approve as Noted" type="object"
+                            invisible="state not in ('submitted','under_review')"/>
+                    <button name="action_revise_resubmit" string="C - Revise &amp; Resubmit" type="object"
+                            invisible="state not in ('submitted','under_review')"/>
+                    <button name="action_reject" string="D - Reject" type="object"
+                            invisible="state not in ('submitted','under_review')"/>
+                    <button name="action_reset_draft" string="Reset to Draft" type="object"
+                            invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,submitted,under_review,approved"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="supplier_id"/>
+                            <field name="discipline"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="rev" readonly="1"/>
+                            <field name="consultant_rep_id"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Material">
+                            <group>
+                                <field name="material_description"/>
+                                <field name="drawing_ref"/>
+                                <field name="specification_ref"/>
+                                <field name="boq_ref"/>
+                            </group>
+                        </page>
+                        <page string="Manufacturer / Supplier">
+                            <group>
+                                <field name="manufacturer_name"/>
+                                <field name="manufacturer_address"/>
+                                <field name="local_agent_name"/>
+                            </group>
+                        </page>
+                        <page string="Delivery">
+                            <group>
+                                <field name="country_of_origin"/>
+                                <field name="availability"/>
+                            </group>
+                            <group string="Documentation">
+                                <field name="sample_required"/>
+                                <field name="sample_attached"/>
+                                <field name="literature_required"/>
+                                <field name="literature_attached"/>
+                            </group>
+                        </page>
+                        <page string="Compliance Statement">
+                            <field name="compliance_line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="contract_requirement"/>
+                                    <field name="compliance"/>
+                                    <field name="submittal_spec_ref"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Attachments &amp; Decision">
+                            <group>
+                                <field name="attachment" filename="attachment_fname"/>
+                                <field name="attachment_fname" invisible="1"/>
+                            </group>
+                            <group string="Consultant Decision Requirements">
+                                <field name="test_on_sample_required"/>
+                                <field name="additional_info_required"/>
+                                <field name="manufacturer_guarantee_required"/>
+                            </group>
+                            <group>
+                                <field name="consultant_comments"/>
+                                <field name="approval_date" readonly="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_qaqc_mar_list" model="ir.ui.view">
+        <field name="name">qaqc.mar.list</field>
+        <field name="model">qaqc.mar</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="supplier_id"/>
+                <field name="discipline"/>
+                <field name="rev"/>
+                <field name="date"/>
+                <field name="state" widget="badge"
+                       decoration-success="state in ('approved','approved_noted')"
+                       decoration-danger="state == 'rejected'"
+                       decoration-warning="state == 'revise_resubmit'"
+                       decoration-info="state in ('submitted','under_review')"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_qaqc_mar" model="ir.actions.act_window">
+        <field name="name">MAR - Material Approval Request</field>
+        <field name="res_model">qaqc.mar</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Material Approval Request
+            </p>
+        </field>
+    </record>
+
+</odoo>

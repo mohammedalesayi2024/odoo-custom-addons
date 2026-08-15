@@ -10,7 +10,15 @@
             <field name="company_id" eval="False"/>
         </record>
 
-        <!-- MAR, MES, MIR, RSN, WIR, NCR sequences follow the same
+        <record id="seq_qaqc_mar" model="ir.sequence">
+            <field name="name">QA/QC - MAR</field>
+            <field name="code">qaqc.mar</field>
+            <field name="prefix"></field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- MES, MIR, RSN, WIR, NCR sequences follow the same
              pattern and will be added alongside each model. -->
 
     </data>

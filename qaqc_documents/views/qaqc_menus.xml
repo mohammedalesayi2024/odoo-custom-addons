@@ -7,7 +7,10 @@
     <menuitem id="menu_qaqc_prq" name="PRQ" parent="menu_qaqc_root"
               action="action_qaqc_prq" sequence="10"/>
 
-    <!-- MAR, MES, MIR, RSN, WIR, NCR menu items will be added
+    <menuitem id="menu_qaqc_mar" name="MAR" parent="menu_qaqc_root"
+              action="action_qaqc_mar" sequence="20"/>
+
+    <!-- MES, MIR, RSN, WIR, NCR menu items will be added
          alongside each model in the next iterations. -->
 
 </odoo>
