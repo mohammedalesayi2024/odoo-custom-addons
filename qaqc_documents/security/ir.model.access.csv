@@ -1,5 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_qaqc_prq_all,qaqc.prq.all users,model_qaqc_prq,,1,0,0,0
-access_qaqc_prq_procurement,qaqc.prq.procurement,model_qaqc_prq,group_qaqc_procurement,1,1,1,0
-access_qaqc_prq_consultant,qaqc.prq.consultant,model_qaqc_prq,group_qaqc_consultant,1,1,0,0
+access_qaqc_prq_user,qaqc.prq.user,model_qaqc_prq,base.group_user,1,1,1,0
 access_qaqc_prq_manager,qaqc.prq.manager,model_qaqc_prq,group_qaqc_manager,1,1,1,1
