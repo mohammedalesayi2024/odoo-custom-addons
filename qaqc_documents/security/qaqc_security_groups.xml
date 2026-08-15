@@ -2,51 +2,39 @@
 <odoo>
     <data>
 
-        <record id="module_category_qaqc" model="ir.module.category">
-            <field name="name">QA/QC Documents</field>
-            <field name="sequence">20</field>
-        </record>
-
         <!-- Site -->
         <record id="group_qaqc_site" model="res.groups">
-            <field name="name">Site Team</field>
-            <field name="category_id" ref="module_category_qaqc"/>
+            <field name="name">QA/QC: Site Team</field>
         </record>
 
         <!-- Procurement -->
         <record id="group_qaqc_procurement" model="res.groups">
-            <field name="name">Procurement</field>
-            <field name="category_id" ref="module_category_qaqc"/>
+            <field name="name">QA/QC: Procurement</field>
         </record>
 
         <!-- QA/QC -->
         <record id="group_qaqc_engineer" model="res.groups">
-            <field name="name">QA/QC Engineer</field>
-            <field name="category_id" ref="module_category_qaqc"/>
+            <field name="name">QA/QC: Engineer</field>
         </record>
 
         <!-- Document Control -->
         <record id="group_qaqc_doc_control" model="res.groups">
-            <field name="name">Document Control</field>
-            <field name="category_id" ref="module_category_qaqc"/>
+            <field name="name">QA/QC: Document Control</field>
         </record>
 
         <!-- Consultant -->
         <record id="group_qaqc_consultant" model="res.groups">
-            <field name="name">Consultant</field>
-            <field name="category_id" ref="module_category_qaqc"/>
+            <field name="name">QA/QC: Consultant</field>
         </record>
 
         <!-- Commercial -->
         <record id="group_qaqc_commercial" model="res.groups">
-            <field name="name">Commercial</field>
-            <field name="category_id" ref="module_category_qaqc"/>
+            <field name="name">QA/QC: Commercial</field>
         </record>
 
         <!-- Manager: full access, implies all of the above -->
         <record id="group_qaqc_manager" model="res.groups">
-            <field name="name">QA/QC Manager</field>
-            <field name="category_id" ref="module_category_qaqc"/>
+            <field name="name">QA/QC: Manager</field>
             <field name="implied_ids" eval="[(4, ref('group_qaqc_site')),
                                               (4, ref('group_qaqc_procurement')),
                                               (4, ref('group_qaqc_engineer')),
