@@ -59,6 +59,15 @@ class LoyaltyProgram(models.Model):
         help="عدد الخانات العشوائية (حروف وأرقام) بعد البادئة. كل ما "
         "زاد الرقم كل ما قلّ احتمال التخمين أو التكرار. الحد الأدنى: 4.",
     )
+    auto_send_coupon_notification = fields.Boolean(
+        string="إرسال إشعار الكوبون تلقائيًا عبر البريد الإلكتروني",
+        compute="_compute_policy_settings_fields",
+        inverse="_inverse_auto_send_coupon_notification",
+        help="مفتاح تشغيل/إيقاف: عند التفعيل، بمجرد إصدار كوبون تلقائي "
+        "(عند بلوغ العميل عتبة النقاط) يُرسل له بريد إلكتروني فوري "
+        "يخبره بذلك. عند التعطيل، يُصدر الكوبون بدون إرسال تلقائي - "
+        "وتقدر ترسله يدويًا لاحقًا من شاشة الكوبونات.",
+    )
 
     def _compute_is_points_earning_program(self):
         program = self.env.ref(
@@ -79,6 +88,7 @@ class LoyaltyProgram(models.Model):
             )
             rec.coupon_code_prefix = settings.coupon_code_prefix
             rec.coupon_code_length = settings.coupon_code_length
+            rec.auto_send_coupon_notification = settings.auto_send_coupon_notification
 
     def _inverse_coupon_trigger_points(self):
         settings = self.env["loyalty.policy.settings"].get_settings()
@@ -119,3 +129,11 @@ class LoyaltyProgram(models.Model):
         for rec in self:
             if rec.is_points_earning_program:
                 settings.coupon_code_length = rec.coupon_code_length
+
+    def _inverse_auto_send_coupon_notification(self):
+        settings = self.env["loyalty.policy.settings"].get_settings()
+        for rec in self:
+            if rec.is_points_earning_program:
+                settings.auto_send_coupon_notification = (
+                    rec.auto_send_coupon_notification
+                )

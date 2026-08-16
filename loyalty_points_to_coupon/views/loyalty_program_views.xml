@@ -20,6 +20,7 @@
                         <group string="إصدار الكوبون التلقائي">
                             <field name="coupon_trigger_points"/>
                             <field name="coupon_value_currency"/>
+                            <field name="auto_send_coupon_notification" widget="boolean_toggle"/>
                         </group>
                         <group string="شكل رمز الكوبون">
                             <field name="coupon_code_prefix"/>
