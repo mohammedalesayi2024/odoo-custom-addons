@@ -64,7 +64,7 @@ class ResPartner(models.Model):
             card._issue_conversion_coupon(
                 points_to_convert=trigger,
                 points_per_currency=points_per_currency,
-                send_notification=True,
+                send_notification=settings.auto_send_coupon_notification,
                 source_label=_("تصحيح/مسح دوري لأرصدة سابقة ≥ %s نقطة") % trigger,
             )
             issued += 1

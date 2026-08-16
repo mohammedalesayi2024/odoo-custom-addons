@@ -49,9 +49,48 @@ class LoyaltyCard(models.Model):
         self._issue_conversion_coupon(
             points_to_convert=trigger,
             points_per_currency=points_per_currency,
-            send_notification=True,
+            send_notification=settings.auto_send_coupon_notification,
             source_label=_("إصدار تلقائي فوري عند بلوغ %s نقطة") % trigger,
         )
+
+    def action_send_coupon_notification(self):
+        """إرسال يدوي فوري لإشعار الكوبون - يظهر كخيار داخل قائمة
+        الإجراءات (⚙️ Actions) في شاشة الكوبونات القياسية بأودو، على أي
+        بطاقة معها رمز كوبون. يُستخدم عندما يكون "الإرسال التلقائي"
+        معطّلاً من الإعدادات، أو لإعادة إرسال كوبون سابق للعميل."""
+        template = self.env.ref(
+            "loyalty_points_to_coupon.mail_template_coupon_sent",
+            raise_if_not_found=False,
+        )
+        if not template:
+            raise UserError(_("لم يتم العثور على قالب البريد الإلكتروني."))
+
+        sent = 0
+        skipped = 0
+        for card in self:
+            if not card.code or not card.partner_id or not card.partner_id.email:
+                skipped += 1
+                continue
+            template.send_mail(card.id, force_send=True)
+            sent += 1
+
+        message = _("تم إرسال %s إشعار بنجاح.") % sent
+        if skipped:
+            message += _(
+                " تم تخطي %s بطاقة (بدون رمز كوبون أو بدون بريد إلكتروني "
+                "للعميل)."
+            ) % skipped
+
+        return {
+            "type": "ir.actions.client",
+            "tag": "display_notification",
+            "params": {
+                "title": _("إرسال إشعار الكوبون"),
+                "message": message,
+                "sticky": False,
+                "type": "success" if sent else "warning",
+            },
+        }
 
     def _generate_unique_coupon_code(self):
         """يولّد رمز كوبون عشوائي وآمن (غير قابل للتخمين أو التسلسل) عبر
