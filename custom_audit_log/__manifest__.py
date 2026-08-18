@@ -22,5 +22,5 @@ Custom Audit Log
         'views/audit_config_views.xml',
     ],
     'installable': True,
-    'application': False,
+    'application': True,
 }
