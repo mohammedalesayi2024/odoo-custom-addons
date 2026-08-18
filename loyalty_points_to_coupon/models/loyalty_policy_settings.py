@@ -62,6 +62,16 @@ class LoyaltyPolicySettings(models.Model):
         "إرسال تلقائي - وتقدر ترسله يدويًا لاحقًا من شاشة الكوبونات "
         "(حدد البطاقة ← زر الإجراءات ← 'إرسال إشعار الكوبون للعميل').",
     )
+    block_coupon_below_value = fields.Boolean(
+        string="منع استخدام الكوبون إذا كانت الفاتورة أقل من قيمته",
+        default=True,
+        help="عند التفعيل (سياسة منع كلي): لن يُقبل استخدام كوبون تحويل "
+        "نقاط الولاء إطلاقًا إذا كان إجمالي الفاتورة (قبل تطبيق "
+        "الكوبون) أقل من قيمة الكوبون نفسها (مثال: كوبون بقيمة 10 "
+        "ريال لن يعمل على فاتورة قيمتها 5 ريال). هذا يمنع فقدان أي "
+        "جزء من قيمة الكوبون بسبب فاتورة صغيرة. يظهر خطأ صريح يمنع "
+        "إتمام البيع في كل من المبيعات ونقطة البيع.",
+    )
 
     @api.constrains("coupon_code_length")
     def _check_coupon_code_length(self):
@@ -97,39 +107,138 @@ class LoyaltyPolicySettings(models.Model):
         return res
 
     def _sync_redeem_categories_to_coupon_reward(self):
-        """يحدّث تلقائيًا مكافأة برنامج الكوبون بحيث تشمل كل الفئات ما
-        عدا الفئات المستثناة المختارة هنا، دون الحاجة لفتح شاشة المكافأة
-        يدويًا في كل مرة."""
+        """يحدّث تلقائيًا مكافأة برنامج الكوبون بحيث تشمل كل المنتجات ما
+        عدا المنتجات ضمن الفئات المستثناة المختارة هنا، دون الحاجة لفتح
+        شاشة المكافأة يدويًا في كل مرة، وبدون سرد آلاف المنتجات في تلك
+        الشاشة.
+
+        الآلية: نستخدم علامة تصنيف واحدة ثابتة (product.tag) نديرها
+        بالكامل تلقائيًا - تُضاف لكل منتج مؤهل وتُزال من غيره في كل
+        مرة تتغيّر فيها الفئات المستثناة، ثم نربط هذه العلامة الواحدة
+        بحقل "علامات تصنيف المنتجات المشمولة في الخصم" على المكافأة.
+        هذا يعمل بنفس الطريقة على كل نسخ أودو بغض النظر عن نوع الحقل
+        (Many2one أو Many2many)، لأننا نكتب علامة واحدة فقط، ويبقى حجم
+        شاشة المكافأة نظيفًا مهما كان عدد المنتجات في الكتالوج."""
         reward = self.env.ref(
             "loyalty_points_to_coupon.coupon_reward_loyalty_conversion",
             raise_if_not_found=False,
         )
-        if not reward:
+        eligibility_tag = self.env.ref(
+            "loyalty_points_to_coupon.product_tag_loyalty_coupon_eligible",
+            raise_if_not_found=False,
+        )
+        if not reward or not eligibility_tag:
             return
 
+        reward_fields = self.env["loyalty.reward"]._fields
+        tag_field = reward_fields.get("discount_product_tag_id")
+        categ_field = reward_fields.get("discount_product_category_id")
+
+        if not tag_field:
+            # احتياط نادر: نسخة أودو بدون حقل التاق على المكافأة إطلاقًا.
+            self._sync_via_category_or_product_fallback(reward, categ_field)
+            return
+
+        Product = self.env["product.product"]
+
         for settings in self:
-            all_categories = self.env["product.category"].search([])
-            included_categories = all_categories - settings.redeem_excluded_category_ids
+            excluded = settings.redeem_excluded_category_ids
+
+            if not excluded:
+                # ما فيه أي استثناء - أبسط وأخف حل: الخصم على الطلب كامل،
+                # وتُمسح العلامة من الجميع (غير مستخدمة في هذي الحالة).
+                Product.search([("product_tag_ids", "in", eligibility_tag.id)]).write(
+                    {"product_tag_ids": [(3, eligibility_tag.id)]}
+                )
+                try:
+                    reward.write({"discount_applicability": "order"})
+                except Exception:
+                    self._log_sync_warning()
+                continue
+
+            excluded_with_children = self.env["product.category"].search(
+                [("id", "child_of", excluded.ids)]
+            )
+            all_tagged = Product.search(
+                [("product_tag_ids", "in", eligibility_tag.id)]
+            )
+            eligible = Product.search(
+                [("categ_id", "not in", excluded_with_children.ids)]
+            )
+            no_longer_eligible = all_tagged - eligible
+            newly_eligible = eligible - all_tagged
+
+            # عمليتان دفعة واحدة (Bulk) بدل المرور على كل منتج لحاله -
+            # سريعتان حتى مع آلاف المنتجات.
+            if no_longer_eligible:
+                no_longer_eligible.write({"product_tag_ids": [(3, eligibility_tag.id)]})
+            if newly_eligible:
+                newly_eligible.write({"product_tag_ids": [(4, eligibility_tag.id)]})
+
             vals = {"discount_applicability": "specific"}
+            if tag_field:
+                vals["discount_product_tag_id"] = (
+                    [(6, 0, [eligibility_tag.id])]
+                    if tag_field.type == "many2many"
+                    else eligibility_tag.id
+                )
+            if categ_field:
+                vals["discount_product_category_id"] = (
+                    [(5, 0, 0)] if categ_field.type == "many2many" else False
+                )
+            vals["discount_product_ids"] = [(5, 0, 0)]
+
             try:
+                reward.write(vals)
+            except Exception:
+                self._log_sync_warning()
+
+    def _sync_via_category_or_product_fallback(self, reward, categ_field):
+        """مسار احتياطي نادر جدًا، يُستخدم فقط لو نسخة أودو ما فيها
+        حقل علامات التصنيف (discount_product_tag_id) على المكافأة
+        إطلاقًا."""
+        for settings in self:
+            excluded = settings.redeem_excluded_category_ids
+            if not excluded:
+                try:
+                    reward.write({"discount_applicability": "order"})
+                except Exception:
+                    self._log_sync_warning()
+                continue
+
+            vals = {"discount_applicability": "specific"}
+            if categ_field and categ_field.type == "many2many":
+                all_categories = self.env["product.category"].search([])
+                included_categories = all_categories - excluded
                 vals["discount_product_category_id"] = [
                     (6, 0, included_categories.ids)
                 ]
+            else:
+                excluded_with_children = self.env["product.category"].search(
+                    [("id", "child_of", excluded.ids)]
+                )
+                eligible_products = self.env["product.product"].search(
+                    [("categ_id", "not in", excluded_with_children.ids)]
+                )
+                vals["discount_product_ids"] = [(6, 0, eligible_products.ids)]
+
+            try:
                 reward.write(vals)
             except Exception:
-                reward.write({"discount_applicability": "specific"})
-                self.env["ir.logging"].sudo().create(
-                    {
-                        "name": "loyalty_points_to_coupon",
-                        "type": "server",
-                        "level": "WARNING",
-                        "message": (
-                            "تعذّر تحديث حقل الفئات المشمولة على مكافأة "
-                            "الكوبون تلقائيًا - يرجى ضبطها يدويًا من واجهة "
-                            "المكافأة."
-                        ),
-                        "path": "loyalty_policy_settings",
-                        "func": "_sync_redeem_categories_to_coupon_reward",
-                        "line": "0",
-                    }
-                )
+                self._log_sync_warning()
+
+    def _log_sync_warning(self):
+        self.env["ir.logging"].sudo().create(
+            {
+                "name": "loyalty_points_to_coupon",
+                "type": "server",
+                "level": "WARNING",
+                "message": (
+                    "تعذّر تحديث نطاق منتجات مكافأة الكوبون تلقائيًا - "
+                    "يرجى ضبطها يدويًا من واجهة المكافأة."
+                ),
+                "path": "loyalty_policy_settings",
+                "func": "_sync_redeem_categories_to_coupon_reward",
+                "line": "0",
+            }
+        )

@@ -68,6 +68,13 @@ class LoyaltyProgram(models.Model):
         "يخبره بذلك. عند التعطيل، يُصدر الكوبون بدون إرسال تلقائي - "
         "وتقدر ترسله يدويًا لاحقًا من شاشة الكوبونات.",
     )
+    block_coupon_below_value = fields.Boolean(
+        string="منع استخدام الكوبون إذا كانت الفاتورة أقل من قيمته",
+        compute="_compute_policy_settings_fields",
+        inverse="_inverse_block_coupon_below_value",
+        help="عند التفعيل: لن يُقبل استخدام الكوبون إطلاقًا إذا كانت "
+        "الفاتورة أقل من قيمته - يمنع فقدان أي جزء من قيمة الكوبون.",
+    )
 
     def _compute_is_points_earning_program(self):
         program = self.env.ref(
@@ -89,6 +96,7 @@ class LoyaltyProgram(models.Model):
             rec.coupon_code_prefix = settings.coupon_code_prefix
             rec.coupon_code_length = settings.coupon_code_length
             rec.auto_send_coupon_notification = settings.auto_send_coupon_notification
+            rec.block_coupon_below_value = settings.block_coupon_below_value
 
     def _inverse_coupon_trigger_points(self):
         settings = self.env["loyalty.policy.settings"].get_settings()
@@ -137,3 +145,9 @@ class LoyaltyProgram(models.Model):
                 settings.auto_send_coupon_notification = (
                     rec.auto_send_coupon_notification
                 )
+
+    def _inverse_block_coupon_below_value(self):
+        settings = self.env["loyalty.policy.settings"].get_settings()
+        for rec in self:
+            if rec.is_points_earning_program:
+                settings.block_coupon_below_value = rec.block_coupon_below_value
