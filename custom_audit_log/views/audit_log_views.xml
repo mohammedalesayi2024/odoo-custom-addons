@@ -63,8 +63,6 @@
                 <field name="log_date"/>
                 <filter string="اليوم" name="today"
                         domain="[('log_date', '&gt;=', context_today().strftime('%Y-%m-%d 00:00:00'))]"/>
-                <filter string="آخر 7 أيام" name="last_7_days"
-                        domain="[('log_date', '&gt;=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d 00:00:00'))]"/>
                 <separator/>
                 <filter string="إضافة" name="filter_create" domain="[('method', '=', 'create')]"/>
                 <filter string="تعديل" name="filter_write" domain="[('method', '=', 'write')]"/>
@@ -73,7 +71,6 @@
                     <filter string="المستخدم" name="group_by_user" context="{'group_by': 'user_id'}"/>
                     <filter string="الموديل" name="group_by_model" context="{'group_by': 'model_label'}"/>
                     <filter string="نوع العملية" name="group_by_method" context="{'group_by': 'method'}"/>
-                    <filter string="اليوم" name="group_by_day" context="{'group_by': 'log_date:day'}"/>
                 </group>
             </search>
         </field>
@@ -84,7 +81,7 @@
         <field name="res_model">audit.log</field>
         <field name="view_mode">list,form</field>
         <field name="search_view_id" ref="view_audit_log_search"/>
-        <field name="context">{'search_default_last_7_days': 1}</field>
+        <field name="context">{}</field>
     </record>
 
     <menuitem id="menu_audit_root" name="التدقيق" sequence="90" groups="custom_audit_log.group_audit_viewer"/>
