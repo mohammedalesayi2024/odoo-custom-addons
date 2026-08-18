@@ -39,7 +39,7 @@
                     <notebook>
                         <page string="تفاصيل التغييرات">
                             <field name="field_changes_ids">
-                                <list editable="false" create="false" delete="false">
+                                <list create="false" delete="false">
                                     <field name="field_label"/>
                                     <field name="old_value"/>
                                     <field name="new_value"/>

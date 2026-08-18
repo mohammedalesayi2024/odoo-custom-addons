@@ -33,12 +33,9 @@ class AuditLog(models.Model):
                 lines.append(f"{line.field_label}: '{line.old_value}' → '{line.new_value}'")
             rec.changes_summary = '\n'.join(lines) if lines else ''
 
-    def name_get(self):
-        result = []
+    def _compute_display_name(self):
         for rec in self:
-            label = f"[{rec.method}] {rec.model_label or rec.model_name} - {rec.record_name or rec.res_id}"
-            result.append((rec.id, label))
-        return result
+            rec.display_name = f"[{rec.method}] {rec.model_label or rec.model_name} - {rec.record_name or rec.res_id}"
 
 
 class AuditLogLine(models.Model):
