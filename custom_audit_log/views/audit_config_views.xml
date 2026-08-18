@@ -23,6 +23,6 @@
     </record>
 
     <menuitem id="menu_audit_config" name="إعدادات التتبع" parent="menu_audit_root"
-              action="action_audit_tracked_model" groups="group_audit_manager" sequence="20"/>
+              action="action_audit_tracked_model" groups="custom_audit_log.group_audit_manager" sequence="20"/>
 
 </odoo>

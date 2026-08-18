@@ -1,6 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_audit_log_viewer,audit.log.viewer,model_audit_log,group_audit_viewer,1,0,0,0
-access_audit_log_line_viewer,audit.log.line.viewer,model_audit_log_line,group_audit_viewer,1,0,0,0
-access_audit_log_manager,audit.log.manager,model_audit_log,group_audit_manager,1,0,0,1
-access_audit_log_line_manager,audit.log.line.manager,model_audit_log_line,group_audit_manager,1,0,0,1
-access_audit_tracked_model_manager,audit.tracked.model.manager,model_audit_tracked_model,group_audit_manager,1,1,1,1
+access_audit_log_viewer,audit.log.viewer,model_audit_log,custom_audit_log.group_audit_viewer,1,0,0,0
+access_audit_log_line_viewer,audit.log.line.viewer,model_audit_log_line,custom_audit_log.group_audit_viewer,1,0,0,0
+access_audit_log_manager,audit.log.manager,model_audit_log,custom_audit_log.group_audit_manager,1,0,0,1
+access_audit_log_line_manager,audit.log.line.manager,model_audit_log_line,custom_audit_log.group_audit_manager,1,0,0,1
+access_audit_tracked_model_manager,audit.tracked.model.manager,model_audit_tracked_model,custom_audit_log.group_audit_manager,1,1,1,1
