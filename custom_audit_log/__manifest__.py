@@ -1,6 +1,6 @@
 {
     'name': 'Custom Audit Log',
-    'version': '17.0.1.0.0',
+    'version': '19.0.1.0.0',
     'summary': 'تتبع عمليات الإضافة والتعديل والحذف لكل مستخدم مع القيم قبل وبعد التعديل',
     'description': """
 Custom Audit Log
