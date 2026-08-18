@@ -21,6 +21,7 @@
                             <field name="coupon_trigger_points"/>
                             <field name="coupon_value_currency"/>
                             <field name="auto_send_coupon_notification" widget="boolean_toggle"/>
+                            <field name="block_coupon_below_value" widget="boolean_toggle"/>
                         </group>
                         <group string="شكل رمز الكوبون">
                             <field name="coupon_code_prefix"/>

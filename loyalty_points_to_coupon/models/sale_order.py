@@ -8,7 +8,49 @@ class SaleOrder(models.Model):
 
     def action_confirm(self):
         self._check_coupon_combination_policy()
+        self._check_coupon_minimum_order_policy()
         return super().action_confirm()
+
+    def _check_coupon_minimum_order_policy(self):
+        """يمنع تأكيد الطلب كليًا إذا كان إجمالي الطلب (قبل خصم
+        الكوبون) أقل من قيمة الكوبون نفسها - سياسة "منع كلي" بدون
+        استخدام جزئي، لتجنّب فقدان أي جزء من قيمة الكوبون."""
+        settings = self.env["loyalty.policy.settings"].get_settings()
+        if not settings.block_coupon_below_value:
+            return
+
+        coupon_program = self.env.ref(
+            "loyalty_points_to_coupon.coupon_program_loyalty_conversion",
+            raise_if_not_found=False,
+        )
+        if not coupon_program:
+            return
+
+        for order in self:
+            reward_lines = order.order_line.filtered(
+                lambda l: l.is_reward_line
+                and l.reward_id
+                and l.reward_id.program_id.id == coupon_program.id
+            )
+            if not reward_lines:
+                continue
+
+            other_lines = order.order_line - reward_lines
+            base_amount = sum(other_lines.mapped("price_total"))
+
+            if base_amount < settings.coupon_value_currency:
+                raise UserError(
+                    _(
+                        "لا يمكن استخدام هذا الكوبون: إجمالي الفاتورة "
+                        "(%(base)s) أقل من قيمة الكوبون (%(coupon)s). "
+                        "يرجى إضافة منتجات أكثر أو استخدام الكوبون في "
+                        "طلب لاحق."
+                    )
+                    % {
+                        "base": "%.2f" % base_amount,
+                        "coupon": "%.2f" % settings.coupon_value_currency,
+                    }
+                )
 
     def _check_coupon_combination_policy(self):
         """يمنع تأكيد الطلب إذا كان فيه كوبون تحويل نقاط الولاء بالإضافة

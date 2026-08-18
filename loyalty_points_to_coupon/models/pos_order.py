@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models, _
+from odoo.exceptions import UserError
 
 
 class PosOrder(models.Model):
@@ -8,8 +9,52 @@ class PosOrder(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         orders = super().create(vals_list)
+        orders._check_coupon_minimum_order_policy()
         orders._warn_if_coupon_combined_with_discount_pos()
         return orders
+
+    def _check_coupon_minimum_order_policy(self):
+        """يمنع إتمام الطلب كليًا (خطأ صريح يوقف الحفظ/الدفع) إذا كان
+        إجمالي الطلب قبل خصم الكوبون أقل من قيمة الكوبون نفسها - سياسة
+        "منع كلي" بدون استخدام جزئي. على عكس تحذير دمج الخصومات، هذا
+        الفحص يمنع فعليًا لأنه يحدث وقت إنشاء سجل الطلب في create()،
+        قبل تأكيد الدفع نهائيًا في واجهة نقطة البيع."""
+        settings = self.env["loyalty.policy.settings"].get_settings()
+        if not settings.block_coupon_below_value:
+            return
+
+        coupon_program = self.env.ref(
+            "loyalty_points_to_coupon.coupon_program_loyalty_conversion",
+            raise_if_not_found=False,
+        )
+        if not coupon_program:
+            return
+
+        for order in self:
+            reward_lines = order.lines.filtered(
+                lambda l: l.is_reward_line
+                and l.reward_id
+                and l.reward_id.program_id.id == coupon_program.id
+            )
+            if not reward_lines:
+                continue
+
+            other_lines = order.lines - reward_lines
+            base_amount = sum(other_lines.mapped("price_subtotal_incl"))
+
+            if base_amount < settings.coupon_value_currency:
+                raise UserError(
+                    _(
+                        "لا يمكن استخدام هذا الكوبون: إجمالي الفاتورة "
+                        "(%(base)s) أقل من قيمة الكوبون (%(coupon)s). "
+                        "يرجى إضافة منتجات أكثر أو استخدام الكوبون في "
+                        "طلب لاحق."
+                    )
+                    % {
+                        "base": "%.2f" % base_amount,
+                        "coupon": "%.2f" % settings.coupon_value_currency,
+                    }
+                )
 
     def write(self, vals):
         res = super().write(vals)
