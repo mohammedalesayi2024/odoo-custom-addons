@@ -7,6 +7,5 @@
     <record id="group_audit_manager" model="res.groups">
         <field name="name">مدير التدقيق (إعداد الموديلات المتتبَّعة)</field>
         <field name="implied_ids" eval="[(4, ref('group_audit_viewer'))]"/>
-        <field name="users" eval="[(4, ref('base.user_admin'))]"/>
     </record>
 </odoo>
