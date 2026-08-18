@@ -87,7 +87,7 @@
         <field name="context">{'search_default_last_7_days': 1}</field>
     </record>
 
-    <menuitem id="menu_audit_root" name="التدقيق" sequence="90" groups="group_audit_viewer"/>
+    <menuitem id="menu_audit_root" name="التدقيق" sequence="90" groups="custom_audit_log.group_audit_viewer"/>
     <menuitem id="menu_audit_log" name="سجل التدقيق" parent="menu_audit_root"
               action="action_audit_log" sequence="10"/>
 
