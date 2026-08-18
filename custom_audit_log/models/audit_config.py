@@ -14,9 +14,8 @@ class AuditTrackedModel(models.Model):
     track_write = fields.Boolean(string='تتبع التعديل', default=True)
     track_unlink = fields.Boolean(string='تتبع الحذف', default=True)
 
-    _sql_constraints = [
-        ('model_uniq', 'unique(model_id)', 'هذا الموديل مضاف مسبقًا في قائمة التتبع.'),
-    ]
+    _model_uniq = models.Constraint(
+        'unique(model_id)', 'هذا الموديل مضاف مسبقًا في قائمة التتبع.')
 
     @api.model
     def _get_tracked_models_map(self):

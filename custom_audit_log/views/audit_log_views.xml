@@ -67,11 +67,6 @@
                 <filter string="إضافة" name="filter_create" domain="[('method', '=', 'create')]"/>
                 <filter string="تعديل" name="filter_write" domain="[('method', '=', 'write')]"/>
                 <filter string="حذف" name="filter_unlink" domain="[('method', '=', 'unlink')]"/>
-                <group expand="0" string="تجميع حسب">
-                    <filter string="المستخدم" name="group_by_user" context="{'group_by': 'user_id'}"/>
-                    <filter string="الموديل" name="group_by_model" context="{'group_by': 'model_label'}"/>
-                    <filter string="نوع العملية" name="group_by_method" context="{'group_by': 'method'}"/>
-                </group>
             </search>
         </field>
     </record>
