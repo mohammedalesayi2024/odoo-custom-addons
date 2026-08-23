@@ -12,7 +12,7 @@ Custom Audit Log
 - التحكم بالموديلات المتتبَّعة عبر قائمة بيضاء (Whitelist) من واجهة الإعدادات
 """,
     'category': 'Tools',
-    'author': 'Custom',
+    'author': 'Mohammed alesayi',
     'license': 'LGPL-3',
     'depends': ['base', 'mail'],
     'data': [
