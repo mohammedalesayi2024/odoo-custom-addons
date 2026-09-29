@@ -9,7 +9,7 @@
         <field name="name">receipt.book.tree</field>
         <field name="model">receipt.book</field>
         <field name="arch" type="xml">
-            <tree string="Receipt Books"
+            <list string="Receipt Books"
                   decoration-success="state == 'active'"
                   decoration-warning="remaining &lt;= 10 and state == 'active'"
                   decoration-danger="state == 'finished'">
@@ -24,7 +24,7 @@
                 <field name="company_id"/>
                 <field name="received_by_accountant" widget="boolean_toggle"/>
 
-        </tree>
+        </list>
         </field>
     </record>
 

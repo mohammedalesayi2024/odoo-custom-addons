@@ -10,7 +10,7 @@
         <field name="model">receipt.exception</field>
         <field name="arch" type="xml">
 
-            <tree string="Receipt Exceptions" create="0">
+            <list string="Receipt Exceptions" create="0">
 
                 <field name="receipt_book_id" readonly="1" />
                 <field name="receipt_number" />
@@ -18,7 +18,7 @@
                 <field name="resolved"/>
                 <field name="company_id" />
 
-            </tree>
+            </list>
 
         </field>
     </record>
