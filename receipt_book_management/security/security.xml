@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ========================================================= -->
+    <!-- Receipt Book Manager -->
+    <!-- ========================================================= -->
+
+    <record id="group_receipt_book_manager" model="res.groups">
+        <field name="name">Receipt Book Manager</field>
+        <field name="category_id" ref="base.module_category_accounting"/>
+    </record>
+
+</odoo>

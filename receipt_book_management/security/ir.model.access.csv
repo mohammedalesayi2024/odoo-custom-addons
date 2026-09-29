@@ -1,3 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_receipt_book,receipt.book,model_receipt_book,,1,1,1,1
-access_receipt_salesperson,receipt.salesperson,model_receipt_salesperson,base.group_user,1,1,1,1
+access_receipt_book_manager,receipt.book.manager,model_receipt_book,receipt_book_management.group_receipt_book_manager,1,1,1,1
+access_receipt_exception_manager,receipt.exception.manager,model_receipt_exception,receipt_book_management.group_receipt_book_manager,1,1,1,1
+access_receipt_exception_wizard,receipt.exception.wizard,model_receipt_exception_wizard,receipt_book_management.group_receipt_book_manager,1,1,1,1
+access_receipt_exception_wizard_line,receipt.exception.wizard.line,model_receipt_exception_wizard_line,receipt_book_management.group_receipt_book_manager,1,1,1,1
+access_receipt_delayed_wizard,receipt.delayed.wizard,model_receipt_delayed_wizard,receipt_book_management.group_receipt_book_manager,1,1,1,1
