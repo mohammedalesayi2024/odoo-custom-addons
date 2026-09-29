@@ -137,7 +137,7 @@
 
                 <separator/>
 
-                <group expand="0" string="Group By">
+                <group>
 
                     <filter string="Salesperson"
                             name="group_salesperson"
