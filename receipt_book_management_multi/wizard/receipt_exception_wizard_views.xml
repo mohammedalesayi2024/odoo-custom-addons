@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ========================================================= -->
+    <!-- Receipt Exception Wizard -->
+    <!-- ========================================================= -->
+
+    <record id="view_receipt_exception_wizard_form" model="ir.ui.view">
+        <field name="name">receipt.exception.wizard.form</field>
+        <field name="model">receipt.exception.wizard</field>
+        <field name="arch" type="xml">
+
+            <form string="Skipped Receipt Numbers">
+
+                <sheet>
+
+                 <div class="alert alert-warning d-flex align-items-center mb-3" role="alert">
+                        <i class="fa fa-exclamation-triangle fa-2x me-3"/>
+
+                       <div>
+                         <strong>Skipped Receipt Numbers</strong>
+                         <br/>
+                         Please select the reason for every skipped receipt before continuing.
+                       </div>
+                 </div>
+
+                    <field name="line_ids" nolabel="1">
+
+                        <list editable="bottom" create="0" delete="0">
+
+                            <field
+                                name="receipt_number"
+                                readonly="1"
+                                string="Receipt No."
+                                width="70"/>
+
+                            <field
+                                name="reason"
+                                width="120"/>
+
+                            <field
+                                name="notes"
+                                string="Notes"/>
+
+                        </list>
+
+                    </field>
+
+                </sheet>
+
+                <footer>
+
+                    <button
+                        name="action_confirm"
+                        string="Confirm"
+                        type="object"
+                        class="btn-primary"/>
+
+                    <button
+                        string="Cancel"
+                        special="cancel"
+                        class="btn-danger"/>
+
+                </footer>
+
+            </form>
+
+        </field>
+    </record>
+
+</odoo>
