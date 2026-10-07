@@ -42,8 +42,8 @@ class AccountPayment(models.Model):
 
         return self.env["receipt.exception.multi"].search(
             [
-                ("receipt_book_multi_id", "=", book.id),
-                ("receipt_number_multi", "=", self.receipt_number_multi),
+                ("receipt_book_id", "=", book.id),
+                ("receipt_number", "=", self.receipt_number_multi),
                 ("reason", "=", "delayed"),
                 ("resolved", "=", False),
             ],
@@ -135,8 +135,8 @@ class AccountPayment(models.Model):
 
                 delayed_exception = self.env["receipt.exception.multi"].search(
                     [
-                        ("receipt_book_multi_id", "=", book.id),
-                        ("receipt_number_multi", "=", payment.receipt_number_multi),
+                        ("receipt_book_id", "=", book.id),
+                        ("receipt_number", "=", payment.receipt_number_multi),
                         ("reason", "=", "delayed"),
                         ("resolved", "=", False),
                     ],

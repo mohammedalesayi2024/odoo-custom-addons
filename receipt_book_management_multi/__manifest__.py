@@ -1,6 +1,6 @@
 {
     "name": "Receipt Book Management - Multiple Books",
-    "version": "19.0.0.1",
+    "version": "19.0.1.2",
     "summary": "Manage multiple receipt books per salesperson",
     "description": """
 Standalone Receipt Book Management - Multiple Books
