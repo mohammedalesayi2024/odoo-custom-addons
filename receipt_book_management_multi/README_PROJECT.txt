@@ -1,3 +1,7 @@
+Receipt Book Management - Multiple Books (Odoo 19)
+
+This module extends receipt_book_management and allows multiple receipt books per salesperson.
+
 Receipt Book Management (Odoo 17)
 
 Models
@@ -32,6 +36,3 @@ Rules
 - Remaining = Total - Used - Exceptions.
 - Warning when remaining <= 10.
 - Finished when remaining = 0.
-
-
-This folder is receipt_book_management_multi, an extension of receipt_book_management. It intentionally depends on the original module so existing receipt.book and account.payment data remain shared. The original module files are retained for completeness but are not imported/loaded by this extension.
