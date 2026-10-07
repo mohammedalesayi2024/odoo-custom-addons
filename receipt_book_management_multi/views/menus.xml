@@ -6,7 +6,7 @@
     <!-- ========================================================= -->
 
    <menuitem
-    id="menu_receipt_book_root"
+    id="menu_receipt_book_root_multi"
     name="Receipt Book Management"
     sequence="100"
     web_icon="receipt_book_management_multi,static/description/icon.png"/>
@@ -17,10 +17,10 @@
     <!-- ========================================================= -->
 
     <menuitem
-        id="menu_receipt_books"
+        id="menu_receipt_books_multi"
         name="Receipt Books"
-        parent="menu_receipt_book_root"
-        action="action_receipt_book"
+        parent="menu_receipt_book_root_multi"
+        action="action_receipt_book_multi"
         sequence="10"/>
 
     <!-- ========================================================= -->
@@ -28,10 +28,10 @@
     <!-- ========================================================= -->
 
     <menuitem
-        id="menu_receipt_exceptions"
+        id="menu_receipt_exceptions_multi"
         name="Receipt Exceptions"
-        parent="menu_receipt_book_root"
-        action="action_receipt_exception"
+        parent="menu_receipt_book_root_multi"
+        action="action_receipt_exception_multi"
         sequence="20"/>
 
 </odoo>

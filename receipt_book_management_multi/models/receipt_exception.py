@@ -2,12 +2,12 @@ from odoo import fields, models, _
 
 
 class ReceiptException(models.Model):
-    _name = "receipt.exception"
+    _name = "receipt.exception.multi"
     _description = "Receipt Exception"
     _order = "receipt_number desc"
 
     receipt_book_id = fields.Many2one(
-        "receipt.book",
+        "receipt.book.multi",
         string="Receipt Book",
         required=True,
         ondelete="cascade",
@@ -57,7 +57,7 @@ class ReceiptException(models.Model):
 
     _sql_constraints = [
         (
-            "receipt_exception_unique",
+            "receipt_exception_multi_unique",
             "unique(receipt_book_id, receipt_number)",
             "This receipt number has already been registered as an exception.",
         ),

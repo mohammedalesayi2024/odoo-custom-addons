@@ -1,1 +1,2 @@
-# Wizard models are supplied by the original receipt_book_management dependency.
+from . import receipt_exception_wizard
+from . import receipt_delayed_wizard

@@ -1,18 +1,17 @@
 {
     "name": "Receipt Book Management - Multiple Books",
     "version": "19.0.1.1",
-    "summary": "Manage manual receipt books and allow multiple books per salesperson",
+    "summary": "Manage multiple receipt books per salesperson",
     "description": """
-Receipt Book Management - Multiple Books
+Standalone Receipt Book Management - Multiple Books
 
 Features:
-- Manage receipt books
-- Assign multiple receipt books to the same salesperson
-- Automatic receipt numbering
-- Receipt exceptions
-- Integration with Customer Payments
-- Separate receipt-number ranges per receipt book
-- Prevent overlapping receipt-number ranges for the same salesperson and company
+- Manage receipt books independently from the original Receipt Book Management module.
+- Assign multiple receipt books to the same salesperson.
+- Prevent overlapping number ranges for the same salesperson/company.
+- Automatic receipt numbering.
+- Select the required receipt book on customer payments.
+- Receipt exceptions and delayed/skipped receipt workflows.
 """,
     "author": "Mohammed alesayi",
     "license": "LGPL-3",
@@ -20,14 +19,12 @@ Features:
     "website": "",
     "depends": [
         "account",
-        "receipt_book_management",
     ],
     "data": [
         "security/security.xml",
         "security/ir.model.access.csv",
         "views/receipt_book_views.xml",
         "views/account_payment_views.xml",
-        "views/account_payment_views_multi.xml",
         "views/receipt_exception_views.xml",
         "wizard/receipt_exception_wizard_views.xml",
         "wizard/receipt_delayed_wizard_views.xml",

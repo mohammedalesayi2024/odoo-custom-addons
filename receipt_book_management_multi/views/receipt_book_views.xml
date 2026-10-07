@@ -5,9 +5,9 @@
     <!-- Tree View -->
     <!-- ========================================================= -->
 
-    <record id="view_receipt_book_tree" model="ir.ui.view">
-        <field name="name">receipt.book.tree</field>
-        <field name="model">receipt.book</field>
+    <record id="view_receipt_book_tree_multi" model="ir.ui.view">
+        <field name="name">receipt.book.multi.tree</field>
+        <field name="model">receipt.book.multi</field>
         <field name="arch" type="xml">
             <list string="Receipt Books"
                   decoration-success="state == 'active'"
@@ -33,9 +33,9 @@
     <!-- Form View -->
     <!-- ========================================================= -->
 
-    <record id="view_receipt_book_form" model="ir.ui.view">
-        <field name="name">receipt.book.form</field>
-        <field name="model">receipt.book</field>
+    <record id="view_receipt_book_form_multi" model="ir.ui.view">
+        <field name="name">receipt.book.multi.form</field>
+        <field name="model">receipt.book.multi</field>
         <field name="arch" type="xml">
 
             <form string="Receipt Book">
@@ -111,9 +111,9 @@
     <!-- Search View -->
     <!-- ========================================================= -->
 
-    <record id="view_receipt_book_search" model="ir.ui.view">
-        <field name="name">receipt.book.search</field>
-        <field name="model">receipt.book</field>
+    <record id="view_receipt_book_search_multi" model="ir.ui.view">
+        <field name="name">receipt.book.multi.search</field>
+        <field name="model">receipt.book.multi</field>
         <field name="arch" type="xml">
 
             <search>
@@ -163,15 +163,15 @@
     <!-- Action -->
     <!-- ========================================================= -->
 
-    <record id="action_receipt_book" model="ir.actions.act_window">
+    <record id="action_receipt_book_multi" model="ir.actions.act_window">
 
         <field name="name">Receipt Books</field>
 
-        <field name="res_model">receipt.book</field>
+        <field name="res_model">receipt.book.multi</field>
 
         <field name="view_mode">list,form</field>
 
-        <field name="search_view_id" ref="view_receipt_book_search"/>
+        <field name="search_view_id" ref="view_receipt_book_search_multi"/>
 
         <field name="help" type="html">
 

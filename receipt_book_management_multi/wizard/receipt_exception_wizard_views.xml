@@ -5,9 +5,9 @@
     <!-- Receipt Exception Wizard -->
     <!-- ========================================================= -->
 
-    <record id="view_receipt_exception_wizard_form" model="ir.ui.view">
-        <field name="name">receipt.exception.wizard.form</field>
-        <field name="model">receipt.exception.wizard</field>
+    <record id="view_receipt_exception_wizard_form_multi" model="ir.ui.view">
+        <field name="name">receipt.exception.wizard.multi.form</field>
+        <field name="model">receipt.exception.wizard.multi</field>
         <field name="arch" type="xml">
 
             <form string="Skipped Receipt Numbers">

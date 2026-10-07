@@ -5,7 +5,7 @@
     <!-- Receipt Book Manager -->
     <!-- ========================================================= -->
 
-    <record id="group_receipt_book_manager" model="res.groups">
+    <record id="group_receipt_book_manager_multi" model="res.groups">
         <field name="name">Receipt Book Manager</field>
         
     </record>

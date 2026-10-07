@@ -5,8 +5,8 @@
     <!-- Account Payment Form -->
     <!-- ========================================================= -->
 
-    <record id="view_account_payment_form_receipt_book" model="ir.ui.view">
-        <field name="name">account.payment.form.receipt.book</field>
+    <record id="view_account_payment_form_receipt_book_multi" model="ir.ui.view">
+        <field name="name">account.payment.form.receipt.book.multi</field>
         <field name="model">account.payment</field>
         <field name="inherit_id" ref="account.view_account_payment_form"/>
         <field name="arch" type="xml">
@@ -18,15 +18,15 @@
 
                     <group>
 
-                        <field name="salesperson_id" readonly="state == 'posted'"/>
+                        <field name="salesperson_multi_id" readonly="state == 'posted'"/>
 
-                        <field name="receipt_book_id" readonly="1"/>
+                        <field name="receipt_book_multi_id" domain="[('salesperson_id', '=', salesperson_multi_id), ('company_id', '=', company_id), ('state', '!=', 'finished')]" readonly="state == 'posted'"/>
 
                     </group>
 
                     <group>
 
-                        <field name="receipt_number" readonly="state == 'posted'"/>
+                        <field name="receipt_number_multi" readonly="state == 'posted'"/>
 
                     </group>
 

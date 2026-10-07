@@ -3,7 +3,7 @@ from odoo.exceptions import ValidationError
 
 
 class ReceiptExceptionWizard(models.TransientModel):
-    _name = "receipt.exception.wizard"
+    _name = "receipt.exception.wizard.multi"
     _description = "Receipt Exception Wizard"
 
     payment_id = fields.Many2one(
@@ -13,13 +13,13 @@ class ReceiptExceptionWizard(models.TransientModel):
     )
 
     receipt_book_id = fields.Many2one(
-        "receipt.book",
+        "receipt.book.multi",
         string="Receipt Book",
         required=True,
     )
 
     line_ids = fields.One2many(
-        "receipt.exception.wizard.line",
+        "receipt.exception.wizard.line.multi",
         "wizard_id",
         string="Skipped Receipts",
     )
@@ -40,7 +40,7 @@ class ReceiptExceptionWizard(models.TransientModel):
                     )
                 )
         for line in self.line_ids:
-            self.env["receipt.exception"].create(
+            self.env["receipt.exception.multi"].create(
                 {
                     "receipt_book_id": book.id,
                     "receipt_number": line.receipt_number,
@@ -49,10 +49,10 @@ class ReceiptExceptionWizard(models.TransientModel):
                 }
             )
             # Move Next Number after the posted receipt
-        if book.next_number <= payment.receipt_number:
+        if book.next_number <= payment.receipt_number_multi:
             book.write(
                 {
-                    "next_number": payment.receipt_number + 1,
+                    "next_number": payment.receipt_number_multi + 1,
                 }
             )
         payment.with_context(skip_receipt_exception_check=True).action_post()
@@ -62,11 +62,11 @@ class ReceiptExceptionWizard(models.TransientModel):
 
 
 class ReceiptExceptionWizardLine(models.TransientModel):
-    _name = "receipt.exception.wizard.line"
+    _name = "receipt.exception.wizard.line.multi"
     _description = "Receipt Exception Wizard Line"
 
     wizard_id = fields.Many2one(
-        "receipt.exception.wizard",
+        "receipt.exception.wizard.multi",
         required=True,
         ondelete="cascade",
     )

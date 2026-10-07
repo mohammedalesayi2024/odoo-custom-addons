@@ -3,7 +3,7 @@ from odoo.exceptions import ValidationError
 
 
 class ReceiptDelayedWizard(models.TransientModel):
-    _name = "receipt.delayed.wizard"
+    _name = "receipt.delayed.wizard.multi"
     _description = "Receipt Delayed Wizard"
 
     payment_id = fields.Many2one(
@@ -13,7 +13,7 @@ class ReceiptDelayedWizard(models.TransientModel):
     )
 
     delayed_exception_id = fields.Many2one(
-        "receipt.exception",
+        "receipt.exception.multi",
         required=True,
     )
 
