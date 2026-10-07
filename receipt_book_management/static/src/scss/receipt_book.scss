@@ -1,0 +1,17 @@
+/* Reduce header height in editable list */
+.o_dialog .o_list_table thead th {
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+    height: 32px !important;
+    vertical-align: middle !important;
+}
+
+/* Reduce row height */
+.o_dialog .o_list_table tbody td {
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+    height: 34px !important;
+}
+.o_dialog .o_list_table {
+    table-layout: auto !important;
+}

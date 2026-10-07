@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ========================================================= -->
+    <!-- Root Menu -->
+    <!-- ========================================================= -->
+
+   <menuitem
+    id="menu_receipt_book_root"
+    name="Receipt Book Management"
+    sequence="100"
+    web_icon="receipt_book_management,static/description/icon.png"/>
+        
+
+    <!-- ========================================================= -->
+    <!-- Receipt Books -->
+    <!-- ========================================================= -->
+
+    <menuitem
+        id="menu_receipt_books"
+        name="Receipt Books"
+        parent="menu_receipt_book_root"
+        action="action_receipt_book"
+        sequence="10"/>
+
+    <!-- ========================================================= -->
+    <!-- Receipt Exceptions -->
+    <!-- ========================================================= -->
+
+    <menuitem
+        id="menu_receipt_exceptions"
+        name="Receipt Exceptions"
+        parent="menu_receipt_book_root"
+        action="action_receipt_exception"
+        sequence="20"/>
+
+</odoo>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_receipt_delayed_wizard_form" model="ir.ui.view">
+        <field name="name">receipt.delayed.wizard.form</field>
+        <field name="model">receipt.delayed.wizard</field>
+        <field name="arch" type="xml">
+
+            <form string="Delayed Receipt">
+
+                <sheet>
+                    <field name="payment_id" invisible="1" />
+
+                    <field name="delayed_exception_id" invisible="1" />
+                    <div class="alert alert-warning" role="alert" style="margin-bottom: 0;">
+                        <h4 class="alert-heading">⚠ Delayed Receipt</h4>
+                        <p class="mb-1">
+                            This receipt number is marked as delayed.
+                        </p>
+                        <p class="mb-0"> Click <strong>Confirm</strong> if the receipt has been
+                            found. </p>
+                    </div>
+
+                </sheet>
+
+                <footer>
+
+                    <button
+                        name="action_confirm"
+                        string="Confirm"
+                        type="object"
+                        class="btn-primary" />
+
+                    <button
+                        string="Cancel"
+                        special="cancel"
+                        class="btn-danger" />
+
+                </footer>
+
+            </form>
+
+        </field>
+    </record>
+
+</odoo>
