@@ -17,7 +17,7 @@ class AccountPayment(models.Model):
         string="Receipt Book",
         readonly=False,
         copy=False,
-        domain="[(\"salesperson_id\", \"=\", salesperson_multi_id), (\"company_id\", \"=\", company_id), (\"state\", \"!=\", \"finished\")]",
+        domain='[("salesperson_id", "=", salesperson_multi_id), ("company_id", "=", company_id), ("state", "!=", "finished")]',
     )
 
     receipt_number_multi = fields.Integer(
@@ -73,6 +73,14 @@ class AccountPayment(models.Model):
             order="id desc",
             limit=1,
         )
+
+    @api.onchange("partner_id")
+    def _onchange_partner_id_salesperson(self):
+        for payment in self:
+            if payment.partner_id:
+                payment.salesperson_multi_id = payment.partner_id.user_id
+            else:
+                payment.salesperson_multi_id = False
 
     def write(self, vals):
         protected_fields = {
@@ -193,7 +201,9 @@ class AccountPayment(models.Model):
             # Skipped receipt numbers
             if not self.env.context.get("skip_receipt_exception_check"):
 
-                skipped_numbers = list(range(book.next_number, payment.receipt_number_multi))
+                skipped_numbers = list(
+                    range(book.next_number, payment.receipt_number_multi)
+                )
 
                 if skipped_numbers:
 
