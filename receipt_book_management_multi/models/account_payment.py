@@ -70,7 +70,7 @@ class AccountPayment(models.Model):
                 ("company_id", "=", self.company_id.id),
                 ("state", "!=", "finished"),
             ],
-            order="id desc",
+            order="id asc",
             limit=1,
         )
 
