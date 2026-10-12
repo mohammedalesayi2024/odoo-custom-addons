@@ -81,6 +81,104 @@ class AccountPayment(models.Model):
                 payment.salesperson_multi_id = payment.partner_id.user_id
             else:
                 payment.salesperson_multi_id = False
+    
+    @api.onchange("receipt_number_multi", "receipt_book_multi_id")
+    def _onchange_receipt_number_multi_warning(self):
+        for payment in self:
+            if not payment.receipt_book_multi_id or not payment.receipt_number_multi:
+                continue
+
+            existing_payment = self.search(
+                [
+                    ("id", "!=", payment._origin.id or 0),
+                    ("receipt_book_multi_id", "=", payment.receipt_book_multi_id.id),
+                    ("receipt_number_multi", "=", payment.receipt_number_multi),
+                ],
+                limit=1,
+            )
+            if existing_payment:
+                return {
+                    "warning": {
+                        "title": _("Duplicate Receipt Number"),
+                        "message": _(
+                            "Receipt number %(number)s is already assigned to payment %(payment)s in this receipt book. "
+                            "Please enter a different receipt number."
+                        ) % {
+                            "number": payment.receipt_number_multi,
+                            "payment": existing_payment.display_name,
+                        },
+                    }
+                }
+
+            old_number = payment._origin.receipt_number_multi
+            if (
+                payment.state == "draft"
+                and old_number
+                and payment.receipt_number_multi
+                and old_number != payment.receipt_number_multi
+            ):
+                return {
+                    "warning": {
+                        "title": _("Receipt Number Changed"),
+                        "message": _(
+                            "This receipt already has number %(old)s. "
+                            "You are changing it to %(new)s. "
+                            "Please make sure this change is intentional. "
+                            "The receipt book sequence will follow the existing logic."
+                        ) % {
+                            "old": old_number,
+                            "new": payment.receipt_number_multi,
+                        },
+                    }
+                }
+
+    @api.constrains("receipt_book_multi_id", "receipt_number_multi", "payment_type", "partner_type")
+    def _check_unique_receipt_number_multi(self):
+        for payment in self:
+            if (
+                payment.payment_type != "inbound"
+                or payment.partner_type != "customer"
+                or not payment.receipt_book_multi_id
+                or not payment.receipt_number_multi
+            ):
+                continue
+
+            duplicate = self.search(
+                [
+                    ("id", "!=", payment.id),
+                    ("receipt_book_multi_id", "=", payment.receipt_book_multi_id.id),
+                    ("receipt_number_multi", "=", payment.receipt_number_multi),
+                ],
+                limit=1,
+            )
+            # Validate that the receipt number belongs to the selected receipt book.
+            # This runs when saving a Draft payment as well as during later updates.
+            book = payment.receipt_book_multi_id
+            number = payment.receipt_number_multi
+            if number < book.from_number or number > book.to_number:
+                raise ValidationError(
+                    _(
+                        "Receipt number %(number)s is outside the range for receipt book "
+                        "%(book)s. Allowed range: %(start)s to %(end)s."
+                    ) % {
+                        "number": number,
+                        "book": book.display_name,
+                        "start": book.from_number,
+                        "end": book.to_number,
+                    }
+                )
+
+            if duplicate:
+                raise ValidationError(
+                    _(
+                        "Receipt number %(number)s is already assigned to payment %(payment)s "
+                        "in receipt book %(book)s. Each receipt number can be used only once."
+                    ) % {
+                        "number": payment.receipt_number_multi,
+                        "payment": duplicate.display_name,
+                        "book": payment.receipt_book_multi_id.display_name,
+                    }
+                )
 
     def write(self, vals):
         protected_fields = {
@@ -88,6 +186,25 @@ class AccountPayment(models.Model):
             "receipt_book_multi_id",
             "receipt_number_multi",
         }
+
+        if "receipt_number_multi" in vals:
+            new_number = vals.get("receipt_number_multi") or 0
+            for payment in self:
+                if (
+                    payment.state == "draft"
+                    and payment.receipt_number_multi
+                    and new_number
+                    and new_number < payment.receipt_number_multi
+                ):
+                    raise ValidationError(
+                        _(
+                            "The receipt number cannot be reduced from %(old)s to %(new)s. "
+                            "Please keep the current receipt number or use a higher number."
+                        ) % {
+                            "old": payment.receipt_number_multi,
+                            "new": new_number,
+                        }
+                    )
 
         if protected_fields.intersection(vals):
             for payment in self:
@@ -168,7 +285,6 @@ class AccountPayment(models.Model):
                     ("id", "!=", payment.id),
                     ("receipt_book_multi_id", "=", book.id),
                     ("receipt_number_multi", "=", payment.receipt_number_multi),
-                    ("state", "=", "posted"),
                 ],
                 limit=1,
             )
