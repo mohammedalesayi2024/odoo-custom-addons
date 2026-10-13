@@ -1,13 +1,13 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# 	* receipt_book_management
+# 	* receipt_book_management_multi
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 17.0+e\n"
+"Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-25 07:13+0000\n"
-"PO-Revision-Date: 2026-09-30 17:40+0300\n"
+"POT-Creation-Date: 2026-10-13 06:53+0000\n"
+"PO-Revision-Date: 2026-10-13 10:46+0300\n"
 "Last-Translator: mohammed <mohammedalesayi2024@gmail.com>\n"
 "Language-Team: \n"
 "Language: ar_001\n"
@@ -18,463 +18,499 @@ msgstr ""
 "3 : n%100>=11 && n%100<=99 ? 4 : 5);\n"
 "X-Generator: Poedit 3.9\n"
 
-#. module: receipt_book_management
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_exception_wizard_form
+#. module: receipt_book_management_multi
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_exception_wizard_form_multi
 msgid ""
 "<strong>Skipped Receipt Numbers</strong>\n"
 "                         <br/>\n"
 "                         Please select the reason for every skipped receipt before continuing."
 msgstr ""
-"أرقام الإيصالات المتجاوزة\n"
-"\n"
-"يرجى تحديد سبب كل إيصال متجاوز قبل المتابعة."
+"<strong>أرقام الإيصالات التي تم تخطيها</strong>\n"
+"                        <br/> \n"
+"                         يرجى تحديد سبب تخطي كل إيصال قبل المتابعة."
 
-#. module: receipt_book_management
-#: model:ir.model.fields.selection,name:receipt_book_management.selection__receipt_book__state__active
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_book_search
+#. module: receipt_book_management_multi
+#: model:ir.model.fields.selection,name:receipt_book_management_multi.selection__receipt_book_multi__state__active
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_book_search_multi
 msgid "Active"
-msgstr "نشط"
+msgstr "فعال"
 
-#. module: receipt_book_management
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_exception_form
+#. module: receipt_book_management_multi
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_exception_form_multi
 msgid "Additional notes..."
-msgstr "ملاحظات إضافية..."
+msgstr "ملاحظات اضافية"
 
-#. module: receipt_book_management
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_book__received_by_accountant
-msgid "Received by Accountant"
-msgstr "تم استلامه من المحاسب"
-
-#. module: receipt_book_management
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_delayed_wizard_form
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_exception_wizard_form
+#. module: receipt_book_management_multi
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_delayed_wizard_form_multi
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_exception_wizard_form_multi
 msgid "Cancel"
 msgstr "الغاء"
 
-#. module: receipt_book_management
-#: model:ir.model.fields.selection,name:receipt_book_management.selection__receipt_exception__reason__cancelled
-#: model:ir.model.fields.selection,name:receipt_book_management.selection__receipt_exception_wizard_line__reason__cancelled
+#. module: receipt_book_management_multi
+#: model:ir.model.fields.selection,name:receipt_book_management_multi.selection__receipt_exception_multi__reason__cancelled
+#: model:ir.model.fields.selection,name:receipt_book_management_multi.selection__receipt_exception_wizard_line_multi__reason__cancelled
 msgid "Cancelled"
-msgstr "تم الإلغاء"
+msgstr "ملغي"
 
-#. module: receipt_book_management
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_delayed_wizard_form
+#. module: receipt_book_management_multi
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_delayed_wizard_form_multi
 msgid ""
 "Click <strong>Confirm</strong> if the receipt has been\n"
 "                            found."
-msgstr ""
-"انقر على <strong>«تأكيد»</strong> إذا تم\n"
-"                            العثور على الإيصال."
+msgstr "تاكيد"
 
-#. module: receipt_book_management
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_book__company_id
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception__company_id
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_book_search
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_exception_search
+#. module: receipt_book_management_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_book_multi__company_id
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_multi__company_id
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_book_search_multi
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_exception_search_multi
 msgid "Company"
 msgstr "شركة"
 
-#. module: receipt_book_management
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_delayed_wizard_form
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_exception_wizard_form
+#. module: receipt_book_management_multi
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_delayed_wizard_form_multi
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_exception_wizard_form_multi
 msgid "Confirm"
-msgstr "تأكيد"
+msgstr "تاكيد"
 
-#. module: receipt_book_management
-#: model_terms:ir.actions.act_window,help:receipt_book_management.action_receipt_book
+#. module: receipt_book_management_multi
+#: model_terms:ir.actions.act_window,help:receipt_book_management_multi.action_receipt_book_multi
 msgid "Create your first Receipt Book"
-msgstr "أنشئ دفتر إيصالاتك الأول"
+msgstr "انشى دفتر الايصالات الأول"
 
-#. module: receipt_book_management
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_book__create_uid
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_delayed_wizard__create_uid
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception__create_uid
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception_wizard__create_uid
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception_wizard_line__create_uid
+#. module: receipt_book_management_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_book_multi__create_uid
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_delayed_wizard_multi__create_uid
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_multi__create_uid
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_wizard_line_multi__create_uid
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_wizard_multi__create_uid
 msgid "Created by"
-msgstr "تم إنشاؤه بواسطة"
+msgstr "انشى بواسطة"
 
-#. module: receipt_book_management
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_book__create_date
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_delayed_wizard__create_date
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception__create_date
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception_wizard__create_date
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception_wizard_line__create_date
+#. module: receipt_book_management_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_book_multi__create_date
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_delayed_wizard_multi__create_date
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_multi__create_date
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_wizard_line_multi__create_date
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_wizard_multi__create_date
 msgid "Created on"
-msgstr "تم إنشاؤه في"
+msgstr "انشى في"
 
-#. module: receipt_book_management
-#: model:ir.model.fields.selection,name:receipt_book_management.selection__receipt_exception__reason__damaged
-#: model:ir.model.fields.selection,name:receipt_book_management.selection__receipt_exception_wizard_line__reason__damaged
+#. module: receipt_book_management_multi
+#: model:ir.model.fields.selection,name:receipt_book_management_multi.selection__receipt_exception_multi__reason__damaged
+#: model:ir.model.fields.selection,name:receipt_book_management_multi.selection__receipt_exception_wizard_line_multi__reason__damaged
 msgid "Damaged"
 msgstr "تالف"
 
-#. module: receipt_book_management
-#: model:ir.model.fields.selection,name:receipt_book_management.selection__receipt_exception__reason__delayed
-#: model:ir.model.fields.selection,name:receipt_book_management.selection__receipt_exception_wizard_line__reason__delayed
+#. module: receipt_book_management_multi
+#: model:ir.model.fields.selection,name:receipt_book_management_multi.selection__receipt_exception_multi__reason__delayed
+#: model:ir.model.fields.selection,name:receipt_book_management_multi.selection__receipt_exception_wizard_line_multi__reason__delayed
 msgid "Delayed"
-msgstr "تأخير"
+msgstr "مؤجل"
 
-#. module: receipt_book_management
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_delayed_wizard__delayed_exception_id
+#. module: receipt_book_management_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_delayed_wizard_multi__delayed_exception_id
 msgid "Delayed Exception"
-msgstr "استثناء متأخر"
+msgstr "الاستثناءات المؤجلة"
 
-#. module: receipt_book_management
+#. module: receipt_book_management_multi
 #. odoo-python
-#: code:addons/receipt_book_management/models/account_payment.py:0
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_delayed_wizard_form
-#, python-format
+#: code:addons/receipt_book_management_multi/models/account_payment.py:0
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_delayed_wizard_form_multi
 msgid "Delayed Receipt"
 msgstr "تأخر الاستلام"
 
-#. module: receipt_book_management
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception__description
+#. module: receipt_book_management_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_multi__description
 msgid "Description"
-msgstr "وصف"
+msgstr "الوصف"
 
-#. module: receipt_book_management
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_book__display_name
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_delayed_wizard__display_name
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception__display_name
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception_wizard__display_name
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception_wizard_line__display_name
+#. module: receipt_book_management_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_account_payment__display_name
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_book_multi__display_name
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_delayed_wizard_multi__display_name
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_multi__display_name
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_wizard_line_multi__display_name
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_wizard_multi__display_name
 msgid "Display Name"
 msgstr "اسم العرض"
 
-#. module: receipt_book_management
-#: model:ir.model.fields.selection,name:receipt_book_management.selection__receipt_book__state__draft
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_book_search
+#. module: receipt_book_management_multi
+#: model:ir.model.fields.selection,name:receipt_book_management_multi.selection__receipt_book_multi__state__draft
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_book_search_multi
 msgid "Draft"
 msgstr "مسودة"
 
-#. module: receipt_book_management
-#: model:ir.model.fields.selection,name:receipt_book_management.selection__receipt_book__state__finished
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_book_search
+#. module: receipt_book_management_multi
+#. odoo-python
+#: code:addons/receipt_book_management_multi/models/account_payment.py:0
+msgid "Duplicate Receipt Number"
+msgstr "إيصال مكرر"
+
+#. module: receipt_book_management_multi
+#: model:ir.model.fields.selection,name:receipt_book_management_multi.selection__receipt_book_multi__state__finished
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_book_search_multi
 msgid "Finished"
-msgstr "انتهى"
+msgstr "منتهي"
 
-#. module: receipt_book_management
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_book__from_number
+#. module: receipt_book_management_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_book_multi__from_number
 msgid "From Number"
-msgstr "من رقم"
+msgstr "من"
 
-#. module: receipt_book_management
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_book_search
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_exception_search
-msgid "Group By"
-msgstr "تجميع حسب"
-
-#. module: receipt_book_management
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_book__id
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_delayed_wizard__id
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception__id
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception_wizard__id
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception_wizard_line__id
+#. module: receipt_book_management_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_account_payment__id
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_book_multi__id
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_delayed_wizard_multi__id
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_multi__id
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_wizard_line_multi__id
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_wizard_multi__id
 msgid "ID"
-msgstr "بطاقة تعريف"
+msgstr "المُعرف"
 
-#. module: receipt_book_management
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_book__issue_date
+#. module: receipt_book_management_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_book_multi__issue_date
 msgid "Issue Date"
-msgstr "تاريخ الإصدار"
+msgstr "تاريخ المعالجة"
 
-#. module: receipt_book_management
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_book__write_uid
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_delayed_wizard__write_uid
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception__write_uid
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception_wizard__write_uid
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception_wizard_line__write_uid
+#. module: receipt_book_management_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_book_multi__write_uid
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_delayed_wizard_multi__write_uid
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_multi__write_uid
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_wizard_line_multi__write_uid
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_wizard_multi__write_uid
 msgid "Last Updated by"
-msgstr "آخر تحديث بواسطة"
+msgstr "اخر تحديث بواسطة"
 
-#. module: receipt_book_management
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_book__write_date
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_delayed_wizard__write_date
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception__write_date
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception_wizard__write_date
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception_wizard_line__write_date
+#. module: receipt_book_management_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_book_multi__write_date
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_delayed_wizard_multi__write_date
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_multi__write_date
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_wizard_line_multi__write_date
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_wizard_multi__write_date
 msgid "Last Updated on"
-msgstr "آخر تحديث بتاريخ"
+msgstr "اخر تحديث في"
 
-#. module: receipt_book_management
-#: model:ir.model.fields.selection,name:receipt_book_management.selection__receipt_exception__reason__lost
-#: model:ir.model.fields.selection,name:receipt_book_management.selection__receipt_exception_wizard_line__reason__lost
+#. module: receipt_book_management_multi
+#: model:ir.model.fields.selection,name:receipt_book_management_multi.selection__receipt_exception_multi__reason__lost
+#: model:ir.model.fields.selection,name:receipt_book_management_multi.selection__receipt_exception_wizard_line_multi__reason__lost
 msgid "Lost"
 msgstr "ضائع"
 
-#. module: receipt_book_management
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_book__next_number
+#. module: receipt_book_management_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_book_multi__next_number
 msgid "Next Number"
 msgstr "الرقم التالي"
 
-#. module: receipt_book_management
+#. module: receipt_book_management_multi
 #. odoo-python
-#: code:addons/receipt_book_management/models/receipt_book.py:0
-#, python-format
+#: code:addons/receipt_book_management_multi/models/receipt_book.py:0
 msgid "Next Number cannot be less than the starting number."
 msgstr "لا يمكن أن يكون الرقم التالي أقل من الرقم الأول."
 
-#. module: receipt_book_management
+#. module: receipt_book_management_multi
 #. odoo-python
-#: code:addons/receipt_book_management/models/receipt_book.py:0
-#, python-format
+#: code:addons/receipt_book_management_multi/models/receipt_book.py:0
 msgid "Next Number cannot exceed the receipt book range."
 msgstr "لا يجوز أن يتجاوز الرقم التالي نطاق دفتر الإيصالات."
 
-#. module: receipt_book_management
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_book__notes
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception_wizard_line__notes
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_book_form
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_exception_wizard_form
+#. module: receipt_book_management_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_book_multi__notes
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_wizard_line_multi__notes
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_book_form_multi
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_exception_wizard_form_multi
 msgid "Notes"
 msgstr "ملاحظات"
 
-#. module: receipt_book_management
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_delayed_wizard__payment_id
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception_wizard__payment_id
+#. module: receipt_book_management_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_delayed_wizard_multi__payment_id
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_wizard_multi__payment_id
 msgid "Payment"
 msgstr "الدفعة"
 
-#. module: receipt_book_management
-#: model:ir.model,name:receipt_book_management.model_account_payment
+#. module: receipt_book_management_multi
+#: model:ir.model,name:receipt_book_management_multi.model_account_payment
 msgid "Payments"
-msgstr "المدفوعات"
+msgstr "الدفعات"
 
-#. module: receipt_book_management
+#. module: receipt_book_management_multi
 #. odoo-python
-#: code:addons/receipt_book_management/wizard/receipt_exception_wizard.py:0
-#, python-format
+#: code:addons/receipt_book_management_multi/wizard/receipt_exception_wizard.py:0
 msgid "Please select a reason for every skipped receipt before confirming."
 msgstr "يرجى تحديد سبب لكل إيصال تم تخطيه قبل التأكيد."
 
-#. module: receipt_book_management
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception__reason
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception_wizard_line__reason
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_exception_search
+#. module: receipt_book_management_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_multi__reason
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_wizard_line_multi__reason
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_exception_search_multi
 msgid "Reason"
-msgstr "سبب"
+msgstr "السبب"
 
-#. module: receipt_book_management
-#: model:ir.model,name:receipt_book_management.model_receipt_book
-#: model:ir.model.fields,field_description:receipt_book_management.field_account_payment__receipt_book_id
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_book__name
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception__receipt_book_id
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception_wizard__receipt_book_id
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_account_payment_form_receipt_book
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_book_form
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_exception_search
+#. module: receipt_book_management_multi
+#: model:ir.model,name:receipt_book_management_multi.model_receipt_book_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_account_payment__receipt_book_multi_id
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_book_multi__name
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_multi__receipt_book_id
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_wizard_multi__receipt_book_id
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_account_payment_form_receipt_book_multi
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_book_form_multi
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_exception_search_multi
 msgid "Receipt Book"
-msgstr "دفتر الإيصالات"
+msgstr "دفتر الايصال"
 
-#. module: receipt_book_management
-#: model:ir.ui.menu,name:receipt_book_management.menu_receipt_book_root
+#. module: receipt_book_management_multi
+#: model:ir.ui.menu,name:receipt_book_management_multi.menu_receipt_book_root_multi
 msgid "Receipt Book Management"
-msgstr "إدارة دفتر الإيصالات"
+msgstr "إدارة دفتر الايصالات"
 
-#. module: receipt_book_management
-#: model:res.groups,name:receipt_book_management.group_receipt_book_manager
+#. module: receipt_book_management_multi
+#: model:res.groups,name:receipt_book_management_multi.group_receipt_book_manager_multi
 msgid "Receipt Book Manager"
-msgstr "مدير دفتر الإيصالات"
+msgstr "إدارة دفتر الايصالات"
 
-#. module: receipt_book_management
-#: model:ir.model.constraint,message:receipt_book_management.constraint_receipt_book_receipt_book_name_company_unique
-msgid "Receipt Book name must be unique per company."
-msgstr "يجب أن يكون اسم دفتر الإيصالات فريدًا لكل شركة."
-
-#. module: receipt_book_management
-#: model:ir.actions.act_window,name:receipt_book_management.action_receipt_book
-#: model:ir.ui.menu,name:receipt_book_management.menu_receipt_books
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_book_tree
+#. module: receipt_book_management_multi
+#: model:ir.actions.act_window,name:receipt_book_management_multi.action_receipt_book_multi
+#: model:ir.ui.menu,name:receipt_book_management_multi.menu_receipt_books_multi
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_book_tree_multi
 msgid "Receipt Books"
-msgstr "دفاتر الإيصالات"
+msgstr "دفاتر الايصال"
 
-#. module: receipt_book_management
-#: model:ir.model,name:receipt_book_management.model_receipt_delayed_wizard
+#. module: receipt_book_management_multi
+#: model:ir.model,name:receipt_book_management_multi.model_receipt_delayed_wizard_multi
 msgid "Receipt Delayed Wizard"
-msgstr "معالج تأخير الإيصال"
+msgstr "الاستثناءات المؤجلة"
 
-#. module: receipt_book_management
-#: model:ir.model,name:receipt_book_management.model_receipt_exception
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_exception_form
+#. module: receipt_book_management_multi
+#: model:ir.model,name:receipt_book_management_multi.model_receipt_exception_multi
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_exception_form_multi
 msgid "Receipt Exception"
-msgstr "استثناء الإيصال"
+msgstr "الاستثناءات المؤجلة"
 
-#. module: receipt_book_management
-#: model:ir.model,name:receipt_book_management.model_receipt_exception_wizard
+#. module: receipt_book_management_multi
+#: model:ir.model,name:receipt_book_management_multi.model_receipt_exception_wizard_multi
 msgid "Receipt Exception Wizard"
-msgstr "معالج استثناءات الإيصالات"
+msgstr "الاستثناءات المؤجلة"
 
-#. module: receipt_book_management
-#: model:ir.model,name:receipt_book_management.model_receipt_exception_wizard_line
+#. module: receipt_book_management_multi
+#: model:ir.model,name:receipt_book_management_multi.model_receipt_exception_wizard_line_multi
 msgid "Receipt Exception Wizard Line"
-msgstr "معالج استثناءات الإيصال"
+msgstr "الاستثناءات المؤجلة"
 
-#. module: receipt_book_management
-#: model:ir.actions.act_window,name:receipt_book_management.action_receipt_exception
-#: model:ir.ui.menu,name:receipt_book_management.menu_receipt_exceptions
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_exception_tree
+#. module: receipt_book_management_multi
+#: model:ir.actions.act_window,name:receipt_book_management_multi.action_receipt_exception_multi
+#: model:ir.ui.menu,name:receipt_book_management_multi.menu_receipt_exceptions_multi
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_exception_tree_multi
 msgid "Receipt Exceptions"
-msgstr "استثناءات الإيصال"
+msgstr "استثناءات الاستلام"
 
-#. module: receipt_book_management
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_exception_wizard_form
+#. module: receipt_book_management_multi
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_exception_wizard_form_multi
 msgid "Receipt No."
-msgstr "رقم الإيصال"
+msgstr "رقم الايصال"
 
-#. module: receipt_book_management
-#: model:ir.model.fields,field_description:receipt_book_management.field_account_payment__receipt_number
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception__receipt_number
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception_wizard_line__receipt_number
+#. module: receipt_book_management_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_account_payment__receipt_number_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_multi__receipt_number
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_wizard_line_multi__receipt_number
 msgid "Receipt Number"
-msgstr "رقم الإيصال"
+msgstr "رقم الايصال"
 
-#. module: receipt_book_management
+#. module: receipt_book_management_multi
 #. odoo-python
-#: code:addons/receipt_book_management/models/account_payment.py:0
-#, python-format
+#: code:addons/receipt_book_management_multi/models/account_payment.py:0
+msgid "Receipt Number Changed"
+msgstr "رقم الايصال تغير"
+
+#. module: receipt_book_management_multi
+#. odoo-python
+#: code:addons/receipt_book_management_multi/models/account_payment.py:0
 msgid "Receipt Number already exists in this Receipt Book."
 msgstr "رقم الإيصال موجود بالفعل في دفتر الإيصالات هذا."
 
-#. module: receipt_book_management
+#. module: receipt_book_management_multi
 #. odoo-python
-#: code:addons/receipt_book_management/models/account_payment.py:0
-#, python-format
+#: code:addons/receipt_book_management_multi/models/account_payment.py:0
 msgid "Receipt Number cannot be less than the next expected receipt number."
 msgstr "لا يجوز أن يكون رقم الإيصال أقل من رقم الإيصال التالي المتوقع."
 
-#. module: receipt_book_management
+#. module: receipt_book_management_multi
 #. odoo-python
-#: code:addons/receipt_book_management/models/account_payment.py:0
-#, python-format
+#: code:addons/receipt_book_management_multi/models/account_payment.py:0
 msgid "Receipt Number exceeds the Receipt Book range."
 msgstr "رقم الإيصال يتجاوز نطاق دفتر الإيصالات."
 
-#. module: receipt_book_management
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_book__remaining
+#. module: receipt_book_management_multi
+#. odoo-python
+#: code:addons/receipt_book_management_multi/models/account_payment.py:0
+msgid ""
+"Receipt number %(number)s is already assigned to payment %(payment)s in receipt book %"
+"(book)s. Each receipt number can be used only once."
+msgstr ""
+"رقم الإيصال %(number)s مُخصص بالفعل للدفعة %(payment)s في دفتر الإيصالات %(book)s. ولا يمكن "
+"استخدام كل رقم إيصال إلا مرة واحدة فقط."
+
+#. module: receipt_book_management_multi
+#. odoo-python
+#: code:addons/receipt_book_management_multi/models/account_payment.py:0
+msgid ""
+"Receipt number %(number)s is already assigned to payment %(payment)s in this receipt book. "
+"Please enter a different receipt number."
+msgstr ""
+"رقم الإيصال %(number)s مُخصص بالفعل للدفعة %(payment)s في دفتر الإيصالات هذا. يرجى إدخال رقم "
+"إيصال آخر."
+
+#. module: receipt_book_management_multi
+#. odoo-python
+#: code:addons/receipt_book_management_multi/models/account_payment.py:0
+msgid ""
+"Receipt number %(number)s is outside the range for receipt book %(book)s. Allowed range: %"
+"(start)s to %(end)s."
+msgstr ""
+"رقم الإيصال %(number)s خارج النطاق المحدد لدفتر الإيصالات %(book)s. النطاق المسموح به: من %"
+"(start)s إلى %(end)s."
+
+#. module: receipt_book_management_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_book_multi__received_by_accountant
+msgid "Received by Accountant"
+msgstr "استلمها المحاسب"
+
+#. module: receipt_book_management_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_book_multi__remaining
 msgid "Remaining"
-msgstr "متبقي"
+msgstr "المتبقي"
 
-#. module: receipt_book_management
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_exception_form
+#. module: receipt_book_management_multi
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_exception_form_multi
 msgid "Resolution"
-msgstr "دقة"
+msgstr "قرار"
 
-#. module: receipt_book_management
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception__resolved
+#. module: receipt_book_management_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_multi__resolved
 msgid "Resolved"
-msgstr "تمت المعالجة"
+msgstr "معالج"
 
-#. module: receipt_book_management
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception__resolved_by
+#. module: receipt_book_management_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_multi__resolved_by
 msgid "Resolved By"
-msgstr "تم المعالجة بواسطة"
+msgstr "معالج بواسطة"
 
-#. module: receipt_book_management
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception__resolved_date
+#. module: receipt_book_management_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_multi__resolved_date
 msgid "Resolved Date"
 msgstr "تاريخ المعالجة"
 
-#. module: receipt_book_management
-#: model:ir.model.fields,field_description:receipt_book_management.field_account_payment__salesperson_id
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_book__salesperson_id
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_book_search
+#. module: receipt_book_management_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_account_payment__salesperson_multi_id
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_book_multi__salesperson_id
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_book_search_multi
 msgid "Salesperson"
 msgstr "المندوب"
 
-#. module: receipt_book_management
-#: model:ir.model.fields,help:receipt_book_management.field_account_payment__salesperson_id
+#. module: receipt_book_management_multi
+#: model:ir.model.fields,help:receipt_book_management_multi.field_account_payment__salesperson_multi_id
 msgid "Select the salesperson who owns the receipt book."
-msgstr "اختر المندوب الذي يملك دفتر الايصال"
+msgstr "اختر المندوب المخصص له الايصال هذا"
 
-#. module: receipt_book_management
+#. module: receipt_book_management_multi
 #. odoo-python
-#: code:addons/receipt_book_management/models/account_payment.py:0
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_exception_wizard_form
-#, python-format
+#: code:addons/receipt_book_management_multi/models/account_payment.py:0
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_exception_wizard_form_multi
 msgid "Skipped Receipt Numbers"
 msgstr "أرقام الإيصالات المفقودة"
 
-#. module: receipt_book_management
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception_wizard__line_ids
+#. module: receipt_book_management_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_wizard_multi__line_ids
 msgid "Skipped Receipts"
-msgstr "إيصالات مفقودة"
+msgstr "تجاوز الايصال"
 
-#. module: receipt_book_management
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_book_form
+#. module: receipt_book_management_multi
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_book_form_multi
 msgid "Statistics"
-msgstr "إحصائيات"
+msgstr "الاحصائيات"
 
-#. module: receipt_book_management
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_book__state
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_book_search
+#. module: receipt_book_management_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_book_multi__state
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_book_search_multi
 msgid "Status"
 msgstr "الحالة"
 
-#. module: receipt_book_management
+#. module: receipt_book_management_multi
 #. odoo-python
-#: code:addons/receipt_book_management/models/receipt_book.py:0
-#, python-format
+#: code:addons/receipt_book_management_multi/models/receipt_book.py:0
 msgid "The ending number must be greater than the starting number."
 msgstr "يجب أن يكون الرقم النهائي أكبر من الرقم الأولي."
 
-#. module: receipt_book_management
+#. module: receipt_book_management_multi
 #. odoo-python
-#: code:addons/receipt_book_management/models/account_payment.py:0
-#, python-format
+#: code:addons/receipt_book_management_multi/models/account_payment.py:0
+msgid ""
+"The receipt number cannot be reduced from %(old)s to %(new)s. Please keep the current receipt "
+"number or use a higher number."
+msgstr ""
+"لا يمكن تخفيض رقم الإيصال من %(old)s إلى %(new)s. يرجى الاحتفاظ برقم الإيصال الحالي أو "
+"استخدام رقم أعلى."
+
+#. module: receipt_book_management_multi
+#. odoo-python
+#: code:addons/receipt_book_management_multi/models/receipt_book.py:0
+msgid ""
+"The receipt number range overlaps with another Receipt Book for this salesperson. Please use "
+"a different number range."
+msgstr ""
+"يتداخل نطاق أرقام الإيصالات مع دفتر إيصالات آخر خاص بهذا البائع. يرجى استخدام نطاق أرقام "
+"مختلف."
+
+#. module: receipt_book_management_multi
+#. odoo-python
+#: code:addons/receipt_book_management_multi/models/account_payment.py:0
 msgid "The selected Receipt Book has no remaining receipt numbers."
 msgstr "لم يتبقَ أي أرقام إيصالات في دفتر الإيصالات المحدد."
 
-#. module: receipt_book_management
+#. module: receipt_book_management_multi
 #. odoo-python
-#: code:addons/receipt_book_management/models/account_payment.py:0
-#, python-format
+#: code:addons/receipt_book_management_multi/models/account_payment.py:0
 msgid "The selected salesperson has no Receipt Book."
 msgstr "الموظف المختار لا يملك دفتر إيصالات."
 
-#. module: receipt_book_management
+#. module: receipt_book_management_multi
 #. odoo-python
-#: code:addons/receipt_book_management/models/receipt_book.py:0
-#, python-format
+#: code:addons/receipt_book_management_multi/models/receipt_book.py:0
 msgid "The starting number must be greater than zero."
 msgstr "يجب أن يكون رقم البداية أكبر من الصفر."
 
-#. module: receipt_book_management
-#: model:ir.model.constraint,message:receipt_book_management.constraint_receipt_exception_receipt_exception_unique
-msgid "This receipt number has already been registered as an exception."
-msgstr "تم تسجيل رقم الإيصال هذا بالفعل كاستثناء."
+#. module: receipt_book_management_multi
+#. odoo-python
+#: code:addons/receipt_book_management_multi/models/account_payment.py:0
+msgid ""
+"This receipt already has number %(old)s. You are changing it to %(new)s. Please make sure "
+"this change is intentional. The receipt book sequence will follow the existing logic."
+msgstr ""
+"هذا الإيصال يحمل بالفعل الرقم %(old)s. أنت تقوم بتغييره إلى %(new)s. يرجى التأكد من أن هذا "
+"التغيير مقصود. وسيتبع تسلسل دفتر الإيصالات المنطق المعمول به حالياً."
 
-#. module: receipt_book_management
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_delayed_wizard_form
+#. module: receipt_book_management_multi
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_delayed_wizard_form_multi
 msgid "This receipt number is marked as delayed."
-msgstr "تم وضع علامة \"متأخر\" على رقم الإيصال هذا."
+msgstr "تم وضع علامة «متأخر» على رقم الإيصال هذا."
 
-#. module: receipt_book_management
-#. odoo-python
-#: code:addons/receipt_book_management/models/receipt_book.py:0
-#, python-format
-msgid "This salesperson already has another Receipt Book that is not finished."
-msgstr "يمتلك هذا البائع بالفعل دفتر إيصالات آخر لم ينتهِ بعد."
-
-#. module: receipt_book_management
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_book__to_number
+#. module: receipt_book_management_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_book_multi__to_number
 msgid "To Number"
-msgstr "إلى رقم"
+msgstr "الى"
 
-#. module: receipt_book_management
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_book__total_receipts
+#. module: receipt_book_management_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_book_multi__total_receipts
 msgid "Total Receipts"
-msgstr "أجمالي السندات"
+msgstr "إجمالي السندات"
 
-#. module: receipt_book_management
-#: model:ir.model.fields,field_description:receipt_book_management.field_receipt_exception_wizard_line__wizard_id
+#. module: receipt_book_management_multi
+#: model:ir.model.fields,field_description:receipt_book_management_multi.field_receipt_exception_wizard_line_multi__wizard_id
 msgid "Wizard"
-msgstr "معالج"
+msgstr ""
 
-#. module: receipt_book_management
+#. module: receipt_book_management_multi
 #. odoo-python
-#: code:addons/receipt_book_management/models/account_payment.py:0
-#, python-format
+#: code:addons/receipt_book_management_multi/models/account_payment.py:0
 msgid ""
 "You cannot modify the Salesperson or Receipt information on a posted payment. Reset the "
 "payment to Draft first."
@@ -482,7 +518,7 @@ msgstr ""
 "لا يمكنك تعديل معلومات مندوب المبيعات أو الإيصال في دفعة تم ترحيلها. قم أولاً بإعادة تعيين "
 "الدفعة إلى حالة «مسودة»."
 
-#. module: receipt_book_management
-#: model_terms:ir.ui.view,arch_db:receipt_book_management.view_receipt_delayed_wizard_form
+#. module: receipt_book_management_multi
+#: model_terms:ir.ui.view,arch_db:receipt_book_management_multi.view_receipt_delayed_wizard_form_multi
 msgid "⚠ Delayed Receipt"
-msgstr "⚠ تأخر في الاستلام"
+msgstr "الاستثناءات المؤجلة"
