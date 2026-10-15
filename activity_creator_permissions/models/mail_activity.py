@@ -6,15 +6,22 @@ class MailActivity(models.Model):
     _inherit = "mail.activity"
 
     activity_status = fields.Selection(
-        [("open", "Open"), ("done", "Done"), ("cancelled", "Cancelled")],
-        string="Activity Status", default="open", required=True, index=True,
+        selection=[
+            ("open", "Open"),
+            ("done", "Done"),
+            ("cancelled", "Cancelled"),
+        ],
+        string="Activity Status",
+        default="open",
+        required=True,
+        index=True,
         copy=False,
-        help="Persistent status. Cancelled activities are archived instead of deleted.",
+        help="Persistent status; cancelled activities are archived instead of deleted.",
     )
 
     def _is_creator_or_admin(self):
         user = self.env.user
-        return user._is_admin() or all(a.create_uid.id == user.id for a in self)
+        return user._is_admin() or all(activity.create_uid.id == user.id for activity in self)
 
     def _check_can_complete_activity(self):
         user = self.env.user
@@ -51,19 +58,37 @@ class MailActivity(models.Model):
         return super().write(vals)
 
     def unlink(self):
+        """The standard Activities Cancel button may call unlink directly.
+        Convert that operation into a soft cancellation to preserve history.
+        """
+        if self.env.context.get("activity_creator_permissions_force_delete"):
+            if not self._is_creator_or_admin():
+                raise AccessError(_("Only the creator or a system administrator can delete activities."))
+            return super().unlink()
+
         if not self._is_creator_or_admin():
             raise AccessError(_(
-                "Only the creator or a system administrator can delete this activity."
+                "Only the creator or a system administrator can cancel this activity."
             ))
-        return super().unlink()
+
+        activities = self.filtered(lambda activity: activity.activity_status != "cancelled")
+        if activities:
+            activities.with_context(
+                activity_creator_permissions_completion=True
+            ).write({
+                "active": False,
+                "activity_status": "cancelled",
+            })
+        return True
 
     def action_cancel(self):
-        """Archive and mark cancelled instead of deleting the activity."""
         if not self._is_creator_or_admin():
             raise AccessError(_("Only the creator or a system administrator can cancel it."))
-        activities = self.filtered("active")
+        activities = self.filtered(lambda activity: activity.activity_status != "cancelled")
         if activities:
-            activities.write({"active": False, "activity_status": "cancelled"})
+            activities.with_context(
+                activity_creator_permissions_completion=True
+            ).write({"active": False, "activity_status": "cancelled"})
         return True
 
     def action_done(self):
