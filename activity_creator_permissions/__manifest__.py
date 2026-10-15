@@ -1,7 +1,7 @@
 {
     "name": "Activity Creator Permissions",
-    "summary": "Restrict activity editing and cancellation to the creator",
-    "version": "19.0.1.0.0",
+    "summary": "Restrict activity editing, cancellation, and completion",
+    "version": "19.0.1.0.1",
     "category": "Productivity",
     "author": "Custom",
     "license": "LGPL-3",
