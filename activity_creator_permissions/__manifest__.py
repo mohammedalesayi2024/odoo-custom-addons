@@ -1,7 +1,7 @@
 {
     "name": "Activity Creator Permissions",
     "summary": "Activity permissions and cancellation history",
-    "version": "19.0.1.0.3",
+    "version": "19.0.1.0.4",
     "category": "Productivity",
     "author": "Custom",
     "license": "LGPL-3",
