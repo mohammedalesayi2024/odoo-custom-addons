@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  <menuitem id="menu_qaqc_documents_root" name="QA/QC" parent="documents.menu_documents" sequence="35" groups="qaqc_prq_workflow.group_qaqc_user"/>
-  <menuitem id="menu_qaqc_prq" name="PRQ Requests" parent="menu_qaqc_documents_root" action="action_qaqc_prq" sequence="10" groups="qaqc_prq_workflow.group_qaqc_user"/>
-  <menuitem id="menu_qaqc_settings" name="Configuration" parent="menu_qaqc_documents_root" sequence="90" groups="qaqc_prq_workflow.group_qaqc_manager"/>
-  <menuitem id="menu_qaqc_workflows" name="PRQ Approval Workflows" parent="menu_qaqc_settings" action="action_qaqc_prq_workflows" sequence="10" groups="qaqc_prq_workflow.group_qaqc_manager"/>
+  <menuitem id="menu_qaqc_documents_root" name="QA/QC" parent="documents.menu_documents" sequence="35" groups="qaqc_prq_odoo19.group_qaqc_user"/>
+  <menuitem id="menu_qaqc_prq" name="PRQ Requests" parent="menu_qaqc_documents_root" action="action_qaqc_prq" sequence="10" groups="qaqc_prq_odoo19.group_qaqc_user"/>
+  <menuitem id="menu_qaqc_settings" name="Configuration" parent="menu_qaqc_documents_root" sequence="90" groups="qaqc_prq_odoo19.group_qaqc_manager"/>
+  <menuitem id="menu_qaqc_workflows" name="PRQ Approval Workflows" parent="menu_qaqc_settings" action="action_qaqc_prq_workflows" sequence="10" groups="qaqc_prq_odoo19.group_qaqc_manager"/>
 </odoo>

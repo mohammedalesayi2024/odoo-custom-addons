@@ -73,7 +73,7 @@ class QaqcPrq(models.Model):
         return super().create(vals_list)
 
     def _is_manager(self):
-        return self.env.user.has_group('qaqc_prq_workflow.group_qaqc_manager') or self.env.user.has_group('base.group_system')
+        return self.env.user.has_group('qaqc_prq_odoo19.group_qaqc_manager') or self.env.user.has_group('base.group_system')
 
     def _check_editable(self):
         for rec in self:
