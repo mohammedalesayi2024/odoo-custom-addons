@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <record id="module_category_qaqc" model="ir.module.category"><field name="name">QA/QC Documents</field><field name="sequence">35</field></record>
-  <record id="group_qaqc_user" model="res.groups"><field name="name">QA/QC: PRQ User</field><field name="category_id" ref="module_category_qaqc"/></record>
-  <record id="group_qaqc_reviewer" model="res.groups"><field name="name">QA/QC: PRQ Reviewer</field><field name="category_id" ref="module_category_qaqc"/><field name="implied_ids" eval="[(4, ref('group_qaqc_user'))]"/></record>
-  <record id="group_qaqc_manager" model="res.groups"><field name="name">QA/QC: PRQ Manager</field><field name="category_id" ref="module_category_qaqc"/><field name="implied_ids" eval="[(4, ref('group_qaqc_reviewer'))]"/></record>
+  <record id="group_qaqc_user" model="res.groups"><field name="name">QA/QC: PRQ User</field></record>
+  <record id="group_qaqc_reviewer" model="res.groups"><field name="name">QA/QC: PRQ Reviewer</field><field name="implied_ids" eval="[(4, ref('group_qaqc_user'))]"/></record>
+  <record id="group_qaqc_manager" model="res.groups"><field name="name">QA/QC: PRQ Manager</field><field name="implied_ids" eval="[(4, ref('group_qaqc_reviewer'))]"/></record>
 </odoo>
