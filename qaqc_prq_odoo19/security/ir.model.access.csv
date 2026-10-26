@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_qaqc_prq_user,qaqc.prq.user,model_qaqc_prq,qaqc_prq_workflow.group_qaqc_user,1,1,1,0
+access_qaqc_prq_manager,qaqc.prq.manager,model_qaqc_prq,qaqc_prq_workflow.group_qaqc_manager,1,1,1,1
+access_qaqc_prq_workflow_manager,qaqc.prq.workflow.manager,model_qaqc_prq_workflow,qaqc_prq_workflow.group_qaqc_manager,1,1,1,1
+access_qaqc_prq_workflow_step_manager,qaqc.prq.workflow.step.manager,model_qaqc_prq_workflow_step,qaqc_prq_workflow.group_qaqc_manager,1,1,1,1
+access_qaqc_prq_approval_user,qaqc.prq.approval.user,model_qaqc_prq_approval,qaqc_prq_workflow.group_qaqc_user,1,1,0,0
+access_qaqc_prq_approval_manager,qaqc.prq.approval.manager,model_qaqc_prq_approval,qaqc_prq_workflow.group_qaqc_manager,1,1,1,1
