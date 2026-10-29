@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="documents_document_list_open_activities" model="ir.ui.view">
+        <field name="name">documents.document.list.open.activities</field>
+        <field name="model">documents.document</field>
+        <field name="inherit_id" ref="documents.document_view_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list/field[@name='name']" position="after">
+                <field name="open_activity_summary"
+                       string="Activity"
+                       optional="show"
+                       readonly="1"
+                       widget="text"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
