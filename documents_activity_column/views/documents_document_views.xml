@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="documents_document_view_list_activity_column" model="ir.ui.view">
+        <field name="name">documents.document.list.activity.column</field>
+        <field name="model">documents.document</field>
+        <field name="inherit_id" ref="documents.document_view_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list/field[@name='write_date']" position="before">
+                <field name="activity_ids" widget="list_activity" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
