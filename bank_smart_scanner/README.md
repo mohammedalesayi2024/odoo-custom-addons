@@ -6,7 +6,7 @@ Custom Odoo 19 module for importing bank statement files and preparing draft jou
 - Multi-bank import profiles with per-profile CSV/XLSX column mapping.
 - Import sessions and transaction review models.
 - CSV and XLSX import (requires `openpyxl` on the Odoo server for XLSX).
-- Basic text-based PDF extraction (requires `pypdf` on the Odoo server).
+- Basic text-based PDF extraction using `pypdf`, with a line-oriented transaction parser for common statement layouts.
 - Strict partner matching by exact bank account number/IBAN or exact partner reference.
 - Potential duplicate detection.
 - Draft `account.move` generation and explicit posting action restricted to scanner managers.
@@ -20,10 +20,11 @@ Custom Odoo 19 module for importing bank statement files and preparing draft jou
 - Bank statement opening/closing balance reconciliation and bank-specific PDF profile mapping are not yet implemented.
 
 ## Server dependencies
-- `openpyxl` for XLSX import.
-- `pypdf` for text-based PDF extraction.
+The ZIP includes a `requirements.txt` alongside the `bank_smart_scanner/` addon folder. It declares:
+- `pypdf==5.9.0` for text-based PDF extraction.
+- `openpyxl>=3.1,<4.0` for XLSX import.
 
-Install these packages in the Odoo server environment where permitted by the hosting provider. Odoo.sh deployments may require adding dependencies through the repository's requirements configuration and checking platform support.
+For Odoo.sh, place `requirements.txt` in the root of the repository/addons directory that contains the `bank_smart_scanner/` folder, commit both the requirements file and addon changes to the Git branch, and deploy a new build. Odoo.sh installs Python requirements during builds. A ZIP upload alone does not install Python packages into a running server. Image-only scanned PDFs still require a separately configured OCR service; OCR is not included in this build.
 
 ## Installation
 1. Copy `bank_smart_scanner` into the custom addons path.

@@ -126,18 +126,59 @@ class BankScannerSession(models.Model):
             try:
                 from pypdf import PdfReader
             except ImportError as exc:
-                raise UserError(_("PDF text import requires pypdf on the Odoo server. Scanned PDF OCR requires a separately configured OCR service.")) from exc
+                raise UserError(_(
+                    "The Python package 'pypdf' is not installed on this Odoo server. "
+                    "For Odoo.sh, add the module requirements.txt to the Git repository and "
+                    "deploy a new build. Image-only scanned PDFs additionally require an OCR service."
+                )) from exc
             reader = PdfReader(io.BytesIO(raw))
             extracted = []
+            date_re = re.compile(r"^(?:\d{4}[-/]\d{1,2}[-/]\d{1,2}|\d{1,2}[-/]\d{1,2}[-/]\d{4})$")
+            amount_re = re.compile(r"^(?:[-–—]|\(?-?\d[\d,]*(?:\.\d{1,2})?\)?)$")
             for page_no, page in enumerate(reader.pages, start=1):
-                text = page.extract_text() or ""
-                # Generic parser deliberately does not guess bank-specific table layouts.
-                for line in text.splitlines():
-                    parts = re.split(r"\s{2,}|\t", line.strip())
-                    if len(parts) >= 3:
-                        extracted.append({"_raw_line": line, "_page": page_no, "date": parts[0], "description": " ".join(parts[1:-1]), "amount": parts[-1]})
+                lines = [line.strip() for line in (page.extract_text() or "").splitlines() if line.strip()]
+                index = 0
+                while index < len(lines):
+                    if not date_re.match(lines[index]):
+                        index += 1
+                        continue
+                    transaction_date = lines[index]
+                    cursor = index + 1
+                    # Many bank statements show both transaction date and value date.
+                    if cursor < len(lines) and date_re.match(lines[cursor]):
+                        cursor += 1
+                    row_lines = []
+                    while cursor < len(lines) and not date_re.match(lines[cursor]):
+                        upper = lines[cursor].upper()
+                        if upper.startswith(("CLOSING BALANCE", "OPENING BALANCE", "PURPOSE:", "THIS SYNTHETIC", "TEST DOCUMENT")):
+                            break
+                        row_lines.append(lines[cursor])
+                        cursor += 1
+                    amount_positions = [pos for pos, value in enumerate(row_lines) if amount_re.match(value.replace("SAR", "").strip())]
+                    if amount_positions:
+                        first_amount = amount_positions[0]
+                        description = " ".join(row_lines[:first_amount]).strip()
+                        amount_values = [row_lines[pos].replace("SAR", "").strip() for pos in amount_positions]
+                        debit_value = amount_values[-2] if len(amount_values) >= 2 else "0"
+                        credit_value = amount_values[-1] if len(amount_values) >= 2 else amount_values[-1]
+                        # A dash represents an empty debit/credit cell. A single positive amount
+                        # is treated as a credit only when the PDF row has no separate debit cell.
+                        if len(amount_values) == 1:
+                            debit_value, credit_value = "0", amount_values[0]
+                        raw_line = " | ".join([transaction_date] + row_lines)
+                        if description and any(ch.isdigit() for ch in "".join(amount_values)):
+                            extracted.append({
+                                "_raw_line": raw_line, "_page": page_no,
+                                "date": transaction_date, "description": description,
+                                "debit": debit_value, "credit": credit_value,
+                            })
+                    index = max(cursor, index + 1)
             if not extracted:
-                raise UserError(_("No text transactions could be extracted from this PDF. It may be scanned or require a bank-specific PDF profile/OCR configuration."))
+                raise UserError(_(
+                    "No transaction rows could be extracted from this PDF. "
+                    "If it is an image-only scan, configure an OCR service. "
+                    "If it is a text PDF, configure a bank-specific PDF layout/profile."
+                ))
             return extracted
         raise UserError(_("Unsupported file type. Use PDF, XLSX, or CSV."))
 
@@ -175,6 +216,8 @@ class BankScannerSession(models.Model):
             if isinstance(value, (int, float)):
                 return abs(float(value))
             cleaned = str(value).replace(",", "").replace(" ", "").replace("SAR", "").replace("ر.س", "")
+            if cleaned in ("-", "–", "—", ""):
+                return 0.0
             return abs(float(cleaned))
         debit_raw, credit_raw = get("debit_column"), get("credit_column")
         if debit_raw not in (None, "") or credit_raw not in (None, ""):
