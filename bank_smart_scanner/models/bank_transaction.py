@@ -44,24 +44,58 @@ class BankScannerTransaction(models.Model):
             if rec.debit and rec.credit:
                 raise ValidationError(_("A transaction cannot have both debit and credit amounts."))
 
+    @api.model
+    def _normalize_iban(self, value):
+        """Normalize IBAN for exact comparison (ignore spaces and punctuation only)."""
+        return "".join(ch for ch in (value or "").upper() if ch.isalnum())
+
     def action_strict_match(self):
         for rec in self:
+            partners = self.env["res.partner"]
             if rec.iban:
-                # Compare normalized account numbers in Python for compatibility across Odoo versions.
-                accounts = self.env["res.partner.bank"].search([("partner_id", "!=", False)])
-                normalized = lambda value: "".join(ch for ch in (value or "").upper() if ch.isalnum())
-                partners = accounts.filtered(lambda account: normalized(account.acc_number) == normalized(rec.iban)).mapped("partner_id")
+                # An IBAN supplied by the bank statement has absolute priority.
+                # Match it against IBANs already saved on customer/vendor bank accounts.
+                statement_iban = rec._normalize_iban(rec.iban)
+                bank_accounts = self.env["res.partner.bank"].search([
+                    ("partner_id", "!=", False),
+                    ("acc_number", "!=", False),
+                ])
+                matched_accounts = bank_accounts.filtered(
+                    lambda bank: rec._normalize_iban(bank.acc_number) == statement_iban
+                )
+                # Multiple bank-account records belonging to the same commercial partner
+                # are one business match; different commercial partners are ambiguous.
+                commercial_partners = matched_accounts.mapped("partner_id.commercial_partner_id")
+                unique_partners = commercial_partners.exists()
+                unique_partners = unique_partners.browse(list(set(unique_partners.ids)))
+                if len(unique_partners) == 1:
+                    partners = unique_partners
+                elif len(unique_partners) > 1:
+                    partners = unique_partners
+                # Important: when an IBAN is present but not found, do not fall back to
+                # partner code/name/reference. The supplied IBAN remains authoritative.
             elif rec.partner_code:
-                # Strict code matching only when an exact partner reference exists.
+                # Fallback strict code matching is used only when the statement has no IBAN.
                 partners = self.env["res.partner"].search([("ref", "=", rec.partner_code)], limit=2)
-            else:
-                partners = self.env["res.partner"]
+
             if len(partners) == 1:
-                rec.write({"partner_id": partners.id, "match_state": "matched", "match_note": _("Exact identifier match")})
+                rec.write({
+                    "partner_id": partners.id,
+                    "match_state": "matched",
+                    "match_note": _("Confirmed exact IBAN match") if rec.iban else _("Exact partner code match"),
+                })
             elif len(partners) > 1:
-                rec.write({"match_state": "ambiguous", "match_note": _("More than one partner matches the supplied identifier.")})
+                rec.write({
+                    "partner_id": False,
+                    "match_state": "ambiguous",
+                    "match_note": _("This IBAN or identifier is linked to more than one partner. Manual review is required."),
+                })
             else:
-                rec.write({"match_state": "unmatched", "match_note": _("No exact partner identifier was found. Name similarity is not used.")})
+                rec.write({
+                    "partner_id": False,
+                    "match_state": "unmatched",
+                    "match_note": _("No exact partner IBAN match was found. Name similarity is not used."),
+                })
             duplicates = self.search([
                 ("id", "!=", rec.id), ("company_id", "=", rec.company_id.id),
                 ("session_id.journal_id", "=", rec.session_id.journal_id.id),

@@ -167,10 +167,25 @@ class BankScannerSession(models.Model):
                             debit_value, credit_value = "0", amount_values[0]
                         raw_line = " | ".join([transaction_date] + row_lines)
                         if description and any(ch.isdigit() for ch in "".join(amount_values)):
+                            # Extract the counterparty IBAN only when the PDF labels it
+                            # explicitly. This avoids confusing the company's own IBAN
+                            # in the statement header with the customer's IBAN.
+                            counterparty_iban = ""
+                            for line_index, text_line in enumerate(row_lines):
+                                if re.search(r"\bIBAN\b", text_line, re.IGNORECASE):
+                                    candidate = re.sub(r".*?\bIBAN\b\s*[:#-]?\s*", "", text_line, flags=re.IGNORECASE)
+                                    candidate = re.sub(r"[^A-Za-z0-9]", "", candidate).upper()
+                                    # Some PDF layouts put the IBAN value on the next line.
+                                    if len(candidate) < 15 and line_index + 1 < len(row_lines):
+                                        candidate += re.sub(r"[^A-Za-z0-9]", "", row_lines[line_index + 1]).upper()
+                                    if 15 <= len(candidate) <= 34 and re.match(r"^[A-Z]{2}\d{2}", candidate):
+                                        counterparty_iban = candidate
+                                        break
                             extracted.append({
                                 "_raw_line": raw_line, "_page": page_no,
                                 "date": transaction_date, "description": description,
                                 "debit": debit_value, "credit": credit_value,
+                                "iban": counterparty_iban,
                             })
                     index = max(cursor, index + 1)
             if not extracted:

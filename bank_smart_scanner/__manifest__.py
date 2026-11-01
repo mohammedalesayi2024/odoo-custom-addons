@@ -1,6 +1,6 @@
 {
     "name": "Bank Smart Scanner",
-    "version": "19.0.1.0.1",
+    "version": "19.0.1.0.2",
     "category": "Accounting/Accounting",
     "summary": "Import bank statements, strictly identify partners and prepare draft journal entries",
     "description": "Multi-bank statement import and review workflow for Odoo 19 Enterprise.",
