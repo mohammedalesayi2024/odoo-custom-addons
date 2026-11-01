@@ -1,0 +1,6 @@
+<odoo>
+    <menuitem id="menu_bank_smart_scanner_root" name="Bank Smart Scanner" sequence="65" groups="bank_smart_scanner.group_bank_scanner_user"/>
+    <menuitem id="menu_bank_scanner_sessions" name="Import Sessions" parent="menu_bank_smart_scanner_root" action="action_bank_scanner_sessions" sequence="10"/>
+    <menuitem id="menu_bank_scanner_transactions" name="Transactions" parent="menu_bank_smart_scanner_root" action="action_bank_scanner_transactions" sequence="20"/>
+    <menuitem id="menu_bank_scanner_profiles" name="Bank Profiles" parent="menu_bank_smart_scanner_root" action="action_bank_scanner_profiles" sequence="30" groups="bank_smart_scanner.group_bank_scanner_manager"/>
+</odoo>

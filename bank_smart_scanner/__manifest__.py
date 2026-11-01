@@ -1,0 +1,20 @@
+{
+    "name": "Bank Smart Scanner",
+    "version": "19.0.1.0.0",
+    "category": "Accounting/Accounting",
+    "summary": "Import bank statements, strictly identify partners and prepare draft journal entries",
+    "description": "Multi-bank statement import and review workflow for Odoo 19 Enterprise.",
+    "author": "Custom Development",
+    "license": "LGPL-3",
+    "depends": ["account", "mail"],
+    "data": [
+        "security/security.xml",
+        "security/ir.model.access.csv",
+        "data/sequence.xml",
+        "views/bank_scanner_views.xml",
+        "views/bank_scanner_menus.xml",
+    ],
+    "installable": True,
+    "application": True,
+    "auto_install": False,
+}

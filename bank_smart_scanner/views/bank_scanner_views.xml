@@ -1,0 +1,43 @@
+<odoo>
+    <record id="view_bank_scanner_profile_list" model="ir.ui.view">
+        <field name="name">bank.scanner.profile.list</field><field name="model">bank.scanner.profile</field>
+        <field name="arch" type="xml"><list><field name="name"/><field name="bank_name"/><field name="company_id"/><field name="journal_id"/><field name="file_format"/><field name="active"/></list></field>
+    </record>
+    <record id="view_bank_scanner_profile_form" model="ir.ui.view">
+        <field name="name">bank.scanner.profile.form</field><field name="model">bank.scanner.profile</field>
+        <field name="arch" type="xml"><form><sheet><group><group><field name="name"/><field name="bank_name"/><field name="company_id"/><field name="journal_id"/><field name="active"/></group><group><field name="file_format"/><field name="date_format"/><field name="delimiter"/><field name="encoding"/><field name="expense_account_id"/></group></group><notebook><page string="Column Mapping"><group><field name="date_column"/><field name="description_column"/><field name="debit_column"/><field name="credit_column"/><field name="amount_column"/><field name="reference_column"/><field name="iban_column"/><field name="partner_code_column"/></group></page></notebook></sheet></form></field>
+    </record>
+    <record id="view_bank_scanner_session_list" model="ir.ui.view">
+        <field name="name">bank.scanner.session.list</field><field name="model">bank.scanner.session</field>
+        <field name="arch" type="xml"><list decoration-danger="state == 'failed'"><field name="name"/><field name="profile_id"/><field name="journal_id"/><field name="date_from"/><field name="date_to"/><field name="transaction_count"/><field name="matched_count"/><field name="unmatched_count"/><field name="state"/></list></field>
+    </record>
+    <record id="view_bank_scanner_session_form" model="ir.ui.view">
+        <field name="name">bank.scanner.session.form</field><field name="model">bank.scanner.session</field>
+        <field name="arch" type="xml"><form><header>
+            <button name="action_scan" type="object" string="Start Scanning" class="btn-primary" invisible="state not in ('draft','uploaded','failed')"/>
+            <field name="state" widget="statusbar" statusbar_visible="draft,uploaded,scanned,review,ready,posted"/>
+        </header><sheet><div class="oe_title"><h1><field name="name"/></h1></div>
+            <group><group><field name="company_id"/><field name="profile_id"/><field name="journal_id"/><field name="date_from"/><field name="date_to"/></group><group><field name="file_name"/><field name="file_data" filename="file_name"/><field name="file_type"/><field name="opening_balance"/><field name="closing_balance"/></group></group>
+            <group><field name="total_debit"/><field name="total_credit"/><field name="matched_count"/><field name="unmatched_count"/><field name="error_message" invisible="not error_message"/></group>
+            <notebook><page string="Transactions"><field name="transaction_ids" readonly="1"><list><field name="date"/><field name="description"/><field name="reference"/><field name="partner_id"/><field name="debit"/><field name="credit"/><field name="match_state"/><field name="state"/><field name="move_id"/></list></field></page></notebook>
+        </sheet><chatter/></form></field>
+    </record>
+    <record id="view_bank_scanner_transaction_list" model="ir.ui.view">
+        <field name="name">bank.scanner.transaction.list</field><field name="model">bank.scanner.transaction</field>
+        <field name="arch" type="xml"><list><header><button name="action_approve" type="object" string="Approve Selected"/><button name="action_create_draft_move" type="object" string="Create Draft Entries"/><button name="action_post_draft_move" type="object" string="Post Selected" class="btn-primary" groups="bank_smart_scanner.group_bank_scanner_manager"/></header><field name="date"/><field name="session_id"/><field name="description"/><field name="reference"/><field name="partner_id"/><field name="debit"/><field name="credit"/><field name="match_state"/><field name="state"/><field name="move_id"/></list></field>
+    </record>
+    <record id="view_bank_scanner_transaction_form" model="ir.ui.view">
+        <field name="name">bank.scanner.transaction.form</field><field name="model">bank.scanner.transaction</field>
+        <field name="arch" type="xml"><form><header>
+            <button name="action_strict_match" type="object" string="Run Strict Matching"/>
+            <button name="action_approve" type="object" string="Approve" class="btn-primary" invisible="state != 'new'"/>
+            <button name="action_create_draft_move" type="object" string="Create Draft Entry" invisible="state != 'approved' or move_id"/>
+            <button name="action_post_draft_move" type="object" string="Post Entry" class="btn-primary" groups="bank_smart_scanner.group_bank_scanner_manager" invisible="not move_id or move_id.state != 'draft'"/>
+            <button name="action_exclude" type="object" string="Exclude" invisible="state in ('posted','excluded')"/>
+            <field name="state" widget="statusbar" statusbar_visible="new,approved,posted"/>
+        </header><sheet><group><group><field name="session_id"/><field name="date"/><field name="description"/><field name="reference"/><field name="source_page"/></group><group><field name="partner_id"/><field name="counterpart_account_id"/><field name="iban"/><field name="partner_code"/><field name="debit"/><field name="credit"/><field name="match_state"/><field name="match_note"/></group></group><group><field name="move_id"/><field name="duplicate_of_id"/><field name="raw_text"/></group></sheet></form></field>
+    </record>
+    <record id="action_bank_scanner_sessions" model="ir.actions.act_window"><field name="name">Import Sessions</field><field name="res_model">bank.scanner.session</field><field name="view_mode">list,form</field></record>
+    <record id="action_bank_scanner_profiles" model="ir.actions.act_window"><field name="name">Bank Import Profiles</field><field name="res_model">bank.scanner.profile</field><field name="view_mode">list,form</field></record>
+    <record id="action_bank_scanner_transactions" model="ir.actions.act_window"><field name="name">Transactions</field><field name="res_model">bank.scanner.transaction</field><field name="view_mode">list,form</field></record>
+</odoo>

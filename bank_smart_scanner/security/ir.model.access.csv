@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bank_scanner_profile_user,bank.scanner.profile user,model_bank_scanner_profile,bank_smart_scanner.group_bank_scanner_user,1,0,0,0
+access_bank_scanner_profile_manager,bank.scanner.profile manager,model_bank_scanner_profile,bank_smart_scanner.group_bank_scanner_manager,1,1,1,1
+access_bank_scanner_session_user,bank.scanner.session user,model_bank_scanner_session,bank_smart_scanner.group_bank_scanner_user,1,1,1,0
+access_bank_scanner_session_manager,bank.scanner.session manager,model_bank_scanner_session,bank_smart_scanner.group_bank_scanner_manager,1,1,1,1
+access_bank_scanner_transaction_user,bank.scanner.transaction user,model_bank_scanner_transaction,bank_smart_scanner.group_bank_scanner_user,1,1,1,0
+access_bank_scanner_transaction_manager,bank.scanner.transaction manager,model_bank_scanner_transaction,bank_smart_scanner.group_bank_scanner_manager,1,1,1,1
