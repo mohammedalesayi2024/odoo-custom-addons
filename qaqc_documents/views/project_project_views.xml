@@ -23,4 +23,18 @@
         </field>
     </record>
 
+
+    <record id="view_partner_form_qaqc_contractor_code" model="ir.ui.view">
+        <field name="name">res.partner.form.qaqc.contractor.code</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <group string="QA/QC Settings">
+                    <field name="qaqc_contractor_code" placeholder="e.g. WM"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
 </odoo>

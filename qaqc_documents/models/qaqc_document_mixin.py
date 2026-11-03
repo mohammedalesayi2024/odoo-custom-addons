@@ -42,7 +42,25 @@ class QaqcDocumentMixin(models.AbstractModel):
                 project = self.env['project.project'].browse(vals.get('project_id'))
                 discipline = vals.get('discipline', 'civil')
                 disc = {'civil':'CIV','arch':'ARC','mech':'MEC','elec':'ELE','id':'ID','ffe':'FFE','other':'OTH'}.get(discipline, 'CIV')
-                contractor_code = (project.contractor_code or 'TH').strip().upper()
+                # The contractor prefix must come from the contractor assigned to
+                # the project, never from a hard-coded company prefix such as TH.
+                contractor = project.contractor_id
+                contractor_code = (contractor.qaqc_contractor_code or '').strip().upper() if contractor else ''
+                if not contractor_code and contractor:
+                    # For short contractor names/codes (e.g. WM), use the name as-is.
+                    # For longer company names, derive initials; users can override
+                    # this on the contact using QA/QC Contractor Code.
+                    words = (contractor.name or '').replace('-', ' ').split()
+                    contractor_code = ''.join(word[0] for word in words if word).upper()
+                if not contractor_code:
+                    # Backward-compatible fallback for projects that have not yet
+                    # been assigned a Contractor contact.
+                    contractor_code = (project.contractor_code or '').strip().upper()
+                if not contractor_code:
+                    raise ValidationError(
+                        'Please set the project Contractor and its QA/QC Contractor Code '
+                        'before creating a QA/QC document.'
+                    )
                 project_code = (project.project_code or (project.name or 'PRJ')[:3]).strip().upper()
                 prefix = '%s-%s-%s-%s-' % (contractor_code, project_code, self._doc_type_code, disc)
                 # Keep a separate sequence for every project + document type + discipline.
