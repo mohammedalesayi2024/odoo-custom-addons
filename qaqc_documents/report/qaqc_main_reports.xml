@@ -36,14 +36,9 @@
       </tr>
     </table>
     <table style="width:100%;border-collapse:collapse;margin-top:6px;font-size:9pt;">
-      <tr><td style="border:1px solid #222;padding:5px;text-align:center;">
-        <span style="display:inline-block;width:11px;height:11px;border:1px solid #222;text-align:center;vertical-align:middle;line-height:10px;font-family:Arial,sans-serif;font-size:9px;font-weight:bold;"><t t-if="o.discipline == 'civil'">X</t></span> Civil&#160;&#160;
-        <span style="display:inline-block;width:11px;height:11px;border:1px solid #222;text-align:center;vertical-align:middle;line-height:10px;font-family:Arial,sans-serif;font-size:9px;font-weight:bold;"><t t-if="o.discipline == 'arch'">X</t></span> Architecture&#160;&#160;
-        <span style="display:inline-block;width:11px;height:11px;border:1px solid #222;text-align:center;vertical-align:middle;line-height:10px;font-family:Arial,sans-serif;font-size:9px;font-weight:bold;"><t t-if="o.discipline == 'mech'">X</t></span> Mechanical&#160;&#160;
-        <span style="display:inline-block;width:11px;height:11px;border:1px solid #222;text-align:center;vertical-align:middle;line-height:10px;font-family:Arial,sans-serif;font-size:9px;font-weight:bold;"><t t-if="o.discipline == 'elec'">X</t></span> Electrical&#160;&#160;
-        <span style="display:inline-block;width:11px;height:11px;border:1px solid #222;text-align:center;vertical-align:middle;line-height:10px;font-family:Arial,sans-serif;font-size:9px;font-weight:bold;"><t t-if="o.discipline == 'id'">X</t></span> ID&#160;&#160;
-        <span style="display:inline-block;width:11px;height:11px;border:1px solid #222;text-align:center;vertical-align:middle;line-height:10px;font-family:Arial,sans-serif;font-size:9px;font-weight:bold;"><t t-if="o.discipline == 'ffe'">X</t></span> FFE&#160;&#160;
-        <span style="display:inline-block;width:11px;height:11px;border:1px solid #222;text-align:center;vertical-align:middle;line-height:10px;font-family:Arial,sans-serif;font-size:9px;font-weight:bold;"><t t-if="o.discipline == 'other'">X</t></span> Other
+      <tr><td style="border:1px solid #222;padding:5px;text-align:center;font-weight:bold;">
+        <span style="font-family:DejaVu Sans,sans-serif;font-size:12pt;">&#10003;</span>
+        <span t-esc="dict(o._fields['discipline'].selection).get(o.discipline, '')"/>
       </td></tr>
     </table>
   </template>
@@ -60,10 +55,10 @@
             Date: <span t-esc="o.approval_date.strftime('%d/%m/%Y') if o.approval_date else '____/____/______'"/>
           </td>
           <td style="width:40%;border:1px solid #222;padding:7px;vertical-align:top;">
-            <div><span style="display:inline-block;width:11px;height:11px;border:1px solid #222;text-align:center;vertical-align:middle;line-height:10px;font-family:Arial,sans-serif;font-size:9px;font-weight:bold;"><t t-if="o.consultant_decision == 'A'">X</t></span> A - Approved</div>
-            <div><span style="display:inline-block;width:11px;height:11px;border:1px solid #222;text-align:center;vertical-align:middle;line-height:10px;font-family:Arial,sans-serif;font-size:9px;font-weight:bold;"><t t-if="o.consultant_decision == 'B'">X</t></span> B - Approved as noted</div>
-            <div><span style="display:inline-block;width:11px;height:11px;border:1px solid #222;text-align:center;vertical-align:middle;line-height:10px;font-family:Arial,sans-serif;font-size:9px;font-weight:bold;"><t t-if="o.consultant_decision == 'C'">X</t></span> C - Revise and Resubmit</div>
-            <div><span style="display:inline-block;width:11px;height:11px;border:1px solid #222;text-align:center;vertical-align:middle;line-height:10px;font-family:Arial,sans-serif;font-size:9px;font-weight:bold;"><t t-if="o.consultant_decision == 'D'">X</t></span> D - Rejected</div>
+            <div><span style="font-family:DejaVu Sans,sans-serif;font-weight:bold;"><t t-if="o.consultant_decision == 'A'">&#10003;</t></span> A - Approved</div>
+            <div><span style="font-family:DejaVu Sans,sans-serif;font-weight:bold;"><t t-if="o.consultant_decision == 'B'">&#10003;</t></span> B - Approved as noted</div>
+            <div><span style="font-family:DejaVu Sans,sans-serif;font-weight:bold;"><t t-if="o.consultant_decision == 'C'">&#10003;</t></span> C - Revise and Resubmit</div>
+            <div><span style="font-family:DejaVu Sans,sans-serif;font-weight:bold;"><t t-if="o.consultant_decision == 'D'">&#10003;</t></span> D - Rejected</div>
           </td>
         </tr>
       </table>
