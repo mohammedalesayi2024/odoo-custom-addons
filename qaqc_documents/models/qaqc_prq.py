@@ -19,6 +19,15 @@ class QaqcPrq(models.Model):
         help='Select a vendor already registered in Odoo Contacts/Accounting. PRQ approval is project-specific and does not deactivate the vendor in Accounting.',
     )
     scope_description = fields.Text(string='Scope of Supply / Service')
+    transmission_purpose = fields.Selection([
+        ('information', 'Information'),
+        ('approval', 'Approval'),
+        ('checking', 'Checking'),
+        ('review_comment', 'Review and comment'),
+    ], string='Transmitted For', default='approval', required=True, tracking=True)
+    copies = fields.Char(string='Copies', default='PDF')
+    remarks = fields.Char(string='Remarks')
+    submitted_by_title = fields.Char(string='Submitted By Title', default='Project Director')
     employer_id = fields.Many2one(related='project_id.employer_id', string='Employer', readonly=True)
     engineer_id = fields.Many2one(related='project_id.engineer_id', string='Engineer / Consultant', readonly=True)
     contractor_id = fields.Many2one(related='project_id.contractor_id', string='Contractor', readonly=True)

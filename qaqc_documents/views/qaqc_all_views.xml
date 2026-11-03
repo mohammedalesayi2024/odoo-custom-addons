@@ -2,6 +2,7 @@
 <odoo>
 <record id="view_qaqc_prq_form" model="ir.ui.view"><field name="name">qaqc.prq.form</field><field name="model">qaqc.prq</field><field name="arch" type="xml"><form><header>
 <button name="action_submit" string="Submit" type="object" class="oe_highlight" invisible="state not in ('draft','revise_resubmit')"/>
+<button name="%(action_report_qaqc_prq)d" string="Print PRQ PDF" type="action" class="btn-secondary"/>
 <button name="action_qaqc_approve" string="QA/QC Approve" type="object" class="oe_highlight" groups="qaqc_documents.group_qaqc_engineer" invisible="state != 'qa_review'"/>
 <button name="action_qaqc_reject" string="QA/QC Reject" type="object" groups="qaqc_documents.group_qaqc_engineer" invisible="state != 'qa_review'"/>
 <button name="action_consultant_approve" string="A - Approved" type="object" class="oe_highlight" groups="qaqc_documents.group_qaqc_consultant" invisible="state != 'consultant_review'"/>
@@ -12,7 +13,7 @@
 </header><sheet><div class="oe_title"><h1><field name="name" readonly="1"/></h1><div><field name="supplier_project_status" widget="badge" readonly="1"/></div></div>
 <group string="Project and Document Details"><group><field name="project_id"/><field name="discipline"/><field name="date"/><field name="rev"/></group><group><field name="prepared_by_id"/><field name="qaqc_reviewer_id"/><field name="qa_qc_date"/></group></group>
 <group string="Project Parties"><group><field name="employer_id"/><field name="engineer_id"/></group><group><field name="contractor_id"/></group></group>
-<group string="Supplier Qualification"><field name="supplier_id"/><field name="scope_description"/></group>
+<group string="Supplier Qualification"><field name="supplier_id"/><field name="scope_description"/><field name="transmission_purpose"/><field name="copies"/><field name="remarks"/><field name="submitted_by_title"/></group>
 <group string="Supplier Qualification Documents"><group><field name="company_profile" filename="company_profile_fname"/><field name="company_profile_fname" invisible="1"/><field name="financial_statement" filename="financial_statement_fname"/><field name="financial_statement_fname" invisible="1"/></group><group><field name="previous_projects" filename="previous_projects_fname"/><field name="previous_projects_fname" invisible="1"/><field name="iso_certificates" filename="iso_certificates_fname"/><field name="iso_certificates_fname" invisible="1"/></group></group>
 <group string="QA/QC Review"><field name="qa_qc_comments"/><field name="consultant_rep_id"/><field name="consultant_comments"/><field name="consultant_decision" readonly="1"/><field name="consultant_user_id" readonly="1"/><field name="approval_date" readonly="1"/></group>
 <notebook><page string="Additional Attachments"><field name="attachment_ids" widget="many2many_binary"/></page><page string="Revision History"><field name="revision_ids" readonly="1"><list><field name="revision"/><field name="decision"/><field name="comments"/><field name="changed_by"/><field name="changed_on"/></list></field></page></notebook></sheet><chatter/></form></field></record>

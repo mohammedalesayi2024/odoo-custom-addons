@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="paperformat_qaqc_prq" model="report.paperformat">
+        <field name="name">QA/QC PRQ Cover Sheet A4</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">8</field>
+        <field name="margin_bottom">8</field>
+        <field name="margin_left">8</field>
+        <field name="margin_right">8</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">0</field>
+        <field name="dpi">96</field>
+    </record>
+
+    <record id="action_report_qaqc_prq" model="ir.actions.report">
+        <field name="name">PRQ Document Cover Sheet</field>
+        <field name="model">qaqc.prq</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">qaqc_documents.report_qaqc_prq</field>
+        <field name="report_file">qaqc_documents.report_qaqc_prq</field>
+        <field name="paperformat_id" ref="paperformat_qaqc_prq"/>
+        <field name="binding_model_id" ref="model_qaqc_prq"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">'PRQ - %s' % (object.name or '')</field>
+    </record>
+
+    <template id="report_qaqc_prq">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <div class="page" style="font-family: Arial, sans-serif; color:#111; font-size:9px; line-height:1.2;">
+                    <style>
+                        .prq-table { width:100%; border-collapse:collapse; table-layout:fixed; }
+                        .prq-table td, .prq-table th { border:1px solid #222; padding:4px; vertical-align:middle; }
+                        .prq-top td { height:88px; vertical-align:top; font-weight:bold; }
+                        .prq-logo { display:block; max-width:100%; max-height:56px; margin:7px auto 0 auto; object-fit:contain; }
+                        .prq-meta td { height:29px; font-weight:bold; }
+                        .prq-check { font-size:13px; font-family: DejaVu Sans, sans-serif; }
+                        .prq-section { font-weight:bold; background:#f2f2f2; }
+                        .prq-small { font-size:8px; }
+                        .prq-line { height:19px; }
+                        .prq-sign { height:43px; vertical-align:bottom !important; }
+                        .prq-title { text-align:center; font-size:16px; font-weight:bold; height:45px; }
+                        .prq-no-border { border:0 !important; }
+                    </style>
+
+                    <table class="prq-table prq-top">
+                        <tr>
+                            <td style="width:33.33%;">
+                                Employer:<br/>
+                                <img class="prq-logo" src="/qaqc_documents/static/src/img/employer_alameen.jpeg"/><div style="text-align:center; margin-top:3px; font-weight:normal;" t-esc="o.employer_id.name or ''"/>
+                            </td>
+                            <td style="width:33.33%;">
+                                Engineer:<br/>
+                                <img class="prq-logo" src="/qaqc_documents/static/src/img/engineer_bws.jpeg"/><div style="text-align:center; margin-top:3px; font-weight:normal;" t-esc="o.engineer_id.name or ''"/>
+                            </td>
+                            <td style="width:33.33%;">
+                                Contractor:<br/>
+                                <img class="prq-logo" src="/qaqc_documents/static/src/img/contractor_tatweer.png"/><div style="text-align:center; margin-top:3px; font-weight:normal;" t-esc="o.contractor_id.name or ''"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <table class="prq-table prq-meta">
+                        <tr>
+                            <td style="width:34%;">Project No.: <span t-esc="o.project_id.project_no or o.project_id.project_code or o.project_id.name"/></td>
+                            <td style="width:23%;">Date: <span t-field="o.date" t-options="{'widget':'date'}"/></td>
+                            <td style="width:43%;">Ref: <span t-esc="o.name"/><br/>Rev: <span t-esc="'%02d' % (o.rev or 0)"/></td>
+                        </tr>
+                    </table>
+
+                    <table class="prq-table" style="margin-top:10px;">
+                        <tr><td style="text-align:center; height:27px;">
+                            <span class="prq-check" t-esc="'☒' if o.discipline == 'civil' else '☐'"/> Civil&#160;&#160;
+                            <span class="prq-check" t-esc="'☒' if o.discipline == 'arch' else '☐'"/> Architecture&#160;&#160;
+                            <span class="prq-check" t-esc="'☒' if o.discipline == 'mech' else '☐'"/> Mechanical&#160;&#160;
+                            <span class="prq-check" t-esc="'☒' if o.discipline == 'elec' else '☐'"/> Electrical&#160;&#160;
+                            <span class="prq-check" t-esc="'☒' if o.discipline == 'id' else '☐'"/> ID&#160;&#160;
+                            <span class="prq-check" t-esc="'☒' if o.discipline == 'ffe' else '☐'"/> FFE&#160;&#160;
+                            <span class="prq-check" t-esc="'☒' if o.discipline == 'other' else '☐'"/> Other
+                        </td></tr>
+                    </table>
+                    <table class="prq-table" style="margin-top:9px;">
+                        <tr><td class="prq-title">Document Cover Sheet</td></tr>
+                    </table>
+
+                    <table class="prq-table" style="margin-top:10px;">
+                        <tr><td colspan="5" class="prq-section">1. &#160; Submittal details</td></tr>
+                        <tr class="prq-section">
+                            <th style="width:27%;">Document Reference</th>
+                            <th style="width:39%;">Description</th>
+                            <th style="width:8%;">Rev</th>
+                            <th style="width:10%;">Copies</th>
+                            <th style="width:16%;">Remarks</th>
+                        </tr>
+                        <tr class="prq-line">
+                            <td><span t-esc="o.name"/></td>
+                            <td>Pre-Qualification for <span t-esc="o.supplier_id.name or ''"/><t t-if="o.scope_description"><br/><span class="prq-small" t-esc="o.scope_description"/></t></td>
+                            <td><span t-esc="'%02d' % (o.rev or 0)"/></td>
+                            <td><span t-esc="o.copies or 'PDF'"/></td>
+                            <td><span t-esc="o.remarks or ''"/></td>
+                        </tr>
+                        <tr t-foreach="range(7)" t-as="blank"><td class="prq-line"></td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td colspan="5" class="prq-section">These are transmitted for:</td></tr>
+                        <tr>
+                            <td colspan="5">
+                                <span class="prq-check" t-esc="'☒' if o.transmission_purpose == 'information' else '☐'"/> Information&#160;&#160;&#160;&#160;
+                                <span class="prq-check" t-esc="'☒' if o.transmission_purpose == 'approval' else '☐'"/> Approval&#160;&#160;&#160;&#160;
+                                <span class="prq-check" t-esc="'☒' if o.transmission_purpose == 'checking' else '☐'"/> Checking&#160;&#160;&#160;&#160;
+                                <span class="prq-check" t-esc="'☒' if o.transmission_purpose == 'review_comment' else '☐'"/> Review and comment
+                            </td>
+                        </tr>
+                        <tr><td colspan="5" class="prq-section">We certify that the above documents have been coordinated:</td></tr>
+                        <tr>
+                            <td colspan="3" class="prq-sign">Submitted By: <span t-esc="o.prepared_by_id.name or ''"/><t t-if="o.submitted_by_title"> – <span t-esc="o.submitted_by_title"/></t></td>
+                            <td colspan="2" class="prq-sign">Signature: ____________________</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="prq-sign">
+                                Engineer’s Representative: <span t-esc="(o.consultant_rep_id.name or o.engineer_id.name or '')"/><br/><br/>
+                                Signature: ________________________________
+                                &#160;&#160; Date: <span t-esc="o.approval_date.strftime('%d/%m/%Y') if o.approval_date else '____/____/______'"/>
+                            </td>
+                            <td colspan="2">
+                                <div><span class="prq-check" t-esc="'☒' if o.consultant_decision == 'A' else '☐'"/> A - Approved</div>
+                                <div><span class="prq-check" t-esc="'☒' if o.consultant_decision == 'B' else '☐'"/> B - Approved as noted</div>
+                                <div><span class="prq-check" t-esc="'☒' if o.consultant_decision == 'C' else '☐'"/> C - Revise and Resubmit</div>
+                                <div><span class="prq-check" t-esc="'☒' if o.consultant_decision == 'D' else '☐'"/> D - Rejected</div>
+                            </td>
+                        </tr>
+                        <tr t-if="o.consultant_comments"><td colspan="5"><strong>Consultant Comments:</strong> <span t-esc="o.consultant_comments"/></td></tr>
+                    </table>
+                    <div class="prq-small" style="margin-top:22px; text-align:center;">
+                        Approval shall not relieve Contractor of his liabilities under the Contract or constitute authorization of any change to Contract Documents.
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="paperformat_qaqc_main_a4" model="report.paperformat">
+    <field name="name">QA/QC Main Documents A4</field>
+    <field name="default" eval="False"/>
+    <field name="format">A4</field>
+    <field name="orientation">Portrait</field>
+    <field name="margin_top">8</field><field name="margin_bottom">10</field>
+    <field name="margin_left">9</field><field name="margin_right">9</field>
+    <field name="header_line" eval="False"/><field name="header_spacing">0</field><field name="dpi">96</field>
+  </record>
+
+  <template id="qaqc_report_common_header">
+    <table style="width:100%;border-collapse:collapse;table-layout:fixed;font-size:9pt;">
+      <tr>
+        <td style="width:33.33%;border:1px solid #222;padding:5px;vertical-align:top;height:75px;">
+          <b>Employer:</b><br/>
+          <img src="/qaqc_documents/static/src/img/employer_alameen.jpeg" style="max-height:45px;max-width:95%;display:block;margin:auto;"/>
+          <div style="text-align:center;" t-esc="o.project_id.employer_id.name or ''"/>
+        </td>
+        <td style="width:33.33%;border:1px solid #222;padding:5px;vertical-align:top;height:75px;">
+          <b>Engineer:</b><br/>
+          <img src="/qaqc_documents/static/src/img/engineer_bws.jpeg" style="max-height:45px;max-width:95%;display:block;margin:auto;"/>
+          <div style="text-align:center;" t-esc="o.project_id.engineer_id.name or ''"/>
+        </td>
+        <td style="width:33.33%;border:1px solid #222;padding:5px;vertical-align:top;height:75px;">
+          <b>Contractor:</b><br/>
+          <img src="/qaqc_documents/static/src/img/contractor_tatweer.png" style="max-height:45px;max-width:95%;display:block;margin:auto;"/>
+          <div style="text-align:center;" t-esc="o.project_id.contractor_id.name or ''"/>
+        </td>
+      </tr>
+      <tr style="font-weight:bold;">
+        <td style="border:1px solid #222;padding:5px;">Project No.: <span t-esc="o.project_id.project_no or o.project_id.project_code or o.project_id.name"/></td>
+        <td style="border:1px solid #222;padding:5px;">Date: <span t-field="o.date"/></td>
+        <td style="border:1px solid #222;padding:5px;">Ref: <span t-esc="o.name"/><br/>Rev: <span t-esc="'%02d' % (o.rev or 0)"/></td>
+      </tr>
+    </table>
+    <table style="width:100%;border-collapse:collapse;margin-top:6px;font-size:9pt;">
+      <tr><td style="border:1px solid #222;padding:5px;text-align:center;">
+        <span t-esc="'☒' if o.discipline == 'civil' else '☐'"/> Civil&#160;&#160;
+        <span t-esc="'☒' if o.discipline == 'arch' else '☐'"/> Architecture&#160;&#160;
+        <span t-esc="'☒' if o.discipline == 'mech' else '☐'"/> Mechanical&#160;&#160;
+        <span t-esc="'☒' if o.discipline == 'elec' else '☐'"/> Electrical&#160;&#160;
+        <span t-esc="'☒' if o.discipline == 'id' else '☐'"/> ID&#160;&#160;
+        <span t-esc="'☒' if o.discipline == 'ffe' else '☐'"/> FFE&#160;&#160;
+        <span t-esc="'☒' if o.discipline == 'other' else '☐'"/> Other
+      </td></tr>
+    </table>
+  </template>
+
+  <template id="qaqc_report_approval_block">
+    <div style="margin-top:12px;font-size:9pt;">
+      <table style="width:100%;border-collapse:collapse;">
+        <tr><td colspan="2" style="border:1px solid #222;background:#eee;padding:5px;"><b>Consultant Review / Approval</b></td></tr>
+        <tr>
+          <td style="width:60%;border:1px solid #222;padding:7px;vertical-align:top;">
+            Consultant Representative: <span t-esc="o.consultant_rep_id.name or ''"/><br/><br/>
+            Comments: <span t-esc="o.consultant_comments or ''"/><br/><br/>
+            Signature: __________________________<br/>
+            Date: <span t-esc="o.approval_date.strftime('%d/%m/%Y') if o.approval_date else '____/____/______'"/>
+          </td>
+          <td style="width:40%;border:1px solid #222;padding:7px;vertical-align:top;">
+            <div><span t-esc="'☒' if o.consultant_decision == 'A' else '☐'"/> A - Approved</div>
+            <div><span t-esc="'☒' if o.consultant_decision == 'B' else '☐'"/> B - Approved as noted</div>
+            <div><span t-esc="'☒' if o.consultant_decision == 'C' else '☐'"/> C - Revise and Resubmit</div>
+            <div><span t-esc="'☒' if o.consultant_decision == 'D' else '☐'"/> D - Rejected</div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </template>
+
+  <!-- MAR -->
+  <record id="action_report_qaqc_mar" model="ir.actions.report">
+    <field name="name">MAR - Material Approval Request</field><field name="model">qaqc.mar</field>
+    <field name="report_type">qweb-pdf</field><field name="report_name">qaqc_documents.report_qaqc_mar</field>
+    <field name="report_file">qaqc_documents.report_qaqc_mar</field><field name="paperformat_id" ref="paperformat_qaqc_main_a4"/>
+    <field name="binding_model_id" ref="model_qaqc_mar"/><field name="binding_type">report</field>
+    <field name="print_report_name">'MAR - %s' % (object.name or '')</field>
+  </record>
+  <template id="report_qaqc_mar">
+    <t t-call="web.html_container"><t t-foreach="docs" t-as="o"><div class="page" style="font-family:Arial;font-size:9pt;color:#111;">
+      <t t-call="qaqc_documents.qaqc_report_common_header"/>
+      <h2 style="text-align:center;border:1px solid #222;padding:10px;margin-top:8px;">Material Approval Request</h2>
+      <table style="width:100%;border-collapse:collapse;margin-top:8px;">
+        <tr><td colspan="4" style="border:1px solid #222;padding:5px;background:#eee;"><b>Material Description</b></td></tr>
+        <tr><td colspan="4" style="border:1px solid #222;padding:7px;" t-esc="o.material_description or ''"/></tr>
+        <tr>
+          <td style="border:1px solid #222;padding:5px;"><b>Supplier</b></td><td style="border:1px solid #222;padding:5px;" t-esc="o.supplier_id.name or ''"/>
+          <td style="border:1px solid #222;padding:5px;"><b>Manufacturer</b></td><td style="border:1px solid #222;padding:5px;" t-esc="o.manufacturer_name or ''"/>
+        </tr>
+        <tr>
+          <td style="border:1px solid #222;padding:5px;"><b>Manufacturer Address</b></td><td style="border:1px solid #222;padding:5px;" t-esc="o.manufacturer_address or ''"/>
+          <td style="border:1px solid #222;padding:5px;"><b>Local Agent / Supplier</b></td><td style="border:1px solid #222;padding:5px;" t-esc="o.local_agent_name or ''"/>
+        </tr>
+        <tr>
+          <td style="border:1px solid #222;padding:5px;"><b>Drawing Ref.</b></td><td style="border:1px solid #222;padding:5px;" t-esc="o.drawing_ref or ''"/>
+          <td style="border:1px solid #222;padding:5px;"><b>Specification Ref.</b></td><td style="border:1px solid #222;padding:5px;" t-esc="o.specification_ref or ''"/>
+        </tr>
+        <tr>
+          <td style="border:1px solid #222;padding:5px;"><b>BOQ Ref. No.</b></td><td style="border:1px solid #222;padding:5px;" t-esc="o.boq_ref or ''"/>
+          <td style="border:1px solid #222;padding:5px;"><b>Country of Origin</b></td><td style="border:1px solid #222;padding:5px;" t-esc="o.country_of_origin or ''"/>
+        </tr>
+        <tr>
+          <td style="border:1px solid #222;padding:5px;"><b>Availability</b></td><td style="border:1px solid #222;padding:5px;" t-esc="dict(o._fields['availability'].selection).get(o.availability, '')"/>
+          <td style="border:1px solid #222;padding:5px;"><b>Specification Compliant</b></td><td style="border:1px solid #222;padding:5px;">See compliance statement below</td>
+        </tr>
+        <tr><td colspan="4" style="border:1px solid #222;padding:6px;"><b>Samples / Literature</b><br/>
+          Sample Required: <span t-esc="'Yes' if o.sample_required else 'No'"/> &#160; Sample Attached: <span t-esc="'Yes' if o.sample_attached else 'No'"/><br/>
+          Literature Required: <span t-esc="'Yes' if o.literature_required else 'No'"/> &#160; Literature Attached: <span t-esc="'Yes' if o.literature_attached else 'No'"/>
+        </td></tr>
+      </table>
+      <h3>Compliance Statement</h3>
+      <table style="width:100%;border-collapse:collapse;font-size:8pt;">
+        <tr style="background:#eee;"><th style="border:1px solid #222;padding:4px;">SI.NO</th><th style="border:1px solid #222;padding:4px;">Contract Specification Requirement</th><th style="border:1px solid #222;padding:4px;">Compliance</th><th style="border:1px solid #222;padding:4px;">Submittal - Technical Specification</th></tr>
+        <tr t-foreach="o.compliance_line_ids" t-as="l"><td style="border:1px solid #222;padding:4px;" t-esc="l.sequence"/><td style="border:1px solid #222;padding:4px;" t-esc="l.contract_requirement or ''"/><td style="border:1px solid #222;padding:4px;" t-esc="dict(l._fields['compliance'].selection).get(l.compliance, '')"/><td style="border:1px solid #222;padding:4px;" t-esc="l.submittal_spec_ref or ''"/></tr>
+      </table>
+      <p style="margin-top:10px;">We certify that the above submitted items have been reviewed in detail and are in conformity with the contract drawings and specifications except as otherwise stated.</p>
+      <p>Submitted By: <span t-esc="o.prepared_by_id.name or ''"/> &#160; Signature: ____________________</p>
+      <t t-call="qaqc_documents.qaqc_report_approval_block"/>
+    </div></t></t>
+  </template>
+
+  <!-- MES -->
+  <record id="action_report_qaqc_mes" model="ir.actions.report">
+    <field name="name">MES - Method Statement / ITP / ICL / Risk Assessment</field><field name="model">qaqc.mes</field>
+    <field name="report_type">qweb-pdf</field><field name="report_name">qaqc_documents.report_qaqc_mes</field>
+    <field name="report_file">qaqc_documents.report_qaqc_mes</field><field name="paperformat_id" ref="paperformat_qaqc_main_a4"/>
+    <field name="binding_model_id" ref="model_qaqc_mes"/><field name="binding_type">report</field>
+    <field name="print_report_name">'MES - %s' % (object.name or '')</field>
+  </record>
+  <template id="report_qaqc_mes">
+    <t t-call="web.html_container"><t t-foreach="docs" t-as="o"><div class="page" style="font-family:Arial;font-size:9pt;">
+      <t t-call="qaqc_documents.qaqc_report_common_header"/>
+      <h2 style="text-align:center;border:1px solid #222;padding:10px;">METHOD STATEMENT (MES)</h2>
+      <h3 t-esc="o.title or ''"/>
+      <table style="width:100%;border-collapse:collapse;">
+        <tr><td style="border:1px solid #222;padding:6px;width:25%;"><b>Purpose &amp; Scope</b></td><td style="border:1px solid #222;padding:6px;" t-esc="o.purpose_scope or ''"/></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>References</b></td><td style="border:1px solid #222;padding:6px;" t-esc="o.references or ''"/></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Sequence of Work</b></td><td style="border:1px solid #222;padding:6px;" t-esc="o.sequence_of_work or ''"/></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Risks &amp; Controls</b></td><td style="border:1px solid #222;padding:6px;" t-esc="o.risks_controls or ''"/></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Emergency Arrangements</b></td><td style="border:1px solid #222;padding:6px;" t-esc="o.emergency_arrangements or ''"/></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Supervision</b></td><td style="border:1px solid #222;padding:6px;" t-esc="o.supervision or ''"/></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Housekeeping</b></td><td style="border:1px solid #222;padding:6px;" t-esc="o.housekeeping or ''"/></tr>
+      </table>
+      <h3>Inspection &amp; Test Plan (ITP)</h3>
+      <table style="width:100%;border-collapse:collapse;font-size:8pt;">
+        <tr style="background:#eee;"><th style="border:1px solid #222;padding:4px;">No.</th><th style="border:1px solid #222;padding:4px;">Activity</th><th style="border:1px solid #222;padding:4px;">Inspection Criteria</th><th style="border:1px solid #222;padding:4px;">Reference</th><th style="border:1px solid #222;padding:4px;">Frequency</th><th style="border:1px solid #222;padding:4px;">Code</th></tr>
+        <tr t-foreach="o.itp_line_ids" t-as="l"><td style="border:1px solid #222;padding:4px;" t-esc="l.sequence"/><td style="border:1px solid #222;padding:4px;" t-esc="l.activity or ''"/><td style="border:1px solid #222;padding:4px;" t-esc="l.inspection_criteria or ''"/><td style="border:1px solid #222;padding:4px;" t-esc="l.reference or ''"/><td style="border:1px solid #222;padding:4px;" t-esc="l.frequency or ''"/><td style="border:1px solid #222;padding:4px;" t-esc="l.code or ''"/></tr>
+      </table>
+      <h3>Inspection Checklist (ICL)</h3>
+      <table style="width:100%;border-collapse:collapse;font-size:8pt;">
+        <tr style="background:#eee;"><th style="border:1px solid #222;padding:4px;">Item</th><th style="border:1px solid #222;padding:4px;">Result</th><th style="border:1px solid #222;padding:4px;">Engineer Note</th></tr>
+        <tr t-foreach="o.icl_line_ids" t-as="l"><td style="border:1px solid #222;padding:4px;" t-esc="l.item or ''"/><td style="border:1px solid #222;padding:4px;" t-esc="dict(l._fields['result'].selection).get(l.result, '')"/><td style="border:1px solid #222;padding:4px;" t-esc="l.engineer_note or ''"/></tr>
+      </table>
+      <h3>Risk Assessment</h3>
+      <table style="width:100%;border-collapse:collapse;font-size:8pt;">
+        <tr style="background:#eee;"><th style="border:1px solid #222;padding:4px;">Hazard</th><th style="border:1px solid #222;padding:4px;">Consequence</th><th style="border:1px solid #222;padding:4px;">Control Measures</th><th style="border:1px solid #222;padding:4px;">Responsible</th></tr>
+        <tr t-foreach="o.risk_line_ids" t-as="l"><td style="border:1px solid #222;padding:4px;" t-esc="l.hazard or ''"/><td style="border:1px solid #222;padding:4px;" t-esc="l.consequence or ''"/><td style="border:1px solid #222;padding:4px;" t-esc="l.control_measure or ''"/><td style="border:1px solid #222;padding:4px;" t-esc="l.responsible or ''"/></tr>
+      </table>
+      <t t-call="qaqc_documents.qaqc_report_approval_block"/>
+    </div></t></t>
+  </template>
+
+  <!-- MIR -->
+  <record id="action_report_qaqc_mir" model="ir.actions.report">
+    <field name="name">MIR - Material Inspection Request</field><field name="model">qaqc.mir</field><field name="report_type">qweb-pdf</field>
+    <field name="report_name">qaqc_documents.report_qaqc_mir</field><field name="report_file">qaqc_documents.report_qaqc_mir</field>
+    <field name="paperformat_id" ref="paperformat_qaqc_main_a4"/><field name="binding_model_id" ref="model_qaqc_mir"/><field name="binding_type">report</field>
+    <field name="print_report_name">'MIR - %s' % (object.name or '')</field>
+  </record>
+  <template id="report_qaqc_mir">
+    <t t-call="web.html_container"><t t-foreach="docs" t-as="o"><div class="page" style="font-family:Arial;font-size:9pt;">
+      <t t-call="qaqc_documents.qaqc_report_common_header"/>
+      <h2 style="text-align:center;border:1px solid #222;padding:10px;">MATERIAL INSPECTION REQUEST (MIR)</h2>
+      <table style="width:100%;border-collapse:collapse;">
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Related MAR</b></td><td style="border:1px solid #222;padding:6px;" t-esc="o.mar_id.name or ''"/></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Material Description</b></td><td style="border:1px solid #222;padding:6px;" t-esc="o.material_description or ''"/></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Quantity / UOM</b></td><td style="border:1px solid #222;padding:6px;"><span t-esc="o.quantity"/> <span t-esc="o.uom or ''"/></td></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Manufacturer</b></td><td style="border:1px solid #222;padding:6px;" t-esc="o.manufacturer or ''"/></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Model / Serial No.</b></td><td style="border:1px solid #222;padding:6px;"><span t-esc="o.model_no or ''"/> / <span t-esc="o.serial_no or ''"/></td></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Country of Origin</b></td><td style="border:1px solid #222;padding:6px;" t-esc="o.country_of_origin or ''"/></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Arrival Date / Storage Location</b></td><td style="border:1px solid #222;padding:6px;"><span t-field="o.arrival_date"/> / <span t-esc="o.storage_location or ''"/></td></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Delivery Note</b></td><td style="border:1px solid #222;padding:6px;" t-esc="o.delivery_note or ''"/></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Physical Damage</b></td><td style="border:1px solid #222;padding:6px;" t-esc="'Yes' if o.physical_damage else 'No'"/></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Accessories Included</b></td><td style="border:1px solid #222;padding:6px;" t-esc="'Yes' if o.accessories_included else 'No'"/></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Conforms to Approved Submission</b></td><td style="border:1px solid #222;padding:6px;" t-esc="'Yes' if o.conforms_to_approved_submission else 'No'"/></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Inspection Details</b></td><td style="border:1px solid #222;padding:6px;" t-esc="o.inspection_details or ''"/></tr>
+      </table>
+      <t t-call="qaqc_documents.qaqc_report_approval_block"/>
+    </div></t></t>
+  </template>
+
+  <!-- RSN -->
+  <record id="action_report_qaqc_rsn" model="ir.actions.report">
+    <field name="name">RSN - Request for Start / Notification</field><field name="model">qaqc.rsn</field><field name="report_type">qweb-pdf</field>
+    <field name="report_name">qaqc_documents.report_qaqc_rsn</field><field name="report_file">qaqc_documents.report_qaqc_rsn</field>
+    <field name="paperformat_id" ref="paperformat_qaqc_main_a4"/><field name="binding_model_id" ref="model_qaqc_rsn"/><field name="binding_type">report</field>
+    <field name="print_report_name">'RSN - %s' % (object.name or '')</field>
+  </record>
+  <template id="report_qaqc_rsn">
+    <t t-call="web.html_container"><t t-foreach="docs" t-as="o"><div class="page" style="font-family:Arial;font-size:9pt;">
+      <t t-call="qaqc_documents.qaqc_report_common_header"/>
+      <h2 style="text-align:center;border:1px solid #222;padding:10px;">REQUEST / NOTIFICATION TO START (RSN)</h2>
+      <table style="width:100%;border-collapse:collapse;">
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Work Description</b></td><td style="border:1px solid #222;padding:6px;" t-esc="o.work_description or ''"/></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Planned Date / Inspection Time</b></td><td style="border:1px solid #222;padding:6px;"><span t-field="o.planned_date"/> / <span t-esc="o.inspection_time or ''"/></td></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Location</b></td><td style="border:1px solid #222;padding:6px;">Floor: <span t-esc="o.floor or ''"/>; Area: <span t-esc="o.area or ''"/>; Zone: <span t-esc="o.zone or ''"/></td></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Related Documents</b></td><td style="border:1px solid #222;padding:6px;">MAR: <span t-esc="o.mar_id.name or ''"/>; MES: <span t-esc="o.mes_id.name or ''"/>; References: <span t-esc="o.approval_documents_ref or ''"/></td></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Notice Period</b></td><td style="border:1px solid #222;padding:6px;"><span t-esc="o.notice_hours"/> hours</td></tr>
+      </table>
+      <h3>Discipline / Inspection Clearance</h3>
+      <table style="width:100%;border-collapse:collapse;">
+        <tr style="background:#eee;"><th style="border:1px solid #222;padding:5px;">Discipline</th><th style="border:1px solid #222;padding:5px;">Inspector</th><th style="border:1px solid #222;padding:5px;">Clear to Proceed</th><th style="border:1px solid #222;padding:5px;">Comments</th></tr>
+        <tr t-foreach="o.discipline_approval_ids" t-as="l"><td style="border:1px solid #222;padding:5px;" t-esc="dict(l._fields['discipline'].selection).get(l.discipline, '')"/><td style="border:1px solid #222;padding:5px;" t-esc="l.inspector_name or ''"/><td style="border:1px solid #222;padding:5px;" t-esc="'Yes' if l.clear_to_proceed else 'No'"/><td style="border:1px solid #222;padding:5px;" t-esc="l.comments or ''"/></tr>
+      </table>
+      <t t-call="qaqc_documents.qaqc_report_approval_block"/>
+    </div></t></t>
+  </template>
+
+  <!-- WIR -->
+  <record id="action_report_qaqc_wir" model="ir.actions.report">
+    <field name="name">WIR - Work Inspection Request</field><field name="model">qaqc.wir</field><field name="report_type">qweb-pdf</field>
+    <field name="report_name">qaqc_documents.report_qaqc_wir</field><field name="report_file">qaqc_documents.report_qaqc_wir</field>
+    <field name="paperformat_id" ref="paperformat_qaqc_main_a4"/><field name="binding_model_id" ref="model_qaqc_wir"/><field name="binding_type">report</field>
+    <field name="print_report_name">'WIR - %s' % (object.name or '')</field>
+  </record>
+  <template id="report_qaqc_wir">
+    <t t-call="web.html_container"><t t-foreach="docs" t-as="o"><div class="page" style="font-family:Arial;font-size:9pt;">
+      <t t-call="qaqc_documents.qaqc_report_common_header"/>
+      <h2 style="text-align:center;border:1px solid #222;padding:10px;">WORK INSPECTION REQUEST (WIR)</h2>
+      <table style="width:100%;border-collapse:collapse;">
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Inspection Description</b></td><td style="border:1px solid #222;padding:6px;" t-esc="o.inspection_description or ''"/></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Inspection Date / Time</b></td><td style="border:1px solid #222;padding:6px;"><span t-field="o.inspection_date"/> / <span t-esc="o.inspection_time or ''"/></td></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Location</b></td><td style="border:1px solid #222;padding:6px;">Floor: <span t-esc="o.floor or ''"/>; Area: <span t-esc="o.area or ''"/>; Zone: <span t-esc="o.zone or ''"/></td></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Shop Drawing Reference</b></td><td style="border:1px solid #222;padding:6px;" t-esc="o.shop_drawing_ref or ''"/></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Related RSN</b></td><td style="border:1px solid #222;padding:6px;" t-esc="o.rsn_id.name or ''"/></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Internal QA/QC Passed</b></td><td style="border:1px solid #222;padding:6px;" t-esc="'Yes' if o.internal_qa_qc_passed else 'No'"/></tr>
+      </table>
+      <t t-call="qaqc_documents.qaqc_report_approval_block"/>
+    </div></t></t>
+  </template>
+
+  <!-- NCR -->
+  <record id="action_report_qaqc_ncr" model="ir.actions.report">
+    <field name="name">NCR - Non-Conformance Report</field><field name="model">qaqc.ncr</field><field name="report_type">qweb-pdf</field>
+    <field name="report_name">qaqc_documents.report_qaqc_ncr</field><field name="report_file">qaqc_documents.report_qaqc_ncr</field>
+    <field name="paperformat_id" ref="paperformat_qaqc_main_a4"/><field name="binding_model_id" ref="model_qaqc_ncr"/><field name="binding_type">report</field>
+    <field name="print_report_name">'NCR - %s' % (object.name or '')</field>
+  </record>
+  <template id="report_qaqc_ncr">
+    <t t-call="web.html_container"><t t-foreach="docs" t-as="o"><div class="page" style="font-family:Arial;font-size:9pt;">
+      <t t-call="qaqc_documents.qaqc_report_common_header"/>
+      <h2 style="text-align:center;border:1px solid #222;padding:10px;">NON-CONFORMANCE REPORT (NCR)</h2>
+      <table style="width:100%;border-collapse:collapse;">
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Related WIR</b></td><td style="border:1px solid #222;padding:6px;" t-esc="o.source_wir_id.name or ''"/></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Discovery Date</b></td><td style="border:1px solid #222;padding:6px;"><span t-field="o.discovery_date"/></td></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Deadline</b></td><td style="border:1px solid #222;padding:6px;"><span t-field="o.deadline"/></td></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>NCR Status</b></td><td style="border:1px solid #222;padding:6px;" t-esc="dict(o._fields['ncr_state'].selection).get(o.ncr_state, '')"/></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Issue Description</b></td><td style="border:1px solid #222;padding:6px;" t-esc="o.issue_description or ''"/></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Corrective Action</b></td><td style="border:1px solid #222;padding:6px;" t-esc="o.corrective_action or ''"/></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Preventive Action</b></td><td style="border:1px solid #222;padding:6px;" t-esc="o.preventive_action or ''"/></tr>
+        <tr><td style="border:1px solid #222;padding:6px;"><b>Closure Comments</b></td><td style="border:1px solid #222;padding:6px;" t-esc="o.closure_comments or ''"/></tr>
+      </table>
+      <t t-call="qaqc_documents.qaqc_report_approval_block"/>
+    </div></t></t>
+  </template>
+</odoo>
