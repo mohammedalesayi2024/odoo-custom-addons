@@ -40,9 +40,31 @@ class QaqcDocumentMixin(models.AbstractModel):
         for vals in vals_list:
             if vals.get('name', 'New') == 'New':
                 project = self.env['project.project'].browse(vals.get('project_id'))
-                disc = {'civil':'CIV','arch':'ARCH','mech':'MECH','elec':'ELEC','id':'ID','ffe':'FFE','other':'OTH'}.get(vals.get('discipline','civil'),'CIV')
-                seq = self.env['ir.sequence'].next_by_code(self._sequence_code) or '0001'
-                vals['name'] = '%s-%s-%s-%s-%s' % (project.contractor_code or 'TH', project.project_code or (project.name or 'PRJ')[:3].upper(), self._doc_type_code, disc, seq)
+                discipline = vals.get('discipline', 'civil')
+                disc = {'civil':'CIV','arch':'ARC','mech':'MEC','elec':'ELE','id':'ID','ffe':'FFE','other':'OTH'}.get(discipline, 'CIV')
+                contractor_code = (project.contractor_code or 'TH').strip().upper()
+                project_code = (project.project_code or (project.name or 'PRJ')[:3]).strip().upper()
+                prefix = '%s-%s-%s-%s-' % (contractor_code, project_code, self._doc_type_code, disc)
+                # Keep a separate sequence for every project + document type + discipline.
+                sequence_code = 'qaqc.%s.%s.%s.%s' % (self._name.replace('.', '_'), project.id, self._doc_type_code.lower(), disc.lower())
+                sequence = self.env['ir.sequence'].search([('code', '=', sequence_code)], order='id', limit=1)
+                if not sequence:
+                    existing_names = self.search([('name', '=like', prefix + '%')]).mapped('name')
+                    used_numbers = []
+                    for existing_name in existing_names:
+                        suffix = existing_name.rsplit('-', 1)[-1]
+                        if suffix.isdigit():
+                            used_numbers.append(int(suffix))
+                    sequence = self.env['ir.sequence'].create({
+                        'name': 'QA/QC %s - Project %s - %s' % (self._doc_type_code, project.display_name, disc),
+                        'code': sequence_code,
+                        'implementation': 'standard',
+                        'padding': 4,
+                        'number_next': max(used_numbers or [0]) + 1,
+                        'company_id': False,
+                    })
+                seq = sequence.next_by_id()
+                vals['name'] = '%s%s' % (prefix, seq)
         records = super().create(vals_list)
         for rec in records:
             rec.message_subscribe(partner_ids=[rec.prepared_by_id.partner_id.id])

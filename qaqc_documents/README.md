@@ -1,6 +1,6 @@
 # QA/QC Documents Management — Odoo 19
 
-Version: 19.0.2.0.0
+Version: 19.0.2.3.0
 
 ## Included document types
 - PRQ — Pre-Qualification
@@ -24,12 +24,16 @@ Version: 19.0.2.0.0
 6. On C, the document returns to the submitter for changes and must pass QA/QC again before another Consultant decision.
 
 ## Chatter and files
-- The Attachments tab uses Odoo attachments and posts newly added files to the document chatter.
+- PRQ displays Employer, Engineer/Consultant and Contractor from the project. PRQ status controls use the shared QA/QC workflow (Draft → QA/QC Review → Consultant A/B/C/D), not the legacy submitted/under_review states.
+
+Document references follow `CONTRACTOR-PROJECT-TYPE-DISCIPLINE-0001`, for example `TH-JED-PRQ-CIV-0001`. Sequences are separate by project, document type and discipline; discipline codes include CIV, ARC, MEC, ELE, ID, FFE and OTH. Set Contractor Code and Project Code on the project before creating documents. Revision changes do not change the document reference.
+
+The Attachments tab uses Odoo attachments and posts newly added files to the document chatter.
 - Binary supporting fields (where provided on PRQ/MAR) are linked as field attachments and posted to chatter when uploaded/updated.
 - Chatter followers are added for the QA/QC reviewer group on submission and Consultant group after QA/QC approval. Access to the document itself still follows Odoo model access rules.
 
 ## Project-specific supplier approval
-PRQ A or B Consultant approval registers the supplier as approved for that project. MAR validation checks this project-specific approved-vendor record; it no longer relies on the legacy global partner flag.
+PRQ selects an existing Odoo Vendor (supplier_rank > 0) and stores its qualification documents. The vendor remains active in Contacts/Accounting at all times. Consultant A or B creates/reactivates a project-specific QA/QC approval record; C or D deactivates that project approval. MAR only accepts suppliers with an active approval for the same project.
 
 ## Installation
 1. Back up the database and filestore.
@@ -47,7 +51,7 @@ This package has passed Python syntax compilation and XML well-formedness checks
 - QA/QC reviewer sees PRQ in Pending QA/QC and can approve/reject; rejection requires comments and does not expose Consultant decision buttons.
 - After QA/QC approval, Consultant group sees the document and only then can choose A/B/C/D.
 - B/C/D require Consultant comments; C increments revision, creates a revision-history entry and requires resubmission through QA/QC.
-- A/B on PRQ adds supplier to the approved supplier list for that project only.
+- A/B on PRQ activates the supplier approval for that project only; the partner remains active in Accounting. C/D leave the supplier unapproved for that project.
 - MAR cannot use a supplier without an approved PRQ in the same project.
 - MIR cannot link to MAR unless its Consultant outcome is A or B.
 - WIR A/B creates a Commercial follow-up activity.

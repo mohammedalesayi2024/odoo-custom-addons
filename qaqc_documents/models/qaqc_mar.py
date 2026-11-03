@@ -10,11 +10,11 @@ class QaqcMar(models.Model):
     approved_supplier_ids = fields.Many2many('res.partner',compute='_compute_approved_supplier_ids')
     @api.depends('project_id')
     def _compute_approved_supplier_ids(self):
-        for rec in self: rec.approved_supplier_ids = self.env['qaqc.approved.vendor'].search([('project_id','=',rec.project_id.id)]).mapped('supplier_id')
+        for rec in self: rec.approved_supplier_ids = self.env['qaqc.approved.vendor'].search([('project_id','=',rec.project_id.id),('active','=',True)]).mapped('supplier_id')
     @api.constrains('project_id','supplier_id')
     def _check_supplier_project_approval(self):
         for rec in self:
-            if rec.supplier_id and not self.env['qaqc.approved.vendor'].search_count([('project_id','=',rec.project_id.id),('supplier_id','=',rec.supplier_id.id)]):
+            if rec.supplier_id and not self.env['qaqc.approved.vendor'].search_count([('project_id','=',rec.project_id.id),('supplier_id','=',rec.supplier_id.id),('active','=',True)]):
                 raise ValidationError('The supplier must have an approved PRQ in this project before creating a MAR.')
     manufacturer_name = fields.Char(); manufacturer_address = fields.Char(); local_agent_name = fields.Char()
     country_of_origin = fields.Char()
