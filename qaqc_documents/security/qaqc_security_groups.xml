@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo><data>
+ <record id="group_qaqc_site" model="res.groups"><field name="name">QA/QC: Site Team</field></record>
+ <record id="group_qaqc_procurement" model="res.groups"><field name="name">QA/QC: Procurement</field></record>
+ <record id="group_qaqc_engineer" model="res.groups"><field name="name">QA/QC: QA/QC Reviewer</field></record>
+ <record id="group_qaqc_consultant" model="res.groups"><field name="name">QA/QC: Consultant</field></record>
+ <record id="group_qaqc_commercial" model="res.groups"><field name="name">QA/QC: Commercial</field></record>
+ <record id="group_qaqc_manager" model="res.groups"><field name="name">QA/QC: Manager</field><field name="implied_ids" eval="[(4,ref('group_qaqc_site')),(4,ref('group_qaqc_procurement')),(4,ref('group_qaqc_engineer')),(4,ref('group_qaqc_consultant')),(4,ref('group_qaqc_commercial'))]"/></record>
+</data></odoo>

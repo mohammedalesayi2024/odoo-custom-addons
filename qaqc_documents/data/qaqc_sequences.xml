@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo><data noupdate="1">
+<record id="seq_qaqc_prq" model="ir.sequence"><field name="name">QA/QC PRQ</field><field name="code">qaqc.prq</field><field name="padding">4</field><field name="company_id" eval="False"/></record>
+<record id="seq_qaqc_mar" model="ir.sequence"><field name="name">QA/QC MAR</field><field name="code">qaqc.mar</field><field name="padding">4</field><field name="company_id" eval="False"/></record>
+<record id="seq_qaqc_mes" model="ir.sequence"><field name="name">QA/QC MES</field><field name="code">qaqc.mes</field><field name="padding">4</field><field name="company_id" eval="False"/></record>
+<record id="seq_qaqc_mir" model="ir.sequence"><field name="name">QA/QC MIR</field><field name="code">qaqc.mir</field><field name="padding">4</field><field name="company_id" eval="False"/></record>
+<record id="seq_qaqc_rsn" model="ir.sequence"><field name="name">QA/QC RSN</field><field name="code">qaqc.rsn</field><field name="padding">4</field><field name="company_id" eval="False"/></record>
+<record id="seq_qaqc_wir" model="ir.sequence"><field name="name">QA/QC WIR</field><field name="code">qaqc.wir</field><field name="padding">4</field><field name="company_id" eval="False"/></record>
+<record id="seq_qaqc_ncr" model="ir.sequence"><field name="name">QA/QC NCR</field><field name="code">qaqc.ncr</field><field name="padding">4</field><field name="company_id" eval="False"/></record>
+</data></odoo>
