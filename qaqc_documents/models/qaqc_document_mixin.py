@@ -85,8 +85,16 @@ class QaqcDocumentMixin(models.AbstractModel):
     def _subscribe_group(self, group_xmlid):
         group = self.env.ref('qaqc_documents.' + group_xmlid, raise_if_not_found=False)
         if group:
-            partners = group.users.mapped('partner_id')
-            if partners: self.message_subscribe(partner_ids=partners.ids)
+            # Odoo 19 res.groups does not expose a `users` inverse field.
+            # Resolve group members through res.users.groups_id instead.
+            users = self.env['res.users'].sudo().search([
+                ('groups_id', 'in', group.id),
+                ('active', '=', True),
+                ('share', '=', False),
+            ])
+            partners = users.mapped('partner_id')
+            if partners:
+                self.message_subscribe(partner_ids=partners.ids)
 
     def _require_group(self, xmlid, message):
         if not self.env.user.has_group(xmlid):
