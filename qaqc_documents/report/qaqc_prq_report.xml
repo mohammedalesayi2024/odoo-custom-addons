@@ -71,13 +71,13 @@
 
                     <table class="prq-table" style="margin-top:10px;">
                         <tr><td style="text-align:center; height:27px;">
-                            <span class="prq-check" t-esc="'☒' if o.discipline == 'civil' else '☐'"/> Civil&#160;&#160;
-                            <span class="prq-check" t-esc="'☒' if o.discipline == 'arch' else '☐'"/> Architecture&#160;&#160;
-                            <span class="prq-check" t-esc="'☒' if o.discipline == 'mech' else '☐'"/> Mechanical&#160;&#160;
-                            <span class="prq-check" t-esc="'☒' if o.discipline == 'elec' else '☐'"/> Electrical&#160;&#160;
-                            <span class="prq-check" t-esc="'☒' if o.discipline == 'id' else '☐'"/> ID&#160;&#160;
-                            <span class="prq-check" t-esc="'☒' if o.discipline == 'ffe' else '☐'"/> FFE&#160;&#160;
-                            <span class="prq-check" t-esc="'☒' if o.discipline == 'other' else '☐'"/> Other
+                            <span style="display:inline-block;width:11px;height:11px;border:1px solid #222;text-align:center;vertical-align:middle;line-height:10px;font-family:Arial,sans-serif;font-size:9px;font-weight:bold;"><t t-if="o.discipline == 'civil'">X</t></span> Civil&#160;&#160;
+                            <span style="display:inline-block;width:11px;height:11px;border:1px solid #222;text-align:center;vertical-align:middle;line-height:10px;font-family:Arial,sans-serif;font-size:9px;font-weight:bold;"><t t-if="o.discipline == 'arch'">X</t></span> Architecture&#160;&#160;
+                            <span style="display:inline-block;width:11px;height:11px;border:1px solid #222;text-align:center;vertical-align:middle;line-height:10px;font-family:Arial,sans-serif;font-size:9px;font-weight:bold;"><t t-if="o.discipline == 'mech'">X</t></span> Mechanical&#160;&#160;
+                            <span style="display:inline-block;width:11px;height:11px;border:1px solid #222;text-align:center;vertical-align:middle;line-height:10px;font-family:Arial,sans-serif;font-size:9px;font-weight:bold;"><t t-if="o.discipline == 'elec'">X</t></span> Electrical&#160;&#160;
+                            <span style="display:inline-block;width:11px;height:11px;border:1px solid #222;text-align:center;vertical-align:middle;line-height:10px;font-family:Arial,sans-serif;font-size:9px;font-weight:bold;"><t t-if="o.discipline == 'id'">X</t></span> ID&#160;&#160;
+                            <span style="display:inline-block;width:11px;height:11px;border:1px solid #222;text-align:center;vertical-align:middle;line-height:10px;font-family:Arial,sans-serif;font-size:9px;font-weight:bold;"><t t-if="o.discipline == 'ffe'">X</t></span> FFE&#160;&#160;
+                            <span style="display:inline-block;width:11px;height:11px;border:1px solid #222;text-align:center;vertical-align:middle;line-height:10px;font-family:Arial,sans-serif;font-size:9px;font-weight:bold;"><t t-if="o.discipline == 'other'">X</t></span> Other
                         </td></tr>
                     </table>
                     <table class="prq-table" style="margin-top:9px;">
@@ -104,10 +104,10 @@
                         <tr><td colspan="5" class="prq-section">These are transmitted for:</td></tr>
                         <tr>
                             <td colspan="5">
-                                <span class="prq-check" t-esc="'☒' if o.transmission_purpose == 'information' else '☐'"/> Information&#160;&#160;&#160;&#160;
-                                <span class="prq-check" t-esc="'☒' if o.transmission_purpose == 'approval' else '☐'"/> Approval&#160;&#160;&#160;&#160;
-                                <span class="prq-check" t-esc="'☒' if o.transmission_purpose == 'checking' else '☐'"/> Checking&#160;&#160;&#160;&#160;
-                                <span class="prq-check" t-esc="'☒' if o.transmission_purpose == 'review_comment' else '☐'"/> Review and comment
+                                <span style="display:inline-block;width:11px;height:11px;border:1px solid #222;text-align:center;vertical-align:middle;line-height:10px;font-family:Arial,sans-serif;font-size:9px;font-weight:bold;"><t t-if="o.transmission_purpose == 'information'">X</t></span> Information&#160;&#160;&#160;&#160;
+                                <span style="display:inline-block;width:11px;height:11px;border:1px solid #222;text-align:center;vertical-align:middle;line-height:10px;font-family:Arial,sans-serif;font-size:9px;font-weight:bold;"><t t-if="o.transmission_purpose == 'approval'">X</t></span> Approval&#160;&#160;&#160;&#160;
+                                <span style="display:inline-block;width:11px;height:11px;border:1px solid #222;text-align:center;vertical-align:middle;line-height:10px;font-family:Arial,sans-serif;font-size:9px;font-weight:bold;"><t t-if="o.transmission_purpose == 'checking'">X</t></span> Checking&#160;&#160;&#160;&#160;
+                                <span style="display:inline-block;width:11px;height:11px;border:1px solid #222;text-align:center;vertical-align:middle;line-height:10px;font-family:Arial,sans-serif;font-size:9px;font-weight:bold;"><t t-if="o.transmission_purpose == 'review_comment'">X</t></span> Review and comment
                             </td>
                         </tr>
                         <tr><td colspan="5" class="prq-section">We certify that the above documents have been coordinated:</td></tr>
@@ -122,10 +122,10 @@
                                 &#160;&#160; Date: <span t-esc="o.approval_date.strftime('%d/%m/%Y') if o.approval_date else '____/____/______'"/>
                             </td>
                             <td colspan="2">
-                                <div><span class="prq-check" t-esc="'☒' if o.consultant_decision == 'A' else '☐'"/> A - Approved</div>
-                                <div><span class="prq-check" t-esc="'☒' if o.consultant_decision == 'B' else '☐'"/> B - Approved as noted</div>
-                                <div><span class="prq-check" t-esc="'☒' if o.consultant_decision == 'C' else '☐'"/> C - Revise and Resubmit</div>
-                                <div><span class="prq-check" t-esc="'☒' if o.consultant_decision == 'D' else '☐'"/> D - Rejected</div>
+                                <div><span style="display:inline-block;width:11px;height:11px;border:1px solid #222;text-align:center;vertical-align:middle;line-height:10px;font-family:Arial,sans-serif;font-size:9px;font-weight:bold;"><t t-if="o.consultant_decision == 'A'">X</t></span> A - Approved</div>
+                                <div><span style="display:inline-block;width:11px;height:11px;border:1px solid #222;text-align:center;vertical-align:middle;line-height:10px;font-family:Arial,sans-serif;font-size:9px;font-weight:bold;"><t t-if="o.consultant_decision == 'B'">X</t></span> B - Approved as noted</div>
+                                <div><span style="display:inline-block;width:11px;height:11px;border:1px solid #222;text-align:center;vertical-align:middle;line-height:10px;font-family:Arial,sans-serif;font-size:9px;font-weight:bold;"><t t-if="o.consultant_decision == 'C'">X</t></span> C - Revise and Resubmit</div>
+                                <div><span style="display:inline-block;width:11px;height:11px;border:1px solid #222;text-align:center;vertical-align:middle;line-height:10px;font-family:Arial,sans-serif;font-size:9px;font-weight:bold;"><t t-if="o.consultant_decision == 'D'">X</t></span> D - Rejected</div>
                             </td>
                         </tr>
                         <tr t-if="o.consultant_comments"><td colspan="5"><strong>Consultant Comments:</strong> <span t-esc="o.consultant_comments"/></td></tr>
