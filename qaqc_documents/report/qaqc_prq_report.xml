@@ -71,7 +71,7 @@
 
                     <table class="prq-table" style="margin-top:10px;">
                         <tr><td style="text-align:center; height:27px; font-weight:bold;">
-                            <span style="font-family:DejaVu Sans,sans-serif; font-size:12px;">&#10003;</span>
+                            <t t-call="qaqc_documents.qaqc_check_mark"/>
                             <span t-esc="dict(o._fields['discipline'].selection).get(o.discipline, '')"/>
                         </td></tr>
                     </table>
@@ -80,7 +80,7 @@
                     </table>
 
                     <table class="prq-table" style="margin-top:10px;">
-                        <tr><td colspan="5" class="prq-section">1. &#160; Submittal details</td></tr>
+                        <tr><td colspan="5" class="prq-section">1. Submittal details</td></tr>
                         <tr class="prq-section">
                             <th style="width:27%;">Document Reference</th>
                             <th style="width:39%;">Description</th>
@@ -99,28 +99,28 @@
                         <tr><td colspan="5" class="prq-section">These are transmitted for:</td></tr>
                         <tr>
                             <td colspan="5">
-                                <span style="font-family:DejaVu Sans,sans-serif; font-weight:bold;"><t t-if="o.transmission_purpose == 'information'">&#10003;</t></span> Information&#160;&#160;&#160;&#160;
-                                <span style="font-family:DejaVu Sans,sans-serif; font-weight:bold;"><t t-if="o.transmission_purpose == 'approval'">&#10003;</t></span> Approval&#160;&#160;&#160;&#160;
-                                <span style="font-family:DejaVu Sans,sans-serif; font-weight:bold;"><t t-if="o.transmission_purpose == 'checking'">&#10003;</t></span> Checking&#160;&#160;&#160;&#160;
-                                <span style="font-family:DejaVu Sans,sans-serif; font-weight:bold;"><t t-if="o.transmission_purpose == 'review_comment'">&#10003;</t></span> Review and comment
+                                <span style="display:inline-block;margin-right:14px;"><t t-if="o.transmission_purpose == 'information'"><t t-call="qaqc_documents.qaqc_check_mark"/></t> Information</span>
+                                <span style="display:inline-block;margin-right:14px;"><t t-if="o.transmission_purpose == 'approval'"><t t-call="qaqc_documents.qaqc_check_mark"/></t> Approval</span>
+                                <span style="display:inline-block;margin-right:14px;"><t t-if="o.transmission_purpose == 'checking'"><t t-call="qaqc_documents.qaqc_check_mark"/></t> Checking</span>
+                                <span style="display:inline-block;"><t t-if="o.transmission_purpose == 'review_comment'"><t t-call="qaqc_documents.qaqc_check_mark"/></t> Review and comment</span>
                             </td>
                         </tr>
                         <tr><td colspan="5" class="prq-section">We certify that the above documents have been coordinated:</td></tr>
                         <tr>
-                            <td colspan="3" class="prq-sign">Submitted By: <span t-esc="o.prepared_by_id.name or ''"/><t t-if="o.submitted_by_title"> – <span t-esc="o.submitted_by_title"/></t></td>
+                            <td colspan="3" class="prq-sign">Submitted By: <span t-esc="o.prepared_by_id.name or ''"/><t t-if="o.submitted_by_title"> - <span t-esc="o.submitted_by_title"/></t></td>
                             <td colspan="2" class="prq-sign">Signature: ____________________</td>
                         </tr>
                         <tr>
                             <td colspan="3" class="prq-sign">
-                                Engineer’s Representative: <span t-esc="(o.consultant_rep_id.name or o.engineer_id.name or '')"/><br/><br/>
+                                Engineer's Representative: <span t-esc="(o.consultant_rep_id.name or o.engineer_id.name or '')"/><br/><br/>
                                 Signature: ________________________________
-                                &#160;&#160; Date: <span t-esc="o.approval_date.strftime('%d/%m/%Y') if o.approval_date else '____/____/______'"/>
+                                 Date: <span t-esc="o.approval_date.strftime('%d/%m/%Y') if o.approval_date else '____/____/______'"/>
                             </td>
                             <td colspan="2">
-                                <div><span style="font-family:DejaVu Sans,sans-serif; font-weight:bold;"><t t-if="o.consultant_decision == 'A'">&#10003;</t></span> A - Approved</div>
-                                <div><span style="font-family:DejaVu Sans,sans-serif; font-weight:bold;"><t t-if="o.consultant_decision == 'B'">&#10003;</t></span> B - Approved as noted</div>
-                                <div><span style="font-family:DejaVu Sans,sans-serif; font-weight:bold;"><t t-if="o.consultant_decision == 'C'">&#10003;</t></span> C - Revise and Resubmit</div>
-                                <div><span style="font-family:DejaVu Sans,sans-serif; font-weight:bold;"><t t-if="o.consultant_decision == 'D'">&#10003;</t></span> D - Rejected</div>
+                                <div><t t-if="o.consultant_decision == 'A'"><t t-call="qaqc_documents.qaqc_check_mark"/></t> A - Approved</div>
+                                <div><t t-if="o.consultant_decision == 'B'"><t t-call="qaqc_documents.qaqc_check_mark"/></t> B - Approved as noted</div>
+                                <div><t t-if="o.consultant_decision == 'C'"><t t-call="qaqc_documents.qaqc_check_mark"/></t> C - Revise and Resubmit</div>
+                                <div><t t-if="o.consultant_decision == 'D'"><t t-call="qaqc_documents.qaqc_check_mark"/></t> D - Rejected</div>
                             </td>
                         </tr>
                         <tr t-if="o.consultant_comments"><td colspan="5"><strong>Consultant Comments:</strong> <span t-esc="o.consultant_comments"/></td></tr>

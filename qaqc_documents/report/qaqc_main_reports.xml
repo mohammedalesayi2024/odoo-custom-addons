@@ -10,6 +10,12 @@
     <field name="header_line" eval="False"/><field name="header_spacing">0</field><field name="dpi">96</field>
   </record>
 
+  <template id="qaqc_check_mark">
+    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="10" viewBox="0 0 12 10" style="display:inline-block;vertical-align:middle;">
+      <path d="M1 5 L4.5 8.5 L11 1" fill="none" stroke="#111111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </template>
+
   <template id="qaqc_report_common_header">
     <table style="width:100%;border-collapse:collapse;table-layout:fixed;font-size:9pt;">
       <tr>
@@ -37,7 +43,7 @@
     </table>
     <table style="width:100%;border-collapse:collapse;margin-top:6px;font-size:9pt;">
       <tr><td style="border:1px solid #222;padding:5px;text-align:center;font-weight:bold;">
-        <span style="font-family:DejaVu Sans,sans-serif;font-size:12pt;">&#10003;</span>
+        <t t-call="qaqc_documents.qaqc_check_mark"/>
         <span t-esc="dict(o._fields['discipline'].selection).get(o.discipline, '')"/>
       </td></tr>
     </table>
@@ -55,10 +61,10 @@
             Date: <span t-esc="o.approval_date.strftime('%d/%m/%Y') if o.approval_date else '____/____/______'"/>
           </td>
           <td style="width:40%;border:1px solid #222;padding:7px;vertical-align:top;">
-            <div><span style="font-family:DejaVu Sans,sans-serif;font-weight:bold;"><t t-if="o.consultant_decision == 'A'">&#10003;</t></span> A - Approved</div>
-            <div><span style="font-family:DejaVu Sans,sans-serif;font-weight:bold;"><t t-if="o.consultant_decision == 'B'">&#10003;</t></span> B - Approved as noted</div>
-            <div><span style="font-family:DejaVu Sans,sans-serif;font-weight:bold;"><t t-if="o.consultant_decision == 'C'">&#10003;</t></span> C - Revise and Resubmit</div>
-            <div><span style="font-family:DejaVu Sans,sans-serif;font-weight:bold;"><t t-if="o.consultant_decision == 'D'">&#10003;</t></span> D - Rejected</div>
+            <div><t t-if="o.consultant_decision == 'A'"><t t-call="qaqc_documents.qaqc_check_mark"/></t> A - Approved</div>
+            <div><t t-if="o.consultant_decision == 'B'"><t t-call="qaqc_documents.qaqc_check_mark"/></t> B - Approved as noted</div>
+            <div><t t-if="o.consultant_decision == 'C'"><t t-call="qaqc_documents.qaqc_check_mark"/></t> C - Revise and Resubmit</div>
+            <div><t t-if="o.consultant_decision == 'D'"><t t-call="qaqc_documents.qaqc_check_mark"/></t> D - Rejected</div>
           </td>
         </tr>
       </table>
@@ -101,8 +107,8 @@
           <td style="border:1px solid #222;padding:5px;"><b>Specification Compliant</b></td><td style="border:1px solid #222;padding:5px;">See compliance statement below</td>
         </tr>
         <tr><td colspan="4" style="border:1px solid #222;padding:6px;"><b>Samples / Literature</b><br/>
-          Sample Required: <span t-esc="'Yes' if o.sample_required else 'No'"/> &#160; Sample Attached: <span t-esc="'Yes' if o.sample_attached else 'No'"/><br/>
-          Literature Required: <span t-esc="'Yes' if o.literature_required else 'No'"/> &#160; Literature Attached: <span t-esc="'Yes' if o.literature_attached else 'No'"/>
+          Sample Required: <span t-esc="'Yes' if o.sample_required else 'No'"/>   Sample Attached: <span t-esc="'Yes' if o.sample_attached else 'No'"/><br/>
+          Literature Required: <span t-esc="'Yes' if o.literature_required else 'No'"/>   Literature Attached: <span t-esc="'Yes' if o.literature_attached else 'No'"/>
         </td></tr>
       </table>
       <h3>Compliance Statement</h3>
@@ -111,7 +117,7 @@
         <tr t-foreach="o.compliance_line_ids" t-as="l"><td style="border:1px solid #222;padding:4px;" t-esc="l.sequence"/><td style="border:1px solid #222;padding:4px;" t-esc="l.contract_requirement or ''"/><td style="border:1px solid #222;padding:4px;" t-esc="dict(l._fields['compliance'].selection).get(l.compliance, '')"/><td style="border:1px solid #222;padding:4px;" t-esc="l.submittal_spec_ref or ''"/></tr>
       </table>
       <p style="margin-top:10px;">We certify that the above submitted items have been reviewed in detail and are in conformity with the contract drawings and specifications except as otherwise stated.</p>
-      <p>Submitted By: <span t-esc="o.prepared_by_id.name or ''"/> &#160; Signature: ____________________</p>
+      <p>Submitted By: <span t-esc="o.prepared_by_id.name or ''"/>   Signature: ____________________</p>
       <t t-call="qaqc_documents.qaqc_report_approval_block"/>
     </div></t></t>
   </template>
