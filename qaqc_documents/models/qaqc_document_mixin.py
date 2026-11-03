@@ -85,13 +85,10 @@ class QaqcDocumentMixin(models.AbstractModel):
     def _subscribe_group(self, group_xmlid):
         group = self.env.ref('qaqc_documents.' + group_xmlid, raise_if_not_found=False)
         if group:
-            # Odoo 19 res.groups does not expose a `users` inverse field.
-            # Resolve group members through res.users.groups_id instead.
-            users = self.env['res.users'].sudo().search([
-                ('groups_id', 'in', group.id),
-                ('active', '=', True),
-                ('share', '=', False),
-            ])
+            # In Odoo 19, group membership is exposed by res.groups.user_ids.
+            users = group.sudo().user_ids.filtered(
+                lambda user: user.active and not user.share
+            )
             partners = users.mapped('partner_id')
             if partners:
                 self.message_subscribe(partner_ids=partners.ids)
@@ -111,8 +108,12 @@ class QaqcDocumentMixin(models.AbstractModel):
 
     def _get_group_user(self, group_xmlid):
         group = self.env.ref('qaqc_documents.' + group_xmlid, raise_if_not_found=False)
-        user = self.env['res.users'].search([('groups_id','in',group.ids),('active','=',True)], limit=1) if group else self.env['res.users']
-        return user.id or self.env.user.id
+        if not group:
+            return self.env.user.id
+        users = group.sudo().user_ids.filtered(
+            lambda user: user.active and not user.share
+        )
+        return users[:1].id or self.env.user.id
 
     def action_qaqc_approve(self):
         self._require_group('qaqc_documents.group_qaqc_engineer','Only QA/QC team members can perform the internal review.')
