@@ -8,7 +8,7 @@ class AccountPayment(models.Model):
     salesperson_multi_id = fields.Many2one(
         "res.users",
         string="Salesperson",
-        domain=[("share", "=", False)],
+        domain=[],
         help="Select the salesperson who owns the receipt book.",
     )
 
