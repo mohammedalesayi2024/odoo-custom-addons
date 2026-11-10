@@ -88,6 +88,36 @@ class AccountPayment(models.Model):
             if not payment.receipt_book_multi_id or not payment.receipt_number_multi:
                 continue
 
+            # Check Lost, Damaged, and Cancelled receipts first
+            blocked_exception = self.env["receipt.exception.multi"].search(
+                [
+                    ("receipt_book_id", "=", payment.receipt_book_multi_id.id),
+                    ("receipt_number", "=", payment.receipt_number_multi),
+                    ("reason", "in", ["lost", "damaged", "cancelled"]),
+                ],
+                limit=1,
+            )
+
+            if blocked_exception:
+                reason_label = dict(blocked_exception._fields["reason"].selection).get(
+                    blocked_exception.reason
+                )
+
+                return {
+                    "warning": {
+                        "title": _("Receipt Number Not Allowed"),
+                        "message": _(
+                            "Receipt Number %(number)s has been marked as %(reason)s. "
+                            "You cannot use this receipt number."
+                        )
+                        % {
+                            "number": payment.receipt_number_multi,
+                            "reason": reason_label,
+                        },
+                    }
+                }
+
+            # Original duplicate check
             existing_payment = self.search(
                 [
                     ("id", "!=", payment._origin.id or 0),
@@ -96,6 +126,7 @@ class AccountPayment(models.Model):
                 ],
                 limit=1,
             )
+
             if existing_payment:
                 return {
                     "warning": {
