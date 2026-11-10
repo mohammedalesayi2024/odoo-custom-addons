@@ -269,7 +269,7 @@ class AccountPayment(models.Model):
         if blocked_exception:
             raise ValidationError(
                 _(
-                    "Receipt Number %(number)s cannot be used because it is marked as %(reason)s."
+                    "Receipt Number %(number)s has been marked as %(reason)s and cannot be used."
                 )
                 % {
                     "number": payment.receipt_number_multi,
