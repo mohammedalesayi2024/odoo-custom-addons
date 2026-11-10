@@ -147,18 +147,36 @@ class AccountPayment(models.Model):
             ):
                 continue
 
-            duplicate = self.search(
+            # Validate that the receipt number belongs to the selected receipt book.
+            book = payment.receipt_book_multi_id
+            number = payment.receipt_number_multi
+
+            # Block Lost, Damaged, and Cancelled receipts only.
+            blocked_exception = self.env["receipt.exception.multi"].search(
                 [
-                    ("id", "!=", payment.id),
-                    ("receipt_book_multi_id", "=", payment.receipt_book_multi_id.id),
-                    ("receipt_number_multi", "=", payment.receipt_number_multi),
+                    ("receipt_book_id", "=", book.id),
+                    ("receipt_number", "=", number),
+                    ("reason", "in", ["lost", "damaged", "cancelled"]),
                 ],
                 limit=1,
             )
-            # Validate that the receipt number belongs to the selected receipt book.
-            # This runs when saving a Draft payment as well as during later updates.
-            book = payment.receipt_book_multi_id
-            number = payment.receipt_number_multi
+
+            if blocked_exception:
+                reason_label = dict(blocked_exception._fields["reason"].selection).get(
+                    blocked_exception.reason
+                )
+
+                raise ValidationError(
+                    _(
+                        "Receipt Number %(number)s has been marked as %(reason)s "
+                        "and cannot be used."
+                    )
+                    % {
+                        "number": number,
+                        "reason": reason_label,
+                    }
+                )
+
             if number < book.from_number or number > book.to_number:
                 raise ValidationError(
                     _(
@@ -173,6 +191,15 @@ class AccountPayment(models.Model):
                     }
                 )
 
+            duplicate = self.search(
+                [
+                    ("id", "!=", payment.id),
+                    ("receipt_book_multi_id", "=", book.id),
+                    ("receipt_number_multi", "=", number),
+                ],
+                limit=1,
+            )
+
             if duplicate:
                 raise ValidationError(
                     _(
@@ -180,9 +207,9 @@ class AccountPayment(models.Model):
                         "in receipt book %(book)s. Each receipt number can be used only once."
                     )
                     % {
-                        "number": payment.receipt_number_multi,
+                        "number": number,
                         "payment": duplicate.display_name,
-                        "book": payment.receipt_book_multi_id.display_name,
+                        "book": book.display_name,
                     }
                 )
 
@@ -250,13 +277,18 @@ class AccountPayment(models.Model):
                 raise ValidationError(
                     _("The selected Receipt Book has no remaining receipt numbers.")
                 )
+
             is_reposting = (
                 payment.receipt_book_multi_id
                 and payment.receipt_book_multi_id == book
                 and payment.receipt_number_multi
             )
+
             # Auto assign next receipt number
-            # Block receipts marked as Lost, Damaged, or Cancelled
+            if not payment.receipt_number_multi:
+                payment.receipt_number_multi = book.next_number
+
+            # Block Lost, Damaged, and Cancelled receipts only.
             blocked_exception = self.env["receipt.exception.multi"].search(
                 [
                     ("receipt_book_id", "=", book.id),
@@ -266,127 +298,131 @@ class AccountPayment(models.Model):
                 limit=1,
             )
 
-        if blocked_exception:
-            raise ValidationError(
-                _(
-                    "Receipt Number %(number)s has been marked as %(reason)s and cannot be used."
+            if blocked_exception:
+                reason_label = dict(blocked_exception._fields["reason"].selection).get(
+                    blocked_exception.reason
                 )
-                % {
-                    "number": payment.receipt_number_multi,
-                    "reason": dict(blocked_exception._fields["reason"].selection).get(
-                        blocked_exception.reason
-                    ),
-                }
-            )
-        if not payment.receipt_number_multi:
-            payment.receipt_number_multi = book.next_number
 
-        if (
-            not is_reposting
-            and not self.env.context.get("skip_receipt_exception_check")
-            and payment.receipt_number_multi < book.next_number
-        ):
+                raise ValidationError(
+                    _(
+                        "Receipt Number %(number)s has been marked as %(reason)s "
+                        "and cannot be used."
+                    )
+                    % {
+                        "number": payment.receipt_number_multi,
+                        "reason": reason_label,
+                    }
+                )
 
-            delayed_exception = self.env["receipt.exception.multi"].search(
+            if (
+                not is_reposting
+                and not self.env.context.get("skip_receipt_exception_check")
+                and payment.receipt_number_multi < book.next_number
+            ):
+
+                delayed_exception = self.env["receipt.exception.multi"].search(
+                    [
+                        ("receipt_book_id", "=", book.id),
+                        ("receipt_number", "=", payment.receipt_number_multi),
+                        ("reason", "=", "delayed"),
+                        ("resolved", "=", False),
+                    ],
+                    limit=1,
+                )
+
+                if not delayed_exception:
+                    raise ValidationError(
+                        _(
+                            "Receipt Number cannot be less than the next expected receipt number."
+                        )
+                    )
+
+            if payment.receipt_number_multi > book.to_number:
+                raise ValidationError(
+                    _("Receipt Number exceeds the Receipt Book range.")
+                )
+
+            existing_payment = self.search(
                 [
-                    ("receipt_book_id", "=", book.id),
-                    ("receipt_number", "=", payment.receipt_number_multi),
-                    ("reason", "=", "delayed"),
-                    ("resolved", "=", False),
+                    ("id", "!=", payment.id),
+                    ("receipt_book_multi_id", "=", book.id),
+                    ("receipt_number_multi", "=", payment.receipt_number_multi),
                 ],
                 limit=1,
             )
 
-            if not delayed_exception:
+            if existing_payment:
                 raise ValidationError(
-                    _(
-                        "Receipt Number cannot be less than the next expected receipt number."
-                    )
+                    _("Receipt Number already exists in this Receipt Book.")
                 )
 
-        if payment.receipt_number_multi > book.to_number:
-            raise ValidationError(_("Receipt Number exceeds the Receipt Book range."))
+            delayed_exception = payment._check_delayed_receipt(book)
 
-        existing_payment = self.search(
-            [
-                ("id", "!=", payment.id),
-                ("receipt_book_multi_id", "=", book.id),
-                ("receipt_number_multi", "=", payment.receipt_number_multi),
-            ],
-            limit=1,
-        )
+            if delayed_exception:
 
-        if existing_payment:
-            raise ValidationError(
-                _("Receipt Number already exists in this Receipt Book.")
-            )
-
-        delayed_exception = payment._check_delayed_receipt(book)
-
-        if delayed_exception:
-
-            wizard = self.env["receipt.delayed.wizard.multi"].create(
-                {
-                    "payment_id": payment.id,
-                    "delayed_exception_id": delayed_exception.id,
-                }
-            )
-
-            return {
-                "type": "ir.actions.act_window",
-                "name": _("Delayed Receipt"),
-                "res_model": "receipt.delayed.wizard.multi",
-                "view_mode": "form",
-                "res_id": wizard.id,
-                "target": "new",
-            }
-
-        # Skipped receipt numbers
-        if not self.env.context.get("skip_receipt_exception_check"):
-
-            skipped_numbers = list(
-                range(book.next_number, payment.receipt_number_multi)
-            )
-
-            if skipped_numbers:
-
-                wizard = self.env["receipt.exception.wizard.multi"].create(
+                wizard = self.env["receipt.delayed.wizard.multi"].create(
                     {
                         "payment_id": payment.id,
-                        "receipt_book_id": book.id,
+                        "delayed_exception_id": delayed_exception.id,
                     }
                 )
 
-                for number in skipped_numbers:
-                    self.env["receipt.exception.wizard.line.multi"].create(
-                        {
-                            "wizard_id": wizard.id,
-                            "receipt_number": number,
-                        }
-                    )
-
                 return {
                     "type": "ir.actions.act_window",
-                    "name": _("Skipped Receipt Numbers"),
-                    "res_model": "receipt.exception.wizard.multi",
+                    "name": _("Delayed Receipt"),
+                    "res_model": "receipt.delayed.wizard.multi",
                     "view_mode": "form",
                     "res_id": wizard.id,
                     "target": "new",
                 }
 
-        payment.receipt_book_multi_id = book
+            # Skipped receipt numbers
+            if not self.env.context.get("skip_receipt_exception_check"):
 
-        result = super().action_post()
-        if (
-            not self.env.context.get("skip_receipt_exception_check")
-            and payment.receipt_number_multi >= book.next_number
-        ):
-            book.write(
-                {
-                    "next_number": payment.receipt_number_multi + 1,
-                }
-            )
+                skipped_numbers = list(
+                    range(book.next_number, payment.receipt_number_multi)
+                )
 
-        return result
+                if skipped_numbers:
+
+                    wizard = self.env["receipt.exception.wizard.multi"].create(
+                        {
+                            "payment_id": payment.id,
+                            "receipt_book_id": book.id,
+                        }
+                    )
+
+                    for number in skipped_numbers:
+                        self.env["receipt.exception.wizard.line.multi"].create(
+                            {
+                                "wizard_id": wizard.id,
+                                "receipt_number": number,
+                            }
+                        )
+
+                    return {
+                        "type": "ir.actions.act_window",
+                        "name": _("Skipped Receipt Numbers"),
+                        "res_model": "receipt.exception.wizard.multi",
+                        "view_mode": "form",
+                        "res_id": wizard.id,
+                        "target": "new",
+                    }
+
+            payment.receipt_book_multi_id = book
+
+            result = super().action_post()
+
+            if (
+                not self.env.context.get("skip_receipt_exception_check")
+                and payment.receipt_number_multi >= book.next_number
+            ):
+                book.write(
+                    {
+                        "next_number": payment.receipt_number_multi + 1,
+                    }
+                )
+
+            return result
 
         return super().action_post()
