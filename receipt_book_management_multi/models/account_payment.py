@@ -8,7 +8,7 @@ class AccountPayment(models.Model):
     salesperson_multi_id = fields.Many2one(
         "res.users",
         string="Salesperson",
-        domain=[("share", "=", True)],
+        domain=[("share", "=", False)],
         help="Select the salesperson who owns the receipt book.",
     )
 
@@ -81,7 +81,7 @@ class AccountPayment(models.Model):
                 payment.salesperson_multi_id = payment.partner_id.user_id
             else:
                 payment.salesperson_multi_id = False
-    
+
     @api.onchange("receipt_number_multi", "receipt_book_multi_id")
     def _onchange_receipt_number_multi_warning(self):
         for payment in self:
@@ -103,7 +103,8 @@ class AccountPayment(models.Model):
                         "message": _(
                             "Receipt number %(number)s is already assigned to payment %(payment)s in this receipt book. "
                             "Please enter a different receipt number."
-                        ) % {
+                        )
+                        % {
                             "number": payment.receipt_number_multi,
                             "payment": existing_payment.display_name,
                         },
@@ -125,14 +126,17 @@ class AccountPayment(models.Model):
                             "You are changing it to %(new)s. "
                             "Please make sure this change is intentional. "
                             "The receipt book sequence will follow the existing logic."
-                        ) % {
+                        )
+                        % {
                             "old": old_number,
                             "new": payment.receipt_number_multi,
                         },
                     }
                 }
 
-    @api.constrains("receipt_book_multi_id", "receipt_number_multi", "payment_type", "partner_type")
+    @api.constrains(
+        "receipt_book_multi_id", "receipt_number_multi", "payment_type", "partner_type"
+    )
     def _check_unique_receipt_number_multi(self):
         for payment in self:
             if (
@@ -160,7 +164,8 @@ class AccountPayment(models.Model):
                     _(
                         "Receipt number %(number)s is outside the range for receipt book "
                         "%(book)s. Allowed range: %(start)s to %(end)s."
-                    ) % {
+                    )
+                    % {
                         "number": number,
                         "book": book.display_name,
                         "start": book.from_number,
@@ -173,7 +178,8 @@ class AccountPayment(models.Model):
                     _(
                         "Receipt number %(number)s is already assigned to payment %(payment)s "
                         "in receipt book %(book)s. Each receipt number can be used only once."
-                    ) % {
+                    )
+                    % {
                         "number": payment.receipt_number_multi,
                         "payment": duplicate.display_name,
                         "book": payment.receipt_book_multi_id.display_name,
@@ -200,7 +206,8 @@ class AccountPayment(models.Model):
                         _(
                             "The receipt number cannot be reduced from %(old)s to %(new)s. "
                             "Please keep the current receipt number or use a higher number."
-                        ) % {
+                        )
+                        % {
                             "old": payment.receipt_number_multi,
                             "new": new_number,
                         }
