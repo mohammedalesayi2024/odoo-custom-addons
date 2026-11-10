@@ -256,117 +256,137 @@ class AccountPayment(models.Model):
                 and payment.receipt_number_multi
             )
             # Auto assign next receipt number
-            if not payment.receipt_number_multi:
-                payment.receipt_number_multi = book.next_number
-
-            if (
-                not is_reposting
-                and not self.env.context.get("skip_receipt_exception_check")
-                and payment.receipt_number_multi < book.next_number
-            ):
-
-                delayed_exception = self.env["receipt.exception.multi"].search(
-                    [
-                        ("receipt_book_id", "=", book.id),
-                        ("receipt_number", "=", payment.receipt_number_multi),
-                        ("reason", "=", "delayed"),
-                        ("resolved", "=", False),
-                    ],
-                    limit=1,
-                )
-
-                if not delayed_exception:
-                    raise ValidationError(
-                        _(
-                            "Receipt Number cannot be less than the next expected receipt number."
-                        )
-                    )
-
-            if payment.receipt_number_multi > book.to_number:
-                raise ValidationError(
-                    _("Receipt Number exceeds the Receipt Book range.")
-                )
-
-            existing_payment = self.search(
+            # Block receipts marked as Lost, Damaged, or Cancelled
+            blocked_exception = self.env["receipt.exception.multi"].search(
                 [
-                    ("id", "!=", payment.id),
-                    ("receipt_book_multi_id", "=", book.id),
-                    ("receipt_number_multi", "=", payment.receipt_number_multi),
+                    ("receipt_book_id", "=", book.id),
+                    ("receipt_number", "=", payment.receipt_number_multi),
+                    ("reason", "in", ["lost", "damaged", "cancelled"]),
                 ],
                 limit=1,
             )
 
-            if existing_payment:
+        if blocked_exception:
+            raise ValidationError(
+                _(
+                    "Receipt Number %(number)s cannot be used because it is marked as %(reason)s."
+                )
+                % {
+                    "number": payment.receipt_number_multi,
+                    "reason": dict(blocked_exception._fields["reason"].selection).get(
+                        blocked_exception.reason
+                    ),
+                }
+            )
+        if not payment.receipt_number_multi:
+            payment.receipt_number_multi = book.next_number
+
+        if (
+            not is_reposting
+            and not self.env.context.get("skip_receipt_exception_check")
+            and payment.receipt_number_multi < book.next_number
+        ):
+
+            delayed_exception = self.env["receipt.exception.multi"].search(
+                [
+                    ("receipt_book_id", "=", book.id),
+                    ("receipt_number", "=", payment.receipt_number_multi),
+                    ("reason", "=", "delayed"),
+                    ("resolved", "=", False),
+                ],
+                limit=1,
+            )
+
+            if not delayed_exception:
                 raise ValidationError(
-                    _("Receipt Number already exists in this Receipt Book.")
+                    _(
+                        "Receipt Number cannot be less than the next expected receipt number."
+                    )
                 )
 
-            delayed_exception = payment._check_delayed_receipt(book)
+        if payment.receipt_number_multi > book.to_number:
+            raise ValidationError(_("Receipt Number exceeds the Receipt Book range."))
 
-            if delayed_exception:
+        existing_payment = self.search(
+            [
+                ("id", "!=", payment.id),
+                ("receipt_book_multi_id", "=", book.id),
+                ("receipt_number_multi", "=", payment.receipt_number_multi),
+            ],
+            limit=1,
+        )
 
-                wizard = self.env["receipt.delayed.wizard.multi"].create(
+        if existing_payment:
+            raise ValidationError(
+                _("Receipt Number already exists in this Receipt Book.")
+            )
+
+        delayed_exception = payment._check_delayed_receipt(book)
+
+        if delayed_exception:
+
+            wizard = self.env["receipt.delayed.wizard.multi"].create(
+                {
+                    "payment_id": payment.id,
+                    "delayed_exception_id": delayed_exception.id,
+                }
+            )
+
+            return {
+                "type": "ir.actions.act_window",
+                "name": _("Delayed Receipt"),
+                "res_model": "receipt.delayed.wizard.multi",
+                "view_mode": "form",
+                "res_id": wizard.id,
+                "target": "new",
+            }
+
+        # Skipped receipt numbers
+        if not self.env.context.get("skip_receipt_exception_check"):
+
+            skipped_numbers = list(
+                range(book.next_number, payment.receipt_number_multi)
+            )
+
+            if skipped_numbers:
+
+                wizard = self.env["receipt.exception.wizard.multi"].create(
                     {
                         "payment_id": payment.id,
-                        "delayed_exception_id": delayed_exception.id,
+                        "receipt_book_id": book.id,
                     }
                 )
 
+                for number in skipped_numbers:
+                    self.env["receipt.exception.wizard.line.multi"].create(
+                        {
+                            "wizard_id": wizard.id,
+                            "receipt_number": number,
+                        }
+                    )
+
                 return {
                     "type": "ir.actions.act_window",
-                    "name": _("Delayed Receipt"),
-                    "res_model": "receipt.delayed.wizard.multi",
+                    "name": _("Skipped Receipt Numbers"),
+                    "res_model": "receipt.exception.wizard.multi",
                     "view_mode": "form",
                     "res_id": wizard.id,
                     "target": "new",
                 }
 
-            # Skipped receipt numbers
-            if not self.env.context.get("skip_receipt_exception_check"):
+        payment.receipt_book_multi_id = book
 
-                skipped_numbers = list(
-                    range(book.next_number, payment.receipt_number_multi)
-                )
+        result = super().action_post()
+        if (
+            not self.env.context.get("skip_receipt_exception_check")
+            and payment.receipt_number_multi >= book.next_number
+        ):
+            book.write(
+                {
+                    "next_number": payment.receipt_number_multi + 1,
+                }
+            )
 
-                if skipped_numbers:
-
-                    wizard = self.env["receipt.exception.wizard.multi"].create(
-                        {
-                            "payment_id": payment.id,
-                            "receipt_book_id": book.id,
-                        }
-                    )
-
-                    for number in skipped_numbers:
-                        self.env["receipt.exception.wizard.line.multi"].create(
-                            {
-                                "wizard_id": wizard.id,
-                                "receipt_number": number,
-                            }
-                        )
-
-                    return {
-                        "type": "ir.actions.act_window",
-                        "name": _("Skipped Receipt Numbers"),
-                        "res_model": "receipt.exception.wizard.multi",
-                        "view_mode": "form",
-                        "res_id": wizard.id,
-                        "target": "new",
-                    }
-
-            payment.receipt_book_multi_id = book
-
-            result = super().action_post()
-            if (
-                not self.env.context.get("skip_receipt_exception_check")
-                and payment.receipt_number_multi >= book.next_number
-            ):
-                book.write(
-                    {
-                        "next_number": payment.receipt_number_multi + 1,
-                    }
-                )
-
-            return result
+        return result
 
         return super().action_post()
