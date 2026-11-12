@@ -15,3 +15,14 @@
 .o_dialog .o_list_table {
     table-layout: auto !important;
 }
+/* Highlight cancelled, lost and damaged receipts in red */
+
+.o_list_view .o_data_row:has(td[name="reason"]) {
+    &:has(td[name="reason"]:contains("Cancelled")),
+    &:has(td[name="reason"]:contains("Lost")),
+    &:has(td[name="reason"]:contains("Damaged")) {
+        td[name="resolved"] input[type="checkbox"] {
+            accent-color: #dc2626 !important;
+        }
+    }
+}
