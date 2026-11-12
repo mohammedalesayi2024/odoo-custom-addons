@@ -10,7 +10,9 @@
         <field name="model">receipt.exception.multi</field>
         <field name="arch" type="xml">
 
-            <list string="Receipt Exceptions" create="0">
+            <list string="Receipt Exceptions"
+             create="0"
+             decoration-danger="reason in ['lost', 'damaged', 'cancelled']">
 
                 <field name="receipt_book_id" readonly="1" />
                 <field name="receipt_number" />
