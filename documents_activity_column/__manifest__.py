@@ -3,6 +3,7 @@
     'version': '19.0.1.0.1',
     'category': 'Productivity/Documents',
     'summary': 'Add the Activities column to the Documents list view',
+    'author': 'Mohammed Alesayi',
     'depends': ['documents', 'mail'],
     'data': [],
     'post_init_hook': 'post_init_hook',
