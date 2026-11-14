@@ -23,6 +23,7 @@ Features:
     "data": [
         "security/security.xml",
         "security/ir.model.access.csv",
+        "views/res_partner_views.xml",
         "views/receipt_book_views.xml",
         "views/account_payment_views.xml",
         "views/receipt_exception_views.xml",
