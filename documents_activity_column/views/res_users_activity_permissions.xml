@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_users_form_activity_supervisor_permissions" model="ir.ui.view">
+        <field name="name">res.users.form.activity.supervisor.permissions</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Activity Permissions" groups="base.group_system">
+                    <group string="Manage Other Users’ Activities">
+                        <field name="activity_can_complete_others"/>
+                        <field name="activity_can_cancel_others"/>
+                        <field name="activity_can_reschedule_others"/>
+                        <field name="activity_can_edit_others"/>
+                        <field name="activity_can_delete_others"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

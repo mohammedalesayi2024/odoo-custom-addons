@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mail_activity_rule_creator_assignee_or_supervisor" model="ir.rule">
+        <field name="name">Activities: creator, assignee or authorized supervisor</field>
+        <field name="model_id" ref="mail.model_mail_activity"/>
+        <field name="domain_force">['|', ('create_uid', '=', user.id), '|', ('user_id', '=', user.id), ('id', '!=', 0)] if (user.activity_can_complete_others or user.activity_can_cancel_others or user.activity_can_reschedule_others or user.activity_can_edit_others or user.activity_can_delete_others) else ['|', ('create_uid', '=', user.id), ('user_id', '=', user.id)]</field>
+    </record>
+</odoo>
