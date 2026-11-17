@@ -69,6 +69,12 @@ class UnitMaintenanceRequest(models.Model):
     duration_text = fields.Char('المدة', compute='_compute_duration')
     report_text = fields.Text('تقرير الفني', copy=False)
     photo_ids = fields.One2many('unit.maintenance.photo', 'request_id', 'الصور', copy=False)
+    photo_before_ids = fields.One2many(
+        'unit.maintenance.photo', 'request_id', string='صور قبل الصيانة',
+        domain=[('kind', '=', 'before')], copy=False)
+    photo_after_ids = fields.One2many(
+        'unit.maintenance.photo', 'request_id', string='صور بعد الصيانة',
+        domain=[('kind', '=', 'after')], copy=False)
 
     report_sent = fields.Boolean('تم إرسال التقرير', copy=False, readonly=True)
     report_sent_date = fields.Datetime('آخر إرسال للتقرير', copy=False, readonly=True)
