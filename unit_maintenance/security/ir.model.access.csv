@@ -1,0 +1,22 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_building_tech,building tech,model_unit_maintenance_building,group_unit_maintenance_technician,1,0,0,0
+access_building_user,building user,model_unit_maintenance_building,group_unit_maintenance_user,1,1,1,0
+access_building_manager,building manager,model_unit_maintenance_building,group_unit_maintenance_manager,1,1,1,1
+access_unit_tech,unit tech,model_unit_maintenance_unit,group_unit_maintenance_technician,1,0,0,0
+access_unit_user,unit user,model_unit_maintenance_unit,group_unit_maintenance_user,1,1,1,0
+access_unit_manager,unit manager,model_unit_maintenance_unit,group_unit_maintenance_manager,1,1,1,1
+access_request_tech,request tech,model_unit_maintenance_request,group_unit_maintenance_technician,1,1,0,0
+access_request_user,request user,model_unit_maintenance_request,group_unit_maintenance_user,1,1,1,0
+access_request_manager,request manager,model_unit_maintenance_request,group_unit_maintenance_manager,1,1,1,1
+access_line_tech,line tech,model_unit_maintenance_request_line,group_unit_maintenance_technician,1,1,1,1
+access_line_user,line user,model_unit_maintenance_request_line,group_unit_maintenance_user,1,1,1,1
+access_line_manager,line manager,model_unit_maintenance_request_line,group_unit_maintenance_manager,1,1,1,1
+access_photo_tech,photo tech,model_unit_maintenance_photo,group_unit_maintenance_technician,1,1,1,0
+access_photo_user,photo user,model_unit_maintenance_photo,group_unit_maintenance_user,1,1,1,0
+access_photo_manager,photo manager,model_unit_maintenance_photo,group_unit_maintenance_manager,1,1,1,1
+access_sendlog_tech,sendlog tech,model_unit_maintenance_send_log,group_unit_maintenance_technician,1,0,1,0
+access_sendlog_user,sendlog user,model_unit_maintenance_send_log,group_unit_maintenance_user,1,0,1,0
+access_sendlog_manager,sendlog manager,model_unit_maintenance_send_log,group_unit_maintenance_manager,1,1,1,1
+access_complaint_user,complaint user,model_unit_maintenance_complaint,group_unit_maintenance_user,1,1,1,0
+access_complaint_manager,complaint manager,model_unit_maintenance_complaint,group_unit_maintenance_manager,1,1,1,1
+access_otp_manager,otp manager,model_unit_maintenance_otp,group_unit_maintenance_manager,1,0,0,0

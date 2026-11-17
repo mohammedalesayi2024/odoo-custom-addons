@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_unit_list" model="ir.ui.view">
+        <field name="name">unit.maintenance.unit.list</field>
+        <field name="model">unit.maintenance.unit</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="building_id"/>
+                <field name="number"/>
+                <field name="owner_id"/>
+                <field name="maintenance_type" widget="badge"/>
+                <field name="delivery_date"/>
+                <field name="warranty_end"/>
+                <field name="warranty_state" widget="badge"
+                       decoration-success="warranty_state == 'under'"
+                       decoration-danger="warranty_state == 'expired'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_unit_form" model="ir.ui.view">
+        <field name="name">unit.maintenance.unit.form</field>
+        <field name="model">unit.maintenance.unit</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_requests" type="object" class="oe_stat_button" icon="fa-wrench">
+                            <field name="request_count" widget="statinfo" string="طلبات الصيانة"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group string="الوحدة">
+                            <field name="building_id"/>
+                            <field name="number"/>
+                            <field name="owner_id"/>
+                            <field name="maintenance_type" widget="radio"/>
+                        </group>
+                        <group string="الضمان">
+                            <field name="delivery_date"/>
+                            <field name="warranty_months"/>
+                            <field name="warranty_end"/>
+                            <field name="warranty_state" widget="badge"
+                                   decoration-success="warranty_state == 'under'"
+                                   decoration-danger="warranty_state == 'expired'"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_unit_search" model="ir.ui.view">
+        <field name="name">unit.maintenance.unit.search</field>
+        <field name="model">unit.maintenance.unit</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="number"/>
+                <field name="building_id"/>
+                <field name="owner_id"/>
+                <filter name="under" string="تحت الضمان" domain="[('warranty_end', '&gt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter name="expired" string="انتهى الضمان" domain="[('warranty_end', '&lt;', context_today().strftime('%Y-%m-%d'))]"/>
+                <group>
+                    <filter name="group_building" string="المبنى" context="{'group_by': 'building_id'}"/>
+                    <filter name="group_owner" string="المالك" context="{'group_by': 'owner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_unit" model="ir.actions.act_window">
+        <field name="name">الوحدات</field>
+        <field name="res_model">unit.maintenance.unit</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

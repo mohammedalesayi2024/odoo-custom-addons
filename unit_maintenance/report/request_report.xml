@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_unit_request" model="ir.actions.report">
+        <field name="name">تقرير الصيانة</field>
+        <field name="model">unit.maintenance.request</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">unit_maintenance.report_unit_request_document</field>
+        <field name="report_file">unit_maintenance.report_unit_request_document</field>
+        <field name="print_report_name">'تقرير صيانة - %s' % object.name</field>
+        <field name="binding_model_id" ref="model_unit_maintenance_request"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_unit_request_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page" style="direction: rtl; text-align: right;">
+                        <h2>تقرير صيانة <span t-field="o.name"/></h2>
+                        <table class="table table-sm">
+                            <tr><th>المبنى</th><td><span t-field="o.building_id.name"/></td>
+                                <th>الوحدة</th><td><span t-field="o.unit_id.number"/></td></tr>
+                            <tr><th>المالك</th><td><span t-field="o.owner_id.name"/></td>
+                                <th>نوع الصيانة</th><td><span t-field="o.request_type"/></td></tr>
+                            <tr><th>الفني</th><td><span t-field="o.technician_id.name"/></td>
+                                <th>مدة الصيانة</th><td><span t-out="o.duration_text"/></td></tr>
+                            <tr><th>بداية الصيانة</th><td><span t-field="o.start_datetime"/></td>
+                                <th>نهاية الصيانة</th><td><span t-field="o.end_datetime"/></td></tr>
+                        </table>
+
+                        <h4 t-if="o.description">وصف المشكلة</h4>
+                        <p t-if="o.description" t-field="o.description"/>
+
+                        <h4>تقرير الفني</h4>
+                        <p t-field="o.report_text"/>
+
+                        <h4 t-if="o.line_ids">المنتجات المستخدمة</h4>
+                        <table t-if="o.line_ids" class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>المنتج</th>
+                                    <th>الكمية</th>
+                                    <th>السعر</th>
+                                    <th>الإجمالي</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="l">
+                                    <td><span t-field="l.name"/></td>
+                                    <td><span t-field="l.quantity"/></td>
+                                    <td><span t-field="l.price_unit"/></td>
+                                    <td><span t-field="l.subtotal"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="row">
+                            <div class="col-5 offset-7">
+                                <table class="table table-sm">
+                                    <tr><td>الإجمالي قبل الضريبة</td><td><span t-field="o.amount_untaxed"/></td></tr>
+                                    <tr><td>الضريبة</td><td><span t-field="o.amount_tax"/></td></tr>
+                                    <tr><th>الإجمالي بعد الضريبة</th><th><span t-field="o.amount_total"/></th></tr>
+                                </table>
+                            </div>
+                        </div>
+                        <p t-if="o.request_type == 'internal'"><strong>الجهة المتحملة للتكلفة: شركة أديار. لا تُحمّل هذه التكلفة على العميل.</strong></p>
+                        <p t-else=""><strong>الجهة المتحملة للتكلفة: العميل.</strong></p>
+
+                        <t t-set="before_photos" t-value="o.photo_ids.filtered(lambda p: p.kind == 'before')"/>
+                        <t t-set="after_photos" t-value="o.photo_ids.filtered(lambda p: p.kind == 'after')"/>
+                        <div t-if="before_photos or after_photos" style="page-break-inside: avoid; margin-top: 16px;">
+                            <h4>مقارنة الصور قبل وبعد الصيانة</h4>
+                            <table class="table table-bordered" style="width:100%; table-layout:fixed;">
+                                <thead><tr><th style="width:50%; text-align:center;">قبل الصيانة</th><th style="width:50%; text-align:center;">بعد الصيانة</th></tr></thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="vertical-align:top;">
+                                            <t t-foreach="before_photos" t-as="p">
+                                                <div style="margin:4px; page-break-inside:avoid;">
+                                                    <img t-att-src="image_data_uri(p.image)" style="max-width:100%; max-height:190px;"/>
+                                                    <p t-if="p.note"><span t-field="p.note"/></p>
+                                                </div>
+                                            </t>
+                                        </td>
+                                        <td style="vertical-align:top;">
+                                            <t t-foreach="after_photos" t-as="p">
+                                                <div style="margin:4px; page-break-inside:avoid;">
+                                                    <img t-att-src="image_data_uri(p.image)" style="max-width:100%; max-height:190px;"/>
+                                                    <p t-if="p.note"><span t-field="p.note"/></p>
+                                                </div>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div t-if="o.signature" style="margin-top: 24px; page-break-inside: avoid;">
+                            <h4>توقيع العميل</h4>
+                            <img t-att-src="image_data_uri(o.signature)" style="max-height: 120px;"/>
+                            <div><span t-field="o.signed_date"/></div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
