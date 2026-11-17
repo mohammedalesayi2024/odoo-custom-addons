@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_unit_maintenance_technician" model="res.groups">
+        <field name="name">صيانة الوحدات / فني</field>
+        <field name="comment">يرى الطلبات المسندة له فقط ويعمل عبر التطبيق.</field>
+    </record>
+    <record id="group_unit_maintenance_user" model="res.groups">
+        <field name="name">صيانة الوحدات / موظف</field>
+        <field name="comment">ينشئ الطلبات ويسندها ويحوّل الشكاوى.</field>
+    </record>
+    <record id="group_unit_maintenance_manager" model="res.groups">
+        <field name="name">صيانة الوحدات / مدير</field>
+        <field name="implied_ids" eval="[(4, ref('group_unit_maintenance_user'))]"/>
+        <field name="comment">يسعّر ويعتمد الأسعار ويدير الإعدادات.</field>
+    </record>
+    <record id="base.group_system" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('group_unit_maintenance_manager'))]"/>
+    </record>
+</odoo>

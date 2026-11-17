@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_unit_maintenance_root" name="صيانة الوحدات" sequence="60"
+              groups="group_unit_maintenance_user"/>
+    <menuitem id="menu_requests" name="طلبات الصيانة" parent="menu_unit_maintenance_root"
+              action="action_request" sequence="10"/>
+    <menuitem id="menu_requests_to_price" name="بانتظار التسعير" parent="menu_unit_maintenance_root"
+              action="action_request_to_price" sequence="20"
+              groups="group_unit_maintenance_manager"/>
+    <menuitem id="menu_complaints" name="الشكاوى" parent="menu_unit_maintenance_root"
+              action="action_complaint" sequence="30"/>
+    <menuitem id="menu_config" name="البيانات الأساسية" parent="menu_unit_maintenance_root" sequence="90"/>
+    <menuitem id="menu_buildings" name="المباني" parent="menu_config" action="action_building" sequence="10"/>
+    <menuitem id="menu_units" name="الوحدات" parent="menu_config" action="action_unit" sequence="20"/>
+</odoo>

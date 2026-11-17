@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_request_internal" model="ir.sequence">
+        <field name="name">صيانة الوحدات: طلبات داخلية</field>
+        <field name="code">unit.maintenance.request.int</field>
+        <field name="prefix">INT-</field>
+        <field name="padding">4</field>
+        <field name="number_next">1001</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_request_external" model="ir.sequence">
+        <field name="name">صيانة الوحدات: طلبات خارجية</field>
+        <field name="code">unit.maintenance.request.ext</field>
+        <field name="prefix">EXT-</field>
+        <field name="padding">4</field>
+        <field name="number_next">1001</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_complaint" model="ir.sequence">
+        <field name="name">صيانة الوحدات: الشكاوى</field>
+        <field name="code">unit.maintenance.complaint</field>
+        <field name="prefix">SHK-</field>
+        <field name="padding">4</field>
+        <field name="number_next">1</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

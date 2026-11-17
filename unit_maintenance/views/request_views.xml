@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_request_list" model="ir.ui.view">
+        <field name="name">unit.maintenance.request.list</field>
+        <field name="model">unit.maintenance.request</field>
+        <field name="arch" type="xml">
+            <list decoration-muted="state == 'cancel'" decoration-success="state == 'done'">
+                <field name="name"/>
+                <field name="request_date"/>
+                <field name="building_id"/>
+                <field name="unit_id"/>
+                <field name="owner_id"/>
+                <field name="request_type" widget="badge" decoration-warning="request_type == 'external'" decoration-info="request_type == 'internal'"/>
+                <field name="technician_id"/>
+                <field name="amount_total" sum="الإجمالي"/>
+                <field name="state" widget="badge"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_request_form" model="ir.ui.view">
+        <field name="name">unit.maintenance.request.form</field>
+        <field name="model">unit.maintenance.request</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_assign" string="إسناد للفني" type="object" class="btn-primary"
+                            invisible="state != 'new' or not technician_id"/>
+                    <button name="action_fill_list_prices" string="جلب أسعار القائمة" type="object"
+                            invisible="request_type != 'external' or state not in ('assigned', 'awaiting_price')"
+                            groups="unit_maintenance.group_unit_maintenance_manager"/>
+                    <button name="action_approve_price" string="اعتماد السعر" type="object" class="btn-primary"
+                            invisible="request_type != 'external' or price_approved or state not in ('assigned', 'awaiting_price')"
+                            groups="unit_maintenance.group_unit_maintenance_manager"/>
+                    <button name="action_send_report" string="إرسال التقرير بالبريد" type="object" class="btn-primary"
+                            invisible="state != 'done' or report_sent"/>
+                    <button name="action_send_report" string="إعادة إرسال التقرير" type="object"
+                            invisible="state != 'done' or not report_sent"/>
+                    <button name="action_create_invoice" string="إنشاء فاتورة" type="object"
+                            invisible="state != 'done' or request_type != 'external' or invoice_id"
+                            groups="unit_maintenance.group_unit_maintenance_manager"/>
+                    <button name="action_cancel" string="إلغاء" type="object"
+                            invisible="state not in ('new', 'assigned', 'awaiting_price')"/>
+                    <button name="action_reset" string="إعادة فتح" type="object"
+                            invisible="state != 'cancel'" groups="unit_maintenance.group_unit_maintenance_manager"/>
+                    <field name="state" widget="statusbar" statusbar_visible="new,assigned,awaiting_price,in_progress,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="الوحدة والعميل">
+                            <field name="unit_id"/>
+                            <field name="building_id"/>
+                            <field name="owner_id"/>
+                            <field name="contact_phone" widget="phone"/>
+                            <field name="warranty_state" widget="badge"
+                                   decoration-success="warranty_state == 'under'"
+                                   decoration-danger="warranty_state == 'expired'"/>
+                        </group>
+                        <group string="الطلب">
+                            <field name="request_type"/>
+                            <field name="source"/>
+                            <field name="complaint_id"/>
+                            <field name="request_date"/>
+                            <field name="visit_date"/>
+                            <field name="technician_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="وصف المشكلة" name="description">
+                            <field name="description" placeholder="وصف المشكلة..."/>
+                        </page>
+                        <page string="المنتجات والتسعير" name="lines">
+                            <field name="line_ids" readonly="state not in ('new', 'assigned', 'awaiting_price')">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="product_id"/>
+                                    <field name="name"/>
+                                    <field name="quantity"/>
+                                    <field name="price_unit" readonly="parent.request_type == 'internal'"
+                                           groups="unit_maintenance.group_unit_maintenance_manager"/>
+                                    <field name="tax_ids" widget="many2many_tags" optional="hide"/>
+                                    <field name="subtotal" optional="show"/>
+                                    <field name="total"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer">
+                                <field name="currency_id" invisible="1"/>
+                                <field name="amount_untaxed"/>
+                                <field name="amount_tax"/>
+                                <field name="amount_total" class="oe_subtotal_footer_separator"/>
+                            </group>
+                            <group>
+                                <field name="price_approved"/>
+                                <field name="price_approved_by"/>
+                                <field name="price_approved_date"/>
+                            </group>
+                        </page>
+                        <page string="موافقة العميل" name="signature">
+                            <group>
+                                <field name="signature" widget="image" options="{'size': [400, 200]}"/>
+                                <field name="signed_date"/>
+                            </group>
+                        </page>
+                        <page string="الصيانة والتقرير" name="work">
+                            <group>
+                                <group>
+                                    <field name="start_datetime"/>
+                                    <field name="end_datetime"/>
+                                    <field name="duration_text"/>
+                                </group>
+                            </group>
+                            <field name="report_text" placeholder="تقرير الفني..."/>
+                            <field name="photo_ids" readonly="state in ('done', 'cancel')">
+                                <list editable="bottom">
+                                    <field name="kind"/>
+                                    <field name="image" widget="image" options="{'size': [80, 80]}"/>
+                                    <field name="note"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="الفوترة والإرسال" name="sending">
+                            <group>
+                                <field name="invoice_id"/>
+                                <field name="report_sent"/>
+                                <field name="report_sent_date"/>
+                            </group>
+                            <field name="send_log_ids">
+                                <list create="0" edit="0" delete="0">
+                                    <field name="date"/>
+                                    <field name="method"/>
+                                    <field name="recipient"/>
+                                    <field name="is_resend"/>
+                                    <field name="user_id"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_request_search" model="ir.ui.view">
+        <field name="name">unit.maintenance.request.search</field>
+        <field name="model">unit.maintenance.request</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="unit_id"/>
+                <field name="building_id"/>
+                <field name="owner_id"/>
+                <field name="technician_id"/>
+                <filter name="mine" string="مهامي" domain="[('technician_id', '=', uid)]"/>
+                <filter name="internal" string="داخلية" domain="[('request_type', '=', 'internal')]"/>
+                <filter name="external" string="خارجية" domain="[('request_type', '=', 'external')]"/>
+                <separator/>
+                <filter name="to_assign" string="بحاجة لإسناد" domain="[('state', '=', 'new')]"/>
+                <filter name="to_price" string="بانتظار التسعير" domain="[('state', '=', 'awaiting_price')]"/>
+                <filter name="open" string="مفتوحة" domain="[('state', 'in', ('new', 'assigned', 'awaiting_price', 'in_progress'))]"/>
+                <filter name="done" string="مكتملة" domain="[('state', '=', 'done')]"/>
+                <group>
+                    <filter name="group_state" string="الحالة" context="{'group_by': 'state'}"/>
+                    <filter name="group_type" string="النوع" context="{'group_by': 'request_type'}"/>
+                    <filter name="group_tech" string="الفني" context="{'group_by': 'technician_id'}"/>
+                    <filter name="group_building" string="المبنى" context="{'group_by': 'building_id'}"/>
+                    <filter name="group_month" string="الشهر" context="{'group_by': 'request_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_request_pivot" model="ir.ui.view">
+        <field name="name">unit.maintenance.request.pivot</field>
+        <field name="model">unit.maintenance.request</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="building_id" type="row"/>
+                <field name="request_type" type="col"/>
+                <field name="amount_total" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="view_request_graph" model="ir.ui.view">
+        <field name="name">unit.maintenance.request.graph</field>
+        <field name="model">unit.maintenance.request</field>
+        <field name="arch" type="xml">
+            <graph type="bar">
+                <field name="technician_id"/>
+                <field name="state"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_request" model="ir.actions.act_window">
+        <field name="name">طلبات الصيانة</field>
+        <field name="res_model">unit.maintenance.request</field>
+        <field name="view_mode">list,form,pivot,graph</field>
+        <field name="context">{'search_default_open': 1}</field>
+    </record>
+    <record id="action_request_to_price" model="ir.actions.act_window">
+        <field name="name">بانتظار التسعير</field>
+        <field name="res_model">unit.maintenance.request</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', '=', 'awaiting_price')]</field>
+    </record>
+</odoo>

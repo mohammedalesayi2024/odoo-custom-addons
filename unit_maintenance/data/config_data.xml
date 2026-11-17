@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="param_default_warranty" model="ir.config_parameter">
+        <field name="key">unit_maintenance.default_warranty_months</field>
+        <field name="value">24</field>
+    </record>
+    <record id="param_country_code" model="ir.config_parameter">
+        <field name="key">unit_maintenance.default_country_code</field>
+        <field name="value">966</field>
+    </record>
+    <record id="param_otp_length" model="ir.config_parameter">
+        <field name="key">unit_maintenance.otp_length</field>
+        <field name="value">4</field>
+    </record>
+    <record id="param_otp_ttl" model="ir.config_parameter">
+        <field name="key">unit_maintenance.otp_ttl_minutes</field>
+        <field name="value">5</field>
+    </record>
+    <record id="param_otp_attempts" model="ir.config_parameter">
+        <field name="key">unit_maintenance.otp_max_attempts</field>
+        <field name="value">5</field>
+    </record>
+    <record id="param_otp_per_hour" model="ir.config_parameter">
+        <field name="key">unit_maintenance.otp_max_per_hour</field>
+        <field name="value">3</field>
+    </record>
+    <record id="param_otp_per_ip" model="ir.config_parameter">
+        <field name="key">unit_maintenance.otp_max_per_ip_hour</field>
+        <field name="value">10</field>
+    </record>
+    <record id="param_reveal_unregistered" model="ir.config_parameter">
+        <field name="key">unit_maintenance.reveal_unregistered</field>
+        <field name="value">1</field>
+    </record>
+    <record id="param_max_complaints" model="ir.config_parameter">
+        <field name="key">unit_maintenance.max_complaints_per_day</field>
+        <field name="value">5</field>
+    </record>
+</odoo>
