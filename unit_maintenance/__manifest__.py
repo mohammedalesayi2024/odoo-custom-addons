@@ -11,11 +11,11 @@
 * شكاوى العملاء من التطبيق بدون تسجيل دخول عبر رمز تحقق OTP يرسله Odoo.
 * واجهة API لتطبيق الجوال.
 """,
-    'version': '19.0.1.0.1',
+    'version': '19.0.1.0.2',
     'category': 'Services',
     'author': 'Unit Maintenance',
     'license': 'LGPL-3',
-    'depends': ['base', 'mail', 'product', 'account', 'sms'],
+    'depends': ['base', 'mail', 'product', 'account', 'stock', 'sms'],
     'data': [
         'security/groups.xml',
         'security/ir.model.access.csv',

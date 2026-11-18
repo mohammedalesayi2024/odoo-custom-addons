@@ -81,6 +81,7 @@ class UnitMaintenanceRequest(models.Model):
     send_log_ids = fields.One2many('unit.maintenance.send.log', 'request_id', 'سجل الإرسال')
     access_token = fields.Char(copy=False, readonly=True)
     invoice_id = fields.Many2one('account.move', 'الفاتورة', copy=False, readonly=True)
+    picking_id = fields.Many2one('stock.picking', 'أمر التسليم', copy=False, readonly=True)
 
     # ------------------------------------------------------------------ helpers
     @api.depends('request_type')
@@ -288,5 +289,76 @@ class UnitMaintenanceRequest(models.Model):
             }) for l in self.line_ids],
         })
         self.invoice_id = move
-        return {'type': 'ir.actions.act_window', 'res_model': 'account.move', 'res_id': move.id,
-                'view_mode': 'form'}
+        picking = self._create_delivery_picking()
+        action = {'type': 'ir.actions.act_window', 'res_model': 'account.move', 'res_id': move.id,
+                  'view_mode': 'form'}
+        if picking:
+            # Open the invoice first; the delivery is linked on the maintenance request.
+            self.message_post(body=_('تم إنشاء أمر التسليم %s. راجع الكميات ثم اعتمد التسليم لخصم المخزون.') % picking.name)
+        else:
+            self.message_post(body=_('لم يتم إنشاء أمر تسليم: لا توجد منتجات مخزنية مفعّل لها تتبع المخزون.'))
+        return action
+
+    def _create_delivery_picking(self):
+        """Create an outgoing delivery for storable products; stock is deducted only on validation."""
+        self.ensure_one()
+        if self.picking_id:
+            return self.picking_id
+
+        storable_lines = self.line_ids.filtered(
+            lambda line: line.product_id and
+            (line.product_id.is_storable if 'is_storable' in line.product_id._fields
+             else line.product_id.type != 'service')
+        )
+        if not storable_lines:
+            return False
+
+        warehouse = self.env['stock.warehouse'].search(
+            [('company_id', '=', self.company_id.id)], limit=1)
+        if not warehouse or not warehouse.out_type_id:
+            raise UserError(_('لم يتم العثور على مستودع أو نوع عملية تسليم للشركة %s.') % self.company_id.display_name)
+
+        picking_type = warehouse.out_type_id
+        source_location = warehouse.lot_stock_id
+        destination_location = picking_type.default_location_dest_id or self.env.ref('stock.stock_location_customers')
+        if not source_location:
+            raise UserError(_('لم يتم تحديد موقع المخزون في المستودع %s.') % warehouse.display_name)
+
+        move_commands = []
+        for line in storable_lines:
+            move_commands.append(Command.create({
+                'name': line.name or line.product_id.display_name,
+                'product_id': line.product_id.id,
+                'product_uom_qty': line.quantity,
+                'product_uom': line.product_id.uom_id.id,
+                'location_id': source_location.id,
+                'location_dest_id': destination_location.id,
+                'company_id': self.company_id.id,
+            }))
+
+        picking = self.env['stock.picking'].create({
+            'picking_type_id': picking_type.id,
+            'partner_id': self.owner_id.id,
+            'location_id': source_location.id,
+            'location_dest_id': destination_location.id,
+            'origin': '%s / %s' % (self.name, self.invoice_id.name),
+            'company_id': self.company_id.id,
+            'move_ids': move_commands,
+        })
+        picking.action_confirm()
+        picking.action_assign()
+        self.picking_id = picking
+        return picking
+
+    def action_open_delivery(self):
+        self.ensure_one()
+        if not self.picking_id:
+            raise UserError(_('لا يوجد أمر تسليم مرتبط بطلب الصيانة.'))
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('أمر التسليم'),
+            'res_model': 'stock.picking',
+            'res_id': self.picking_id.id,
+            'view_mode': 'form',
+            'target': 'current',
+        }

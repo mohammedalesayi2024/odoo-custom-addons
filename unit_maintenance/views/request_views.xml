@@ -40,6 +40,9 @@
                     <button name="action_create_invoice" string="إنشاء فاتورة" type="object"
                             invisible="state != 'done' or request_type != 'external' or invoice_id"
                             groups="unit_maintenance.group_unit_maintenance_manager"/>
+                    <button name="action_open_delivery" string="فتح أمر التسليم" type="object"
+                            invisible="not picking_id"
+                            groups="unit_maintenance.group_unit_maintenance_manager"/>
                     <button name="action_cancel" string="إلغاء" type="object"
                             invisible="state not in ('new', 'assigned', 'awaiting_price')"/>
                     <button name="action_reset" string="إعادة فتح" type="object"
@@ -145,6 +148,7 @@
                         <page string="الفوترة والإرسال" name="sending">
                             <group>
                                 <field name="invoice_id"/>
+                                <field name="picking_id"/>
                                 <field name="report_sent"/>
                                 <field name="report_sent_date"/>
                             </group>
