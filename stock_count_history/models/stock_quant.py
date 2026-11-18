@@ -4,7 +4,7 @@ from odoo import fields, models
 class StockQuant(models.Model):
     _inherit = 'stock.quant'
 
-    def action_apply_inventory(self):
+    def action_apply_inventory(self, *args, **kwargs):
         # 1) Snapshot BEFORE the standard apply, while the theoretical qty is intact.
         start = fields.Datetime.now()
         snapshot = []
@@ -26,7 +26,7 @@ class StockQuant(models.Model):
                 },
             })
 
-        res = super().action_apply_inventory()
+        res = super().action_apply_inventory(*args, **kwargs)
 
         # 2) Log only what was really applied (standard may return a wizard
         #    instead of applying, e.g. tracked product without lot).
@@ -38,7 +38,8 @@ class StockQuant(models.Model):
             return res
 
         reference = self.env['ir.sequence'].sudo().next_by_code('stock.count.history') or '/'
-        now = fields.Datetime.now()
+        counting_date = args[0] if args else kwargs.get('date')
+        now = fields.Datetime.to_datetime(counting_date) if counting_date else fields.Datetime.now()
 
         # Best-effort link to the adjustment moves created by the standard apply.
         move_lines = self.env['stock.move.line'].sudo().search([
