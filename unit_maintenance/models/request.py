@@ -6,7 +6,7 @@ from odoo.exceptions import AccessError, UserError
 
 from .utils import group_users, normalize_phone
 
-REQUEST_TYPES = [('internal', 'داخلية (على شركة أديار)'), ('external', 'خارجية (على العميل)')]
+REQUEST_TYPES = [('internal', 'داخلي'), ('external', 'خارجي')]
 STATES = [
     ('new', 'جديد'),
     ('assigned', 'مسند لفني'),

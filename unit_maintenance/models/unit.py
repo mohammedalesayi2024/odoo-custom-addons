@@ -45,9 +45,10 @@ class UnitMaintenanceUnit(models.Model):
     building_id = fields.Many2one('unit.maintenance.building', 'المبنى', required=True, index=True, tracking=True)
     owner_id = fields.Many2one('res.partner', 'المالك', required=True, index=True, tracking=True)
     maintenance_type = fields.Selection(
-        [('internal', 'داخلية (على شركة أديار)'), ('external', 'خارجية (على العميل)')],
+        [('internal', 'داخلي'), ('external', 'خارجي')],
         'نوع الصيانة', required=True, default='internal', tracking=True,
         help='يُستخدم النوع تلقائياً عند إنشاء طلب صيانة لهذه الوحدة.')
+    evacuation_date = fields.Date('تاريخ الإفراغ', tracking=True)
     delivery_date = fields.Date('تاريخ التسليم', tracking=True)
     warranty_months = fields.Integer('مدة الضمان (بالأشهر)', default=lambda self: self._default_warranty_months(), tracking=True)
     warranty_end = fields.Date('نهاية الضمان', compute='_compute_warranty_end', store=True)

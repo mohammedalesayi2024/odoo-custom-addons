@@ -9,6 +9,7 @@
                 <field name="number"/>
                 <field name="owner_id"/>
                 <field name="maintenance_type" widget="badge"/>
+                <field name="evacuation_date"/>
                 <field name="delivery_date"/>
                 <field name="warranty_end"/>
                 <field name="warranty_state" widget="badge"
@@ -36,6 +37,7 @@
                             <field name="maintenance_type" widget="radio"/>
                         </group>
                         <group string="الضمان">
+                            <field name="evacuation_date"/>
                             <field name="delivery_date"/>
                             <field name="warranty_months"/>
                             <field name="warranty_end"/>

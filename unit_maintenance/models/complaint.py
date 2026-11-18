@@ -22,11 +22,33 @@ class UnitMaintenanceComplaint(models.Model):
     ip_address = fields.Char('عنوان IP', readonly=True)
     request_id = fields.Many2one('unit.maintenance.request', 'طلب الصيانة', readonly=True, copy=False)
 
+    @api.model
+    def _phone_from_unit(self, unit):
+        owner = unit.owner_id
+        if not owner:
+            return False
+        return owner.phone or owner.mobile or False
+
+    @api.onchange('unit_id')
+    def _onchange_unit_id_phone(self):
+        for rec in self:
+            rec.phone = rec._phone_from_unit(rec.unit_id) if rec.unit_id else False
+
+    def write(self, vals):
+        if 'unit_id' not in vals or 'phone' in vals:
+            return super().write(vals)
+        unit = self.env['unit.maintenance.unit'].browse(vals['unit_id']) if vals['unit_id'] else False
+        phone = self._phone_from_unit(unit) if unit else False
+        return super().write(dict(vals, phone=phone))
+
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
             if not vals.get('name') or vals['name'] == 'جديد':
                 vals['name'] = self.env['ir.sequence'].next_by_code('unit.maintenance.complaint') or 'جديد'
+            if not vals.get('phone') and vals.get('unit_id'):
+                unit = self.env['unit.maintenance.unit'].browse(vals['unit_id'])
+                vals['phone'] = self._phone_from_unit(unit)
         records = super().create(vals_list)
         managers = group_users(self.env, 'unit_maintenance.group_unit_maintenance_user').partner_id
         for rec in records:
