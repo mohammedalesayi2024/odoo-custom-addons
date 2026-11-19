@@ -11,7 +11,7 @@
 * شكاوى العملاء من التطبيق بدون تسجيل دخول عبر رمز تحقق OTP يرسله Odoo.
 * واجهة API لتطبيق الجوال.
 """,
-    'version': '19.0.1.0.2',
+    'version': '19.0.1.0.3',
     'category': 'Services',
     'author': 'Unit Maintenance',
     'license': 'LGPL-3',

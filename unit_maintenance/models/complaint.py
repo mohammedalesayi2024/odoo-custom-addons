@@ -27,7 +27,11 @@ class UnitMaintenanceComplaint(models.Model):
         owner = unit.owner_id
         if not owner:
             return False
-        return owner.phone or owner.mobile or False
+        # The mobile field may be absent in customized partner models/databases.
+        phone = owner.phone or False
+        if not phone and 'mobile' in owner._fields:
+            phone = owner['mobile'] or False
+        return phone
 
     @api.onchange('unit_id')
     def _onchange_unit_id_phone(self):
