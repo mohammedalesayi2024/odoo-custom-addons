@@ -327,7 +327,6 @@ class UnitMaintenanceRequest(models.Model):
         move_commands = []
         for line in storable_lines:
             move_commands.append(Command.create({
-                'name': line.name or line.product_id.display_name,
                 'product_id': line.product_id.id,
                 'product_uom_qty': line.quantity,
                 'product_uom': line.product_id.uom_id.id,
