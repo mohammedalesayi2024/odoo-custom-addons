@@ -2,6 +2,7 @@ import hashlib
 import hmac
 import logging
 import secrets
+import requests
 from datetime import timedelta
 
 from odoo import api, fields, models
@@ -60,10 +61,49 @@ class UnitMaintenanceOtp(models.Model):
         } for u in units]
 
     def _send_sms(self, key, code):
-        body = 'رمز التحقق لتقديم شكوى الصيانة: %s. صالح %s دقائق.' % (code, self._cfg('otp_ttl_minutes', '5'))
+        body = 'رمز التحقق لتقديم شكوى الصيانة: %s. صالح %s دقائق.' % (
+            code, self._cfg('otp_ttl_minutes', '5'))
         if self._cfg('otp_test_mode', '0') == '1':
-            _logger.warning('OTP test mode: code for %s is %s', key, code)
+            _logger.warning('OTP TEST MODE: phone=%s code=%s', key, code)
             return
+
+        provider = self._cfg('sms_provider', 'taqnyat')
+        if provider == 'taqnyat':
+            token = self._cfg('taqnyat_api_token', '')
+            sender = self._cfg('taqnyat_sender', '')
+            if not token or not sender:
+                raise ValueError('Taqnyat API token or sender name is not configured')
+
+            # Taqnyat expects Saudi mobile numbers in international format
+            # without "+" or "00", e.g. 9665XXXXXXXX.
+            country_code = self._cfg('default_country_code', '966')
+            number = '%s%s' % (country_code, key)
+            response = requests.post(
+                'https://api.taqnyat.sa/v1/messages',
+                headers={
+                    'Authorization': 'Bearer %s' % token,
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    'Accept': 'application/json',
+                },
+                json={
+                    'sender': sender,
+                    'recipients': [number],
+                    'body': body,
+                },
+                timeout=20,
+            )
+            try:
+                result = response.json()
+            except ValueError:
+                result = {'message': response.text[:500]}
+            if response.status_code not in (200, 201) or result.get('statusCode') not in (None, 200, 201):
+                raise ValueError('Taqnyat SMS API error (%s): %s' % (
+                    response.status_code, result.get('message', result)))
+            if result.get('rejected') and result.get('rejected') not in ('[]', [], None):
+                raise ValueError('Taqnyat rejected recipient: %s' % result.get('rejected'))
+            return result
+
+        # Optional fallback to Odoo's configured SMS gateway.
         number = '+%s%s' % (self._cfg('default_country_code', '966'), key)
         self.env['sms.sms'].sudo().create({'number': number, 'body': body}).send()
 

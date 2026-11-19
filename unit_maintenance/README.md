@@ -2,8 +2,15 @@
 
 ## التثبيت
 1. ضع المجلد `unit_maintenance` داخل مسار addons ثم: Apps ← Update Apps List ← ثبّت «صيانة الوحدات».
-2. يعتمد على: `mail`, `product`, `account`, `sms`. لإرسال OTP فعلياً يلزم تفعيل بوابة SMS (IAP أو مزود محلي مربوط بـ `sms.sms`). يلزم `wkhtmltopdf` لتقرير PDF.
-3. المجموعات: **فني** / **موظف** / **مدير** (مدير النظام يحصل على «مدير» تلقائياً).
+2. يعتمد على: `mail`, `product`, `account`, `stock`, `sms`. يلزم `wkhtmltopdf` لتقرير PDF.
+3. لإرسال OTP عبر Taqnyat، أضف معاملات النظام التالية من الإعدادات التقنية ← المعاملات ← معاملات النظام:
+   * `unit_maintenance.sms_provider` = `taqnyat`
+   * `unit_maintenance.taqnyat_api_token` = Bearer Token (يُحفظ سرياً في الخادم ولا يوضع في ملفات الموديول)
+   * `unit_maintenance.taqnyat_sender` = اسم مرسل SMS المعتمد في حساب تقنيات
+   * `unit_maintenance.otp_test_mode` = `0` للإرسال الفعلي، أو `1` للاختبار المحلي دون إرسال.
+   * تأكد من تفعيل إرسال API في تقنيات وإضافة عنوان IP العام الخارج من خادم Odoo إلى القائمة المسموحة، وأن رصيد الحساب واسم المرسل صالحان.
+   * يستخدم الموديول Taqnyat SMS API (`POST https://api.taqnyat.sa/v1/messages`) لإرسال رمز ينشئه Odoo ويتحقق منه محلياً. أرقام المستلمين ترسل بصيغة دولية دون علامة +.
+4. المجموعات: **فني** / **موظف** / **مدير** (مدير النظام يحصل على «مدير» تلقائياً).
 
 ## تهيئة البيانات
 المباني ← الوحدات (المالك = عميل Odoo، تاريخ التسليم، مدة الضمان بالأشهر، الافتراضي 24).
@@ -50,7 +57,7 @@
 (المسار الكامل يسبقه `/unit_maintenance`.) السعر لا يظهر للفني في الخارجي قبل اعتماد الإدارة. رابط التقرير العام للواتساب: `/unit_maintenance/report/<id>/<token>`.
 
 ## معاملات النظام (Settings ← Technical ← System Parameters)
-`unit_maintenance.default_warranty_months`, `default_country_code`, `otp_length`, `otp_ttl_minutes`, `otp_max_attempts`, `otp_max_per_hour`, `otp_max_per_ip_hour`, `reveal_unregistered`, `max_complaints_per_day`, `token_ttl_minutes`، و`otp_test_mode=1` للتطوير فقط (يكتب الرمز في سجل الخادم بدل SMS).
+`unit_maintenance.sms_provider`, `taqnyat_api_token`, `taqnyat_sender`, `otp_test_mode`, `default_warranty_months`, `default_country_code`, `otp_length`, `otp_ttl_minutes`, `otp_max_attempts`, `otp_max_per_hour`, `otp_max_per_ip_hour`, `reveal_unregistered`, `max_complaints_per_day`, `token_ttl_minutes`، و`otp_test_mode=1` للتطوير فقط (يكتب الرمز في سجل الخادم بدل SMS).
 
 ## ملاحظات مهمة
 * **لم أشغّل الكود على خادم Odoo 19** (لا يتوفر هنا). تم فحص صياغة بايثون وXML وجدول الصلاحيات فقط. جرّبه على قاعدة اختبار أولاً.
